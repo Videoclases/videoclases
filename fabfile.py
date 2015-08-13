@@ -7,8 +7,8 @@ def restart(reboot=False):
     local('python manage.py makemigrations')
     local('python manage.py migrate')
     if reboot:
-        fixtures = ['devgroups', 'devusers', 'devcursos', 'devalumnos', 'devprofesores', 
-        'devcolegio', 'devtareas']
+        fixtures = ['devgroups', 'devusers', 'devcolegio', 'devcursos', 'devalumnos', 'devprofesores', 
+        'devtareas']
         for f in fixtures:
             local('python manage.py loaddata ' + f)
     local('python manage.py runserver 0.0.0.0:8000')
