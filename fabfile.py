@@ -31,6 +31,7 @@ def reboot():
 def install():
     local('cp ' + os.path.join(BASE_DIR, template_name) + ' ' + os.path.join(BASE_DIR, file_name))
     _load_data()
+    local('python manage.py collectstatic --noinput -l')
     local('python manage.py test')
     local('python manage.py runserver 0.0.0.0:8000')
 
