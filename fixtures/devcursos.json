@@ -1,0 +1,29 @@
+[
+{
+    "fields": {
+        "nombre": "1\u00b0A",
+        "colegio": 1,
+        "anho": 2015
+    },
+    "model": "videoclases.curso",
+    "pk": 1
+},
+{
+    "fields": {
+        "nombre": "1\u00b0B",
+        "colegio": 1,
+        "anho": 2015
+    },
+    "model": "videoclases.curso",
+    "pk": 2
+},
+{
+    "fields": {
+        "nombre": "2\u00b0A",
+        "colegio": 1,
+        "anho": 2015
+    },
+    "model": "videoclases.curso",
+    "pk": 3
+}
+]

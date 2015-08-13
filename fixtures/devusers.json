@@ -1,0 +1,860 @@
+[
+{
+    "fields": {
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "is_active": true,
+        "is_superuser": true,
+        "is_staff": true,
+        "last_login": "2015-07-08T20:22:36.205Z",
+        "groups": [],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$vORloUm6iVeD$Crf9S0RLroWUyqZ8fm32MtlkPAoSgmxe0Pp6eiokQSQ=",
+        "email": "admin@admin.admin",
+        "date_joined": "2015-07-08T20:05:47.787Z"
+    },
+    "model": "auth.user",
+    "pk": 1
+},
+{
+    "fields": {
+        "username": "profe",
+        "first_name": "Profesor",
+        "last_name": "Jirafales",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2015-07-08T20:22:15.462Z",
+        "groups": [
+            1
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$1DnBWsSxSJ9i$EAcgUXWWrcqRTvdFTXKdWPHDfBvV2QEDitb810vl/hk=",
+        "email": "profe@profe.com",
+        "date_joined": "2015-07-08T20:06:03Z"
+    },
+    "model": "auth.user",
+    "pk": 2
+},
+{
+    "fields": {
+        "username": "alumno",
+        "first_name": "Alumno",
+        "last_name": "Responsable",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2015-07-08T20:14:21.618Z",
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$51psGGqkBYim$TevndYx3/l0dHawHSNWaq36wKuYFhp0ZPpNsTbUJMzs=",
+        "email": "alumno@alumno.com",
+        "date_joined": "2015-07-08T20:06:24Z"
+    },
+    "model": "auth.user",
+    "pk": 3
+},
+{
+    "fields": {
+        "username": "alumno1",
+        "first_name": "alumno1",
+        "last_name": "alumno1",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$8IcUA5aznYej$0GOqtpZBz3dy+BLVJwbvT/hRL7kPBk9kHIL6TE2I0Rg=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:06.554Z"
+    },
+    "model": "auth.user",
+    "pk": 4
+},
+{
+    "fields": {
+        "username": "alumno2",
+        "first_name": "alumno2",
+        "last_name": "alumno2",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$Qap0kEQR5dtx$Cc7EO1kvKPB2V9gv/MqsioSoRHzdJ+KTIbN6/nYsQ/Q=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:06.832Z"
+    },
+    "model": "auth.user",
+    "pk": 5
+},
+{
+    "fields": {
+        "username": "alumno3",
+        "first_name": "alumno3",
+        "last_name": "alumno3",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$3W7XZKcseAEg$8uziCFW0NYm64K+R1G+Jc1D2Xz6vwGsbhepFEV8aDAw=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:07.110Z"
+    },
+    "model": "auth.user",
+    "pk": 6
+},
+{
+    "fields": {
+        "username": "alumno4",
+        "first_name": "alumno4",
+        "last_name": "alumno4",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$GJnSwMSIOGBH$PgsOZLOuBCjDzW5y14y7JYXUOoUkB3vRbQFw48Of1pg=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:07.423Z"
+    },
+    "model": "auth.user",
+    "pk": 7
+},
+{
+    "fields": {
+        "username": "alumno5",
+        "first_name": "alumno5",
+        "last_name": "alumno5",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$ZsS0ZFC0JfFA$19O5XoCBxwn/u5VHSkPhtOfr+B7R7FFkN/twzddXrMQ=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:07.668Z"
+    },
+    "model": "auth.user",
+    "pk": 8
+},
+{
+    "fields": {
+        "username": "alumno6",
+        "first_name": "alumno6",
+        "last_name": "alumno6",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$kX8uzQuvat5C$OYeUZqVFT8+qzkF3sCNUgKKeorIKy4j2aK8T0bZOFWA=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:07.969Z"
+    },
+    "model": "auth.user",
+    "pk": 9
+},
+{
+    "fields": {
+        "username": "alumno7",
+        "first_name": "alumno7",
+        "last_name": "alumno7",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$5c8HDCbYctcl$U4POyjTr0BuSsZHAstsUyK+H4d4rXCqkVu6rrsE0LtA=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:08.269Z"
+    },
+    "model": "auth.user",
+    "pk": 10
+},
+{
+    "fields": {
+        "username": "alumno8",
+        "first_name": "alumno8",
+        "last_name": "alumno8",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$t9OhyLaguxIe$hglCOFie/+guWZLpLbXlcQct3sE0c1i7iCceLQ2AI3U=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:08.525Z"
+    },
+    "model": "auth.user",
+    "pk": 11
+},
+{
+    "fields": {
+        "username": "alumno9",
+        "first_name": "alumno9",
+        "last_name": "alumno9",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$CbYYdWZU9Yg7$xNOSY7EV0BAH5Glp4e5d8bimD3BbXeLLj1Wq/iTdWWs=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:08.781Z"
+    },
+    "model": "auth.user",
+    "pk": 12
+},
+{
+    "fields": {
+        "username": "alumno10",
+        "first_name": "alumno10",
+        "last_name": "alumno10",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$ZWlvFrInBnoE$nDpzU/Z1iEb7+8ss+EnQc+UezPdfmyImuxX8YxJVkEU=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:09.037Z"
+    },
+    "model": "auth.user",
+    "pk": 13
+},
+{
+    "fields": {
+        "username": "alumno11",
+        "first_name": "alumno11",
+        "last_name": "alumno11",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$2c3tSOfuWGwF$z9kFCqmLJGo0KsNGN7OKqGty1BcgR156wFJqy+8k++E=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:09.304Z"
+    },
+    "model": "auth.user",
+    "pk": 14
+},
+{
+    "fields": {
+        "username": "alumno12",
+        "first_name": "alumno12",
+        "last_name": "alumno12",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$gYYsVAY6XDR1$Pskwci3upBIJEk/6Un5YwGYACg4/wlXTq5jhOY/4dN4=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:09.550Z"
+    },
+    "model": "auth.user",
+    "pk": 15
+},
+{
+    "fields": {
+        "username": "alumno13",
+        "first_name": "alumno13",
+        "last_name": "alumno13",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$nAnTMfQjgwet$RMqbb86cT3EdZPlnGP+PZ1KsR5s0HbAKPkZljHQljd4=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:09.829Z"
+    },
+    "model": "auth.user",
+    "pk": 16
+},
+{
+    "fields": {
+        "username": "alumno14",
+        "first_name": "alumno14",
+        "last_name": "alumno14",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$w5RKIww9BwCD$duX8TJvQ/Dx9sVPBECU3VsZvZ19ztlWmwj7HPywXxHY=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:10.085Z"
+    },
+    "model": "auth.user",
+    "pk": 17
+},
+{
+    "fields": {
+        "username": "alumno15",
+        "first_name": "alumno15",
+        "last_name": "alumno15",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$8DO5BwIUgEI8$pXm3zIBix+CinKUKxWSIzc2GTZjLd91KlW3f1zCYXwI=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:10.341Z"
+    },
+    "model": "auth.user",
+    "pk": 18
+},
+{
+    "fields": {
+        "username": "alumno16",
+        "first_name": "alumno16",
+        "last_name": "alumno16",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$ixW6oQHfpkXf$5497NbDOVGid2ZTz6xzUufQeEqLLdoPw0CVYpdOZ9ps=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:10.596Z"
+    },
+    "model": "auth.user",
+    "pk": 19
+},
+{
+    "fields": {
+        "username": "alumno17",
+        "first_name": "alumno17",
+        "last_name": "alumno17",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$Wtelu65QttSJ$Y4TMaddsFxewUbVoXzQJCVum7I5wMXD2VQE1/MoyQbc=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:10.875Z"
+    },
+    "model": "auth.user",
+    "pk": 20
+},
+{
+    "fields": {
+        "username": "alumno18",
+        "first_name": "alumno18",
+        "last_name": "alumno18",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$6U1e0imBREPD$wovtggdNWAKi051/lDhZ6nS2ARnyN5OmMUPJKhG90MQ=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:11.142Z"
+    },
+    "model": "auth.user",
+    "pk": 21
+},
+{
+    "fields": {
+        "username": "alumno19",
+        "first_name": "alumno19",
+        "last_name": "alumno19",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$94tZZuGBlOmu$NibeSZ/hsrUQSD8mIPYh+C8f1/COMEgwXcXMmX0XRn8=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:11.398Z"
+    },
+    "model": "auth.user",
+    "pk": 22
+},
+{
+    "fields": {
+        "username": "alumno20",
+        "first_name": "alumno20",
+        "last_name": "alumno20",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$ef8EktuEnkEF$Lx6rFu2Nx1qm5NxdjWDtJso5dsn9zpyKrqbGULjAz9k=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:11.655Z"
+    },
+    "model": "auth.user",
+    "pk": 23
+},
+{
+    "fields": {
+        "username": "alumno21",
+        "first_name": "alumno21",
+        "last_name": "alumno21",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$hY6HgIX76ezY$PBnvp+GQkWAgaG5hPIk+oc7kLVZKBv16Xc/jQp7KcNc=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:11.955Z"
+    },
+    "model": "auth.user",
+    "pk": 24
+},
+{
+    "fields": {
+        "username": "alumno22",
+        "first_name": "alumno22",
+        "last_name": "alumno22",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$KXOs8q9fithY$6vSuKdtBddfUXzqvgbRcRG2hVqsLR5xcqpcJu6mLL2s=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:12.256Z"
+    },
+    "model": "auth.user",
+    "pk": 25
+},
+{
+    "fields": {
+        "username": "alumno23",
+        "first_name": "alumno23",
+        "last_name": "alumno23",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$m3gWrn3pvvKG$zxSmAecMvrANZ2GR5GmDkVAjMzDGOzmlgI2SHFXuP7A=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:12.567Z"
+    },
+    "model": "auth.user",
+    "pk": 26
+},
+{
+    "fields": {
+        "username": "alumno24",
+        "first_name": "alumno24",
+        "last_name": "alumno24",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$hz2PHAcK6Icc$Wa8LkJouzIvOV68UAhd3dIMX8ToZ3sUvZsADbMThzcA=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:12.812Z"
+    },
+    "model": "auth.user",
+    "pk": 27
+},
+{
+    "fields": {
+        "username": "alumno25",
+        "first_name": "alumno25",
+        "last_name": "alumno25",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$xkFd5teXuoWV$YbGOgweJON4+RSzpT46JOG21tHH432IO75rlhqkJyzY=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:13.079Z"
+    },
+    "model": "auth.user",
+    "pk": 28
+},
+{
+    "fields": {
+        "username": "alumno26",
+        "first_name": "alumno26",
+        "last_name": "alumno26",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$0hKhLfSgawhP$bVqzAgFMinkRd5C/Ixo2NdTE2nuOoNRROzIeYVVZTOM=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:13.336Z"
+    },
+    "model": "auth.user",
+    "pk": 29
+},
+{
+    "fields": {
+        "username": "alumno27",
+        "first_name": "alumno27",
+        "last_name": "alumno27",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$2gaWfApZo7a0$35JPZuBijdlq5jNh/qbrl7S23kaDHaJ8aCc9Xl+DdpM=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:13.571Z"
+    },
+    "model": "auth.user",
+    "pk": 30
+},
+{
+    "fields": {
+        "username": "alumno28",
+        "first_name": "alumno28",
+        "last_name": "alumno28",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$BDMgCswATRLT$7hcYYAPvMI61gUTXhOuVhGcm2TmXqGo9xPKIDf+7RrE=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:13.838Z"
+    },
+    "model": "auth.user",
+    "pk": 31
+},
+{
+    "fields": {
+        "username": "alumno29",
+        "first_name": "alumno29",
+        "last_name": "alumno29",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$0koeNlKVsNgh$WT8y9IcK1f2a9ri+gEbzW5+scew3NN5UU/1w59sljac=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:14.127Z"
+    },
+    "model": "auth.user",
+    "pk": 32
+},
+{
+    "fields": {
+        "username": "alumno30",
+        "first_name": "alumno30",
+        "last_name": "alumno30",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$UTRmBH7JIqVp$Pdk4SfVWPA+1Iz1kGAeHcOmqM1hYAj3sKBdTYeLhOoY=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:14.405Z"
+    },
+    "model": "auth.user",
+    "pk": 33
+},
+{
+    "fields": {
+        "username": "alumno31",
+        "first_name": "alumno31",
+        "last_name": "alumno31",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$g10gZePb97UZ$pBLTFIZ7ahTYht84vI9YUYFKLLUPgAINT3OUjOYxX8o=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:14.972Z"
+    },
+    "model": "auth.user",
+    "pk": 34
+},
+{
+    "fields": {
+        "username": "alumno32",
+        "first_name": "alumno32",
+        "last_name": "alumno32",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$PwfRw0AceJSq$QS4yq63GDBVYAFfduZd6ryZBTcilUvokW4Crx6raw7Y=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:15.261Z"
+    },
+    "model": "auth.user",
+    "pk": 35
+},
+{
+    "fields": {
+        "username": "alumno33",
+        "first_name": "alumno33",
+        "last_name": "alumno33",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$UoybyD2jliHr$EEXAATmr55q7Tt5L8RGETF0hrhFAh9FlNF94eIYgn4E=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:15.517Z"
+    },
+    "model": "auth.user",
+    "pk": 36
+},
+{
+    "fields": {
+        "username": "alumno34",
+        "first_name": "alumno34",
+        "last_name": "alumno34",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$rtUJBvRsjAXk$AXklzPfq2vrTPZDhB2OQ5QcuowvOmdwyXEOMlAnRIYA=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:15.773Z"
+    },
+    "model": "auth.user",
+    "pk": 37
+},
+{
+    "fields": {
+        "username": "alumno35",
+        "first_name": "alumno35",
+        "last_name": "alumno35",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$rADjIWO895E3$vGrwyt3lO2xdbYJwYS8bbgI9XB8T8iJWNVysp376Bg0=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:16.041Z"
+    },
+    "model": "auth.user",
+    "pk": 38
+},
+{
+    "fields": {
+        "username": "alumno36",
+        "first_name": "alumno36",
+        "last_name": "alumno36",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$6gxPgWcEbNRo$Lw77Nc2Ymqmd44KyLyOH3aFcpj98sHUK9uLCHBnAuyE=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:16.341Z"
+    },
+    "model": "auth.user",
+    "pk": 39
+},
+{
+    "fields": {
+        "username": "alumno37",
+        "first_name": "alumno37",
+        "last_name": "alumno37",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$PH6lhz5HJhu2$DRicJz3adV4yUAB3z6Ihw2gMcPz55XoCB76JBhW3tP4=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:16.619Z"
+    },
+    "model": "auth.user",
+    "pk": 40
+},
+{
+    "fields": {
+        "username": "alumno38",
+        "first_name": "alumno38",
+        "last_name": "alumno38",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$o1lZbhG3GGyf$ykiQ9ferwNv2B5B51/YbmdWEwXjG+pC+3vM4mrr1Ktc=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:16.886Z"
+    },
+    "model": "auth.user",
+    "pk": 41
+},
+{
+    "fields": {
+        "username": "alumno39",
+        "first_name": "alumno39",
+        "last_name": "alumno39",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$1y6hEyXThhdz$LbdNCihp5xShHBGHh6S/pjHdAZGiIUn4tCX1huMxOks=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:17.164Z"
+    },
+    "model": "auth.user",
+    "pk": 42
+},
+{
+    "fields": {
+        "username": "alumno40",
+        "first_name": "alumno40",
+        "last_name": "alumno40",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$nHDMeD1800rD$DvF9NWziI3xwnMyOIPgdpIJ+KVPVFDt7w7kYCvs7PaA=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:17.431Z"
+    },
+    "model": "auth.user",
+    "pk": 43
+}
+]

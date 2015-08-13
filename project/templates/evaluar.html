@@ -1,0 +1,101 @@
+﻿{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block videoclases-active %}class="menu-top-active"{% endblock %}
+
+{% block extra-head %}
+    <script type="text/javascript">
+        function ResponseValues() {
+            var self = this;
+            self.alternativas = [
+                {% for a in alternativas %}
+                    {% if forloop.last %}
+                        '{{ a }}'
+                    {% else %}
+                        '{{ a }}',
+                    {% endif %}
+                {% endfor %}
+            ]
+            self.valor = ko.observable({{evaluacion.valor}});
+            self.videoclase = ko.observable({{grupo.videoclase.id}});
+            self.evaluacion = ko.observable({{evaluacion.pk}});
+            self.thumbUpGray = ko.observable('{% static "img/thumb-up-gray.png" %}');
+            self.thumbUpGreen = ko.observable('{% static "img/thumb-up-green.png" %}');
+            self.thumbDownGray = ko.observable('{% static "img/thumb-down-gray.png" %}');
+            self.thumbDownRed = ko.observable('{% static "img/thumb-down-red.png" %}');
+        }
+    </script>
+    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
+    <script src="{% static "js/src/evaluar.js" %}"></script>
+    <script src="{% static "js/lib/jquery.validate.min.js" %}"></script>
+    <script src="{% static "js/src/evaluarDocumentReady.js" %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-10">
+                    <button onclick="location.href = '{% url 'alumno' %}';" class="btn btn-info">Volver</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h6 class="page-head-line">{{ user.alumno.curso_actual.colegio.nombre }} - {{ user.alumno.curso_actual.nombre }} - {{ grupo.tarea.titulo }}</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <iframe width="100%" height="315" src="{{ grupo.videoclase.video }}" frameborder="0" allowfullscreen></iframe>
+                    <form data-bind="event: {'submit': submitEvaluacionDeAlumno}">
+                        <div class="col-md-6" align="right">
+                            <input id="meGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbUp }" />
+                        </div>
+                        <div class="col-md-6">
+                            <input id="noMeGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbDown }" />
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="line-height:1.3;">
+                            Integrantes:<br/>
+                            {% for a in grupo.alumnos.all %}
+                                {% if forloop.last %}
+                                    {{ a.usuario.get_full_name }}
+                                {% else %}
+                                    {{ a.usuario.get_full_name }} - 
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12"><h4>{{ grupo.videoclase.pregunta }}</h4></div>
+                            </div>
+                            <form id="respuestaForm" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <select name="respuesta" class="form-control" id="id_respuesta"
+                                            data-bind="options: responseValues.alternativas,
+                                            optionsCaption: '-- escoja una alternativa --',
+                                            value: respuesta,
+                                            valueAllowUnset: false"></select>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="videoclase" value="{{ grupo.videoclase.id }}" />
+                                <button style="display:none" id="#respuestaButton" type="submit"></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" align="center">
+                    <button data-bind="click: clickSiguienteVideoclase" class="btn btn-lg btn-success">Siguiente VideoClase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

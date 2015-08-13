@@ -1,0 +1,402 @@
+[
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 4
+    },
+    "model": "videoclases.alumno",
+    "pk": 1
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 5
+    },
+    "model": "videoclases.alumno",
+    "pk": 2
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 6
+    },
+    "model": "videoclases.alumno",
+    "pk": 3
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 7
+    },
+    "model": "videoclases.alumno",
+    "pk": 4
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 8
+    },
+    "model": "videoclases.alumno",
+    "pk": 5
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 9
+    },
+    "model": "videoclases.alumno",
+    "pk": 6
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 10
+    },
+    "model": "videoclases.alumno",
+    "pk": 7
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 11
+    },
+    "model": "videoclases.alumno",
+    "pk": 8
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 12
+    },
+    "model": "videoclases.alumno",
+    "pk": 9
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 13
+    },
+    "model": "videoclases.alumno",
+    "pk": 10
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 14
+    },
+    "model": "videoclases.alumno",
+    "pk": 11
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 15
+    },
+    "model": "videoclases.alumno",
+    "pk": 12
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 16
+    },
+    "model": "videoclases.alumno",
+    "pk": 13
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 17
+    },
+    "model": "videoclases.alumno",
+    "pk": 14
+},
+{
+    "fields": {
+        "cursos": [
+            1
+        ],
+        "usuario": 18
+    },
+    "model": "videoclases.alumno",
+    "pk": 15
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 19
+    },
+    "model": "videoclases.alumno",
+    "pk": 16
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 20
+    },
+    "model": "videoclases.alumno",
+    "pk": 17
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 21
+    },
+    "model": "videoclases.alumno",
+    "pk": 18
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 22
+    },
+    "model": "videoclases.alumno",
+    "pk": 19
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 23
+    },
+    "model": "videoclases.alumno",
+    "pk": 20
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 24
+    },
+    "model": "videoclases.alumno",
+    "pk": 21
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 25
+    },
+    "model": "videoclases.alumno",
+    "pk": 22
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 26
+    },
+    "model": "videoclases.alumno",
+    "pk": 23
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 27
+    },
+    "model": "videoclases.alumno",
+    "pk": 24
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 28
+    },
+    "model": "videoclases.alumno",
+    "pk": 25
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 29
+    },
+    "model": "videoclases.alumno",
+    "pk": 26
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 30
+    },
+    "model": "videoclases.alumno",
+    "pk": 27
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 31
+    },
+    "model": "videoclases.alumno",
+    "pk": 28
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 32
+    },
+    "model": "videoclases.alumno",
+    "pk": 29
+},
+{
+    "fields": {
+        "cursos": [
+            2
+        ],
+        "usuario": 33
+    },
+    "model": "videoclases.alumno",
+    "pk": 30
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 34
+    },
+    "model": "videoclases.alumno",
+    "pk": 31
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 35
+    },
+    "model": "videoclases.alumno",
+    "pk": 32
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 36
+    },
+    "model": "videoclases.alumno",
+    "pk": 33
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 37
+    },
+    "model": "videoclases.alumno",
+    "pk": 34
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 38
+    },
+    "model": "videoclases.alumno",
+    "pk": 35
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 39
+    },
+    "model": "videoclases.alumno",
+    "pk": 36
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 40
+    },
+    "model": "videoclases.alumno",
+    "pk": 37
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 41
+    },
+    "model": "videoclases.alumno",
+    "pk": 38
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 42
+    },
+    "model": "videoclases.alumno",
+    "pk": 39
+},
+{
+    "fields": {
+        "cursos": [
+            3
+        ],
+        "usuario": 43
+    },
+    "model": "videoclases.alumno",
+    "pk": 40
+}
+]

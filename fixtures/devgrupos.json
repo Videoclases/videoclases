@@ -1,0 +1,449 @@
+[
+{
+    "fields": {
+        "alumnos": [
+            2
+        ],
+        "tarea": 1,
+        "numero": 2
+    },
+    "model": "videoclases.grupo",
+    "pk": 16
+},
+{
+    "fields": {
+        "alumnos": [
+            1
+        ],
+        "tarea": 1,
+        "numero": 1
+    },
+    "model": "videoclases.grupo",
+    "pk": 17
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 8
+    },
+    "model": "videoclases.grupo",
+    "pk": 18
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 9
+    },
+    "model": "videoclases.grupo",
+    "pk": 19
+},
+{
+    "fields": {
+        "alumnos": [
+            10
+        ],
+        "tarea": 1,
+        "numero": 10
+    },
+    "model": "videoclases.grupo",
+    "pk": 20
+},
+{
+    "fields": {
+        "alumnos": [
+            11
+        ],
+        "tarea": 1,
+        "numero": 11
+    },
+    "model": "videoclases.grupo",
+    "pk": 21
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 12
+    },
+    "model": "videoclases.grupo",
+    "pk": 22
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 13
+    },
+    "model": "videoclases.grupo",
+    "pk": 23
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 14
+    },
+    "model": "videoclases.grupo",
+    "pk": 24
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 15
+    },
+    "model": "videoclases.grupo",
+    "pk": 25
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 7
+    },
+    "model": "videoclases.grupo",
+    "pk": 26
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 4
+    },
+    "model": "videoclases.grupo",
+    "pk": 27
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 3
+    },
+    "model": "videoclases.grupo",
+    "pk": 28
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 6
+    },
+    "model": "videoclases.grupo",
+    "pk": 29
+},
+{
+    "fields": {
+        "alumnos": [],
+        "tarea": 1,
+        "numero": 5
+    },
+    "model": "videoclases.grupo",
+    "pk": 30
+},
+{
+    "fields": {
+        "alumnos": [
+            16
+        ],
+        "tarea": 9,
+        "numero": 1
+    },
+    "model": "videoclases.grupo",
+    "pk": 31
+},
+{
+    "fields": {
+        "alumnos": [
+            22
+        ],
+        "tarea": 9,
+        "numero": 7
+    },
+    "model": "videoclases.grupo",
+    "pk": 32
+},
+{
+    "fields": {
+        "alumnos": [
+            23
+        ],
+        "tarea": 9,
+        "numero": 8
+    },
+    "model": "videoclases.grupo",
+    "pk": 33
+},
+{
+    "fields": {
+        "alumnos": [
+            24
+        ],
+        "tarea": 9,
+        "numero": 9
+    },
+    "model": "videoclases.grupo",
+    "pk": 34
+},
+{
+    "fields": {
+        "alumnos": [
+            25
+        ],
+        "tarea": 9,
+        "numero": 10
+    },
+    "model": "videoclases.grupo",
+    "pk": 35
+},
+{
+    "fields": {
+        "alumnos": [
+            26
+        ],
+        "tarea": 9,
+        "numero": 11
+    },
+    "model": "videoclases.grupo",
+    "pk": 36
+},
+{
+    "fields": {
+        "alumnos": [
+            27
+        ],
+        "tarea": 9,
+        "numero": 12
+    },
+    "model": "videoclases.grupo",
+    "pk": 37
+},
+{
+    "fields": {
+        "alumnos": [
+            28
+        ],
+        "tarea": 9,
+        "numero": 13
+    },
+    "model": "videoclases.grupo",
+    "pk": 38
+},
+{
+    "fields": {
+        "alumnos": [
+            29
+        ],
+        "tarea": 9,
+        "numero": 14
+    },
+    "model": "videoclases.grupo",
+    "pk": 39
+},
+{
+    "fields": {
+        "alumnos": [
+            30
+        ],
+        "tarea": 9,
+        "numero": 15
+    },
+    "model": "videoclases.grupo",
+    "pk": 40
+},
+{
+    "fields": {
+        "alumnos": [
+            18
+        ],
+        "tarea": 9,
+        "numero": 3
+    },
+    "model": "videoclases.grupo",
+    "pk": 41
+},
+{
+    "fields": {
+        "alumnos": [
+            19
+        ],
+        "tarea": 9,
+        "numero": 4
+    },
+    "model": "videoclases.grupo",
+    "pk": 42
+},
+{
+    "fields": {
+        "alumnos": [
+            17
+        ],
+        "tarea": 9,
+        "numero": 2
+    },
+    "model": "videoclases.grupo",
+    "pk": 43
+},
+{
+    "fields": {
+        "alumnos": [
+            20
+        ],
+        "tarea": 9,
+        "numero": 5
+    },
+    "model": "videoclases.grupo",
+    "pk": 44
+},
+{
+    "fields": {
+        "alumnos": [
+            21
+        ],
+        "tarea": 9,
+        "numero": 6
+    },
+    "model": "videoclases.grupo",
+    "pk": 45
+},
+{
+    "fields": {
+        "alumnos": [
+            1,
+            7
+        ],
+        "tarea": 10,
+        "numero": 1
+    },
+    "model": "videoclases.grupo",
+    "pk": 46
+},
+{
+    "fields": {
+        "alumnos": [
+            3,
+            14
+        ],
+        "tarea": 10,
+        "numero": 7
+    },
+    "model": "videoclases.grupo",
+    "pk": 47
+},
+{
+    "fields": {
+        "alumnos": [
+            8
+        ],
+        "tarea": 10,
+        "numero": 5
+    },
+    "model": "videoclases.grupo",
+    "pk": 48
+},
+{
+    "fields": {
+        "alumnos": [
+            6,
+            9
+        ],
+        "tarea": 10,
+        "numero": 4
+    },
+    "model": "videoclases.grupo",
+    "pk": 49
+},
+{
+    "fields": {
+        "alumnos": [
+            2,
+            10
+        ],
+        "tarea": 10,
+        "numero": 2
+    },
+    "model": "videoclases.grupo",
+    "pk": 50
+},
+{
+    "fields": {
+        "alumnos": [
+            4,
+            11
+        ],
+        "tarea": 10,
+        "numero": 6
+    },
+    "model": "videoclases.grupo",
+    "pk": 51
+},
+{
+    "fields": {
+        "alumnos": [
+            12,
+            13
+        ],
+        "tarea": 10,
+        "numero": 3
+    },
+    "model": "videoclases.grupo",
+    "pk": 52
+},
+{
+    "fields": {
+        "alumnos": [
+            15
+        ],
+        "tarea": 10,
+        "numero": 8
+    },
+    "model": "videoclases.grupo",
+    "pk": 53
+},
+{
+    "fields": {
+        "alumnos": [
+            4,
+            10,
+            11,
+            13,
+            14
+        ],
+        "tarea": 16,
+        "numero": 2
+    },
+    "model": "videoclases.grupo",
+    "pk": 72
+},
+{
+    "fields": {
+        "alumnos": [
+            2,
+            5,
+            7,
+            8,
+            12
+        ],
+        "tarea": 16,
+        "numero": 1
+    },
+    "model": "videoclases.grupo",
+    "pk": 73
+},
+{
+    "fields": {
+        "alumnos": [
+            1,
+            3,
+            6,
+            9,
+            15
+        ],
+        "tarea": 16,
+        "numero": 3
+    },
+    "model": "videoclases.grupo",
+    "pk": 74
+}
+]

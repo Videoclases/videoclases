@@ -1,0 +1,18 @@
+[
+{
+    "fields": {
+        "name": "Profesores",
+        "permissions": []
+    },
+    "model": "auth.group",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "Alumnos",
+        "permissions": []
+    },
+    "model": "auth.group",
+    "pk": 2
+}
+]

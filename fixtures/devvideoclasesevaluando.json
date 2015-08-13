@@ -1,0 +1,535 @@
+[
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 16,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 1
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 17,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 2
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 18,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 3
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 19,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 4
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 20,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 5
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 21,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 6
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 22,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 7
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 23,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 8
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 24,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 9
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 25,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 10
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 26,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 11
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 27,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 12
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 28,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 13
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 29,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 14
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 30,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 15
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 31,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 16
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 32,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 17
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 33,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 18
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 34,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 19
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 35,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 20
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 36,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 21
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 37,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 22
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 38,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 23
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 39,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 24
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 40,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 25
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 41,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 26
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 42,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 27
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 43,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 28
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 44,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 29
+},
+{
+    "fields": {
+        "pregunta": null,
+        "video": null,
+        "alumnos_subida": null,
+        "grupo": 45,
+        "alternativa_correcta": null,
+        "alternativa_3": null,
+        "alternativa_2": null
+    },
+    "model": "videoclases.videoclase",
+    "pk": 30
+},
+{
+    "fields": {
+        "pregunta": "a",
+        "video": "https://www.youtube.com/embed/O1KW3ZkLtuo",
+        "alumnos_subida": "2015-07-28T14:49:27Z",
+        "grupo": 46,
+        "alternativa_correcta": "b",
+        "alternativa_3": "d",
+        "alternativa_2": "c"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 31
+},
+{
+    "fields": {
+        "pregunta": "a",
+        "video": "https://www.youtube.com/embed/0f679wqZttE",
+        "alumnos_subida": "2015-07-28T14:51:15Z",
+        "grupo": 47,
+        "alternativa_correcta": "b",
+        "alternativa_3": "d",
+        "alternativa_2": "c"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 32
+},
+{
+    "fields": {
+        "pregunta": "a",
+        "video": "https://www.youtube.com/embed/TV0QHKeHbs8",
+        "alumnos_subida": "2015-07-28T14:50:35Z",
+        "grupo": 48,
+        "alternativa_correcta": "b",
+        "alternativa_3": "d",
+        "alternativa_2": "c"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 33
+},
+{
+    "fields": {
+        "pregunta": "a",
+        "video": "https://www.youtube.com/embed/ekK7peRxKGc",
+        "alumnos_subida": "2015-07-28T14:50:18Z",
+        "grupo": 49,
+        "alternativa_correcta": "b",
+        "alternativa_3": "d",
+        "alternativa_2": "c"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 34
+},
+{
+    "fields": {
+        "pregunta": "a",
+        "video": "https://www.youtube.com/embed/qSNaN2rrB9A",
+        "alumnos_subida": "2015-07-28T14:49:44Z",
+        "grupo": 50,
+        "alternativa_correcta": "b",
+        "alternativa_3": "d",
+        "alternativa_2": "c"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 35
+},
+{
+    "fields": {
+        "pregunta": "a",
+        "video": "https://www.youtube.com/embed/seHr5Zscsfc",
+        "alumnos_subida": "2015-07-28T14:50:48Z",
+        "grupo": 51,
+        "alternativa_correcta": "b",
+        "alternativa_3": "d",
+        "alternativa_2": "c"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 36
+},
+{
+    "fields": {
+        "pregunta": "a",
+        "video": "https://www.youtube.com/embed/OnqnCoPLdyw",
+        "alumnos_subida": "2015-07-28T14:50:04Z",
+        "grupo": 52,
+        "alternativa_correcta": "b",
+        "alternativa_3": "d",
+        "alternativa_2": "c"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 37
+},
+{
+    "fields": {
+        "pregunta": "a",
+        "video": "https://www.youtube.com/embed/YDdueeBf7MY",
+        "alumnos_subida": "2015-07-28T14:51:29Z",
+        "grupo": 53,
+        "alternativa_correcta": "b",
+        "alternativa_3": "d",
+        "alternativa_2": "c"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 38
+},
+{
+    "fields": {
+        "pregunta": "\u00bfCu\u00e1nto tiempo aproximadamente se fr\u00ede el huevo?",
+        "video": "https://www.youtube.com/embed/m1AOoX9MPd4",
+        "alumnos_subida": "2015-08-04T21:43:06Z",
+        "grupo": 72,
+        "alternativa_correcta": "Un par de minutos",
+        "alternativa_3": "Doce horas",
+        "alternativa_2": "Tres horas"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 57
+},
+{
+    "fields": {
+        "pregunta": "\u00bfQu\u00e9 no se usa al fre\u00edr un huevo?",
+        "video": "https://www.youtube.com/embed/Z3GxcewPOEY",
+        "alumnos_subida": "2015-08-04T21:42:05Z",
+        "grupo": 73,
+        "alternativa_correcta": "Un l\u00e1piz pasta",
+        "alternativa_3": "Aceite",
+        "alternativa_2": "Huevo"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 58
+},
+{
+    "fields": {
+        "pregunta": "\u00bfQu\u00e9 instrumento se usa para fre\u00edr un huevo?",
+        "video": "https://www.youtube.com/embed/uxQPxWw93I0",
+        "alumnos_subida": "2015-08-04T21:45:01Z",
+        "grupo": 74,
+        "alternativa_correcta": "Sart\u00e9n",
+        "alternativa_3": "Juguera",
+        "alternativa_2": "Olla a presi\u00f3n"
+    },
+    "model": "videoclases.videoclase",
+    "pk": 59
+}
+]

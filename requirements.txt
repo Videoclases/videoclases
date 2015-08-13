@@ -1,0 +1,11 @@
+dj-database-url==0.3.0
+Django==1.8.1
+django-datetime-widget==0.9.3
+Fabric==1.10.2
+paramiko==1.15.2
+pyexcel-io==0.0.6
+pyexcel-ods==0.0.8
+pyexcel-xls==0.0.7
+pyexcel-xlsx==0.0.6
+SQLAlchemy==1.0.4
+whitenoise==1.0.6

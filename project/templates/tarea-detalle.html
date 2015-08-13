@@ -1,0 +1,251 @@
+﻿{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block profesor-active %}class="menu-top-active"{% endblock %}
+
+{% block extra-head %}
+    {{ form.media }}
+    <script type="text/javascript">
+        function Select() {
+            var self = this;
+            self.cursos = [
+                {% for c in cursos %}
+                    {% if forloop.last %}
+                        { nombre: '{{ c.nombre }}', id: {{ c.id }}}
+                    {% else %}
+                        { nombre: '{{ c.nombre }}', id: {{ c.id }}},
+                    {% endif %}
+                {% endfor %}
+            ]
+        }
+    </script>
+    <script src="{% static "js/src/asignarGrupo.js" %}"></script>
+    <script src="{% static "js/src/tareaDetalle.js" %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            ko.applyBindings(vm);
+            // initial data for tarea
+            {% if tarea.video %}
+            vm.tarea.video("{{ tarea.video }}");
+            vm.tareaDatosIniciales.video("{{ tarea.video }}");
+            {% endif %}
+            vm.tarea.titulo("{{ tarea.titulo }}");
+            vm.tarea.descripcion("{{ tarea.descripcion|escapejs }}");
+            vm.tarea.fecha_evaluacion("{{ tarea.fecha_evaluacion|date:'d/m/Y' }}");
+            vm.tarea.fecha_subida("{{ tarea.fecha_subida|date:'d/m/Y' }}");
+            vm.tarea.revisiones({{ tarea.revisiones }});
+            vm.tarea.curso({{ tarea.curso.id }});
+            vm.tareaDatosIniciales.titulo("{{ tarea.titulo }}");
+            vm.tareaDatosIniciales.descripcion("{{ tarea.descripcion|escapejs }}");
+            vm.tareaDatosIniciales.fecha_evaluacion("{{ tarea.fecha_evaluacion|date:'d/m/Y' }}");
+            vm.tareaDatosIniciales.fecha_subida("{{ tarea.fecha_subida|date:'d/m/Y' }}");
+            vm.tareaDatosIniciales.revisiones({{ tarea.revisiones }});
+            vm.tareaDatosIniciales.curso({{ tarea.curso.id }});
+            vm.id({{ tarea.id }});
+
+            // initial data for grupos
+            $.when($.ajax("{% url 'descargar_grupos_tarea' tarea.id %}")).done(
+                function (result) {
+                    b=result;
+                    vm.asignarGrupo.alumnos.removeAll();
+                    vm.curso.nombre(result.curso.nombre);
+                    vm.curso.id(result.curso.id);
+                    for (i = 0; i < result.alumnos.length; i++) {
+                        var a = result.alumnos[i];
+                        vm.asignarGrupo.alumnos.push(new Alumno(parseInt(a.id), a.apellido, a.nombre, parseInt(a.grupo)));
+                    }
+                    vm.asignarGrupo.sortTable('grupo');
+                }
+            );
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2"><h4>Profesor</h4></div>
+                <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><h4>Colegio</h4></div>
+                <div class="col-md-2"><h5>{{ user.profesor.colegio.nombre }}</h5></div>
+                <div class="col-md-2 col-md-offset-6">
+                    <button onclick="location.href = '{% url 'profesor' %}';" class="btn btn-info">Volver a cursos</button>
+                </div>
+            </div>
+            <div id="top-form" class="row" data-bind="visible: formErrorsVisible">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-bind="click: function() {changeFormErrorsVisible(false)}" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div align="center">
+                        <!-- ko foreach: formErrors -->
+                            <span data-bind="text: $data"></span><br/>
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </div>
+            <form id="form" name="form" data-bind="submit: submitEditarTarea">
+                <div class="row">
+                    <div align="center" class="col-md-12">
+                        <h6 class="page-head-line"></h6>
+                        <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar tarea</button>
+                        <button type="submit" class="btn btn-success" data-bind="visible: editarTareaBoolean">Guardar tarea</button>
+                        <button class="btn btn-danger" data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">Descartar cambios</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div align="center"><label>Video explicativo</label></div>
+                        </div>
+                        <div class="row" data-bind="visible: !editarTareaBoolean()">
+                            <div data-bind="if: tarea.video">
+                                <iframe data-bind="attr: { src: tarea.video }" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                            <div data-bind="if: !tarea.video()">
+                                <div align="center"><span>Esta tarea no tiene video explicativo</span></div>
+                            </div>
+                        </div>
+                        <div class="row" data-bind="visible: editarTareaBoolean">
+                            <div class="col-md-8 col-md-offset-2">
+                                <input id="id_video" name="video" type="text" class="form-control" placeholder="Copiar link de video en Youtube" data-bind="value: tarea.video" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="line-height:1.3;" data-bind="visible: !editarTareaBoolean()">
+                                <h4>Título de Tarea</h4>
+                                <span data-bind="text: tarea.titulo"></span>
+                            </div>
+                            <div class="panel-heading" style="line-height:1.3;" data-bind="visible: editarTareaBoolean">
+                                <h4>Título de Tarea</h4>
+                                <input name="titulo" type="text" class="form-control" placeholder="Introduzca Título de Tarea" data-bind="value: tarea.titulo"></input>
+                            </div>
+                            <div class="panel-body" data-bind="visible: !editarTareaBoolean()">
+                                <h4>Descripción</h4>
+                                <textarea data-bind="value: tarea.descripcion" class="form-control" rows="5" readonly></textarea>
+                                <div class="row">
+                                    <div class="col-md-7">Fecha límite para subir tarea</div>
+                                    <div class="col-md-5">
+                                        <div class="controls input-append date">
+                                            <span data-bind="text: tarea.fecha_subida"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7">Fecha límite para evaluar tarea</div>
+                                    <div class="col-md-5">
+                                        <div class="controls input-append date">
+                                            <span data-bind="text: tarea.fecha_evaluacion"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7"><h4>VideoClases recibidas</h4></div>
+                                    <div class="col-md-5">{{ videoclases_recibidas }}</div>
+                                </div>
+                            </div>
+                            <div class="panel-body" data-bind="visible: editarTareaBoolean">
+                                <h4>Descripción</h4>
+                                <textarea name="descripcion" class="form-control" data-bind="value: tarea.descripcion"></textarea>
+                                <div class="row">
+                                    <div class="col-md-7">Curso</div>
+                                    <div class="col-md-5">
+                                        <select name="curso" class="form-control" id="id_curso"
+                                            data-bind="options: select.cursos,
+                                            optionsText: 'nombre',
+                                            optionsValue: 'id',
+                                            optionsCaption: '-- escoja un curso --',
+                                            value: tarea.curso,
+                                            valueAllowUnset: false"></select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7">Revisiones mínimas</div>
+                                    <div class="col-md-5"><input class="form-control" type="number" name="revisiones" min="1" max="7" step="1" data-bind="value: tarea.revisiones"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7">Fecha límite para subir tarea</div>
+                                    <div class="col-md-5">
+                                        <div class="controls input-append date">
+                                           <input class="form-control" id="id_fecha_subida" name="fecha_subida" readonly="" type="text" data-bind="value: tarea.fecha_subida" />
+                                           <span class="add-on"><i class="icon-remove"></i></span>
+                                           <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                        <script type="text/javascript">
+                                           $("#id_fecha_subida").datetimepicker({minView: 2,
+                                            format: 'dd/mm/yyyy',
+                                            weekStart: 1,
+                                            autoclose: true,
+                                            todayHighlight: true,
+                                            startView: 2});
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7">Fecha límite para evaluar tarea</div>
+                                    <div class="col-md-5">
+                                        <div class="controls input-append date">
+                                           <input class="form-control" id="id_fecha_evaluacion" name="fecha_evaluacion" readonly="" type="text" data-bind="value: tarea.fecha_evaluacion" />
+                                           <span class="add-on"><i class="icon-remove"></i></span>
+                                           <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                        <script type="text/javascript">
+                                           $("#id_fecha_evaluacion").datetimepicker({minView: 2,
+                                            format: 'dd/mm/yyyy',
+                                            weekStart: 1,
+                                            autoclose: true,
+                                            todayHighlight: true,
+                                            startView: 2});
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form data-bind="submit: submitGruposForm">
+                    <div class="row">
+                        <div class="col-md-3">Alumnos por grupo</div>
+                        <div class="col-md-3">
+                            <input data-bind="value: asignarGrupo.cantidadPorGrupo" type="number" value="1" min="1" step="1" class="form-control"></input>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-success" data-bind="click: asignarGrupo.asignarAleatorio">Designar grupos aleatoriamente</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive col-md-12">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr data-bind="foreach: asignarGrupo.headers">
+                                        <th data-bind="click: $parent.asignarGrupo.sort, text: title"></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: asignarGrupo.alumnos">
+                                    <tr>
+                                        <td><span data-bind="text: $data.apellido"></span></td>
+                                        <td><span data-bind="text: $data.nombre"></span></td>
+                                        <td><input class="form-control" data-bind="value: $data.grupo" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <input id="asignar-grupo-form-submit" type="submit" value="Submit" style="display: none;" />
+                </form>
+                <div class="row">
+                    <div align="center" class="col-md-12">
+                        <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar tarea</button>
+                        <button type="submit" class="btn btn-success" data-bind="visible: editarTareaBoolean">Guardar tarea</button>
+                        <button class="btn btn-danger" data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">Descartar cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+.error {
+    border: 2px solid #f00;
+}
+
+.valid {
+    border: 2px solid #0ff;
+}
+
+input {
+    margin: 10px;
+}

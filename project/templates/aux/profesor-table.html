@@ -1,0 +1,76 @@
+    <script>
+        $(document).ready(function() {
+            jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+                "date-eu-pre": function ( date ) {
+                    date = date.replace(" ", "");
+                     
+                    if ( ! date ) {
+                        return 0;
+                    }
+             
+                    var year;
+                    var eu_date = date.split(/[\.\-\/]/);
+             
+                    /*year (optional)*/
+                    if ( eu_date[2] ) {
+                        year = eu_date[2];
+                    }
+                    else {
+                        year = 0;
+                    }
+             
+                    /*month*/
+                    var month = eu_date[1];
+                    if ( month.length == 1 ) {
+                        month = 0+month;
+                    }
+             
+                    /*day*/
+                    var day = eu_date[0];
+                    if ( day.length == 1 ) {
+                        day = 0+day;
+                    }
+             
+                    return (year + month + day) * 1;
+                },
+             
+                "date-eu-asc": function ( a, b ) {
+                    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                },
+             
+                "date-eu-desc": function ( a, b ) {
+                    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                }
+            } );
+            $('#example').dataTable( {
+                columnDefs: [
+                    { type: 'date-eu', targets: [4,5] }
+                ],
+                "order": [[ 4, "desc" ]],
+                "oLanguage" : {
+                    "sProcessing":     "Procesando...",
+                    "sLengthMenu":     "Mostrar _MENU_ registros",
+                    "sZeroRecords":    "No se encontraron resultados",
+                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix":    "",
+                    "sSearch":         "Buscar:",
+                    "sUrl":            "",
+                    "sInfoThousands":  ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst":    "Primero",
+                        "sLast":     "Último",
+                        "sNext":     "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            });
+        });       
+    </script>

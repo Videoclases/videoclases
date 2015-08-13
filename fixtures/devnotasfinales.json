@@ -1,0 +1,502 @@
+[
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 16,
+        "alumno": 2
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 78
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 17,
+        "alumno": 1
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 79
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 20,
+        "alumno": 10
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 80
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 21,
+        "alumno": 11
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 81
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 27,
+        "alumno": 4
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 82
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 28,
+        "alumno": 3
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 83
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 31,
+        "alumno": 16
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 84
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 32,
+        "alumno": 22
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 85
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 33,
+        "alumno": 23
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 86
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 34,
+        "alumno": 24
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 87
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 35,
+        "alumno": 25
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 88
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 36,
+        "alumno": 26
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 89
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 37,
+        "alumno": 27
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 90
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 38,
+        "alumno": 28
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 91
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 39,
+        "alumno": 29
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 92
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 40,
+        "alumno": 30
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 93
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 41,
+        "alumno": 18
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 94
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 42,
+        "alumno": 19
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 95
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 43,
+        "alumno": 17
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 96
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 44,
+        "alumno": 20
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 97
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 45,
+        "alumno": 21
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 98
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 46,
+        "alumno": 1
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 99
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 46,
+        "alumno": 7
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 100
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 47,
+        "alumno": 3
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 101
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 47,
+        "alumno": 14
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 102
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 48,
+        "alumno": 8
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 103
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 49,
+        "alumno": 6
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 104
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 49,
+        "alumno": 9
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 105
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 50,
+        "alumno": 2
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 106
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 50,
+        "alumno": 10
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 107
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 51,
+        "alumno": 4
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 108
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 51,
+        "alumno": 11
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 109
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 52,
+        "alumno": 12
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 110
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 52,
+        "alumno": 13
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 111
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 53,
+        "alumno": 15
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 112
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 72,
+        "alumno": 4
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 134
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 72,
+        "alumno": 10
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 135
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 72,
+        "alumno": 11
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 136
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 72,
+        "alumno": 13
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 137
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 72,
+        "alumno": 14
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 138
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 73,
+        "alumno": 2
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 139
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 73,
+        "alumno": 5
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 140
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 73,
+        "alumno": 7
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 141
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 73,
+        "alumno": 8
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 142
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 73,
+        "alumno": 12
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 143
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 74,
+        "alumno": 1
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 144
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 74,
+        "alumno": 3
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 145
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 74,
+        "alumno": 6
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 146
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 74,
+        "alumno": 9
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 147
+},
+{
+    "fields": {
+        "nota_profesor": 0.0,
+        "nota_clase": 0.0,
+        "grupo": 74,
+        "alumno": 15
+    },
+    "model": "videoclases.notasfinales",
+    "pk": 148
+}
+]
