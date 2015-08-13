@@ -55,3 +55,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Added
+db.sqlite3
+project/site_media/static/*
+project/site_media/media/*
+project/settings_secret.py
