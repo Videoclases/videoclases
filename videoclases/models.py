@@ -219,6 +219,9 @@ class VideoClase(models.Model):
 
     @staticmethod
     def process_youtube_default_link(link):
+        if 'youtu.be/' in link:
+            video_id = link.split('youtu.be/',1)[1]
+            return 'https://www.youtube.com/embed/' + str(video_id), True
         url_data = urlparse.urlparse(link)
         query = urlparse.parse_qs(url_data.query)
         try:
