@@ -109,6 +109,7 @@ class CrearCursoFormView(FormView):
         elif f.name.endswith('.ods'):
             data = ods_get_data(path)
         else:
+            os.remove(path)
             messages.info(self.request, 'El archivo debe ser formato XLS, XLSX u ODS.')
             return HttpResponseRedirect(reverse('crear_curso'))
         try:
@@ -124,6 +125,7 @@ class CrearCursoFormView(FormView):
             complete &= alumno_array[2] not in [None,'']
             complete &= alumno_array[3] not in [None,'']
             if not complete:
+                os.remove(path)
                 messages.info(self.request, 'El archivo no tiene toda la información de un alumno.')
                 return HttpResponseRedirect(reverse('crear_curso'))
         # Create Curso
