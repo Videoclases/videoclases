@@ -85,13 +85,18 @@ class CrearCursoTestCase(TestCase):
         response = self.client.get(reverse('crear_curso'))
         self.assertEqual(response.status_code, 302)
 
-    def test_crear_curso_form_correct_ods(self):
+    def crear_curso_form_correct(self, filename, content_type):
+        # sheet has 2 alumnos
+        # usernames dmunoz and anoram
+
         self.client.login(username='profe', password='profe')
         user = User.objects.get(username='profe')
-        path = BASE_DIR + '/project' + static('test/correctODSSheet.ods')
+        original_alumnos = Alumno.objects.all().count()
+        path = BASE_DIR + '/project' + static(filename)
         upload_file = open(path, 'rb')
+        #(self, file, field_name, name, content_type, size, charset, content_type_extra=None)
         imf = InMemoryUploadedFile(BytesIO(upload_file.read()), 'file', upload_file.name,
-            'application/vnd.oasis.opendocument.spreadsheet', os.path.getsize(path), None, {})
+            content_type, os.path.getsize(path), None, {})
         file_dict = {'file': imf }
         form_data = {}
         form_data['nombre'] = 'Nombre'
@@ -102,10 +107,12 @@ class CrearCursoTestCase(TestCase):
         # assert valid form
         self.assertTrue(form.is_valid())
 
-        # assert valid response
-        response = self.client.post(reverse('crear_curso'), form_data)
-        self.assertEqual(response.status_code, 302)
+        # assert valid response redirect and message
+        response = self.client.post(reverse('crear_curso'), form_data, follow=True)
         self.assertRedirects(response, reverse('profesor'))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'El curso se ha creado exitosamente')
 
         # assert valid creation of object
         curso = Curso.objects.filter(nombre='Nombre', anho=2015, colegio=user.profesor.colegio)
@@ -113,6 +120,92 @@ class CrearCursoTestCase(TestCase):
         self.assertEqual(curso.count(), 1)
 
         # assert valid creation of alumnos
+        self.assertEqual(original_alumnos + 2, Alumno.objects.all().count())
+        self.assertTrue(User.objects.filter(username='dmunoz').exists())
+        self.assertTrue(User.objects.filter(username='anoram').exists())
+        self.assertIsInstance(User.objects.get(username='dmunoz').alumno, Alumno)
+        self.assertIsInstance(User.objects.get(username='anoram').alumno, Alumno)
+
+    def test_crear_curso_form_correct_ods(self):
+        self.crear_curso_form_correct(
+            'test/correctSheet.ods',
+            'application/vnd.oasis.opendocument.spreadsheet')
+
+    def test_crear_curso_form_correct_xls(self):
+        self.crear_curso_form_correct(
+            'test/correctSheet.xls',
+            'application/vnd.ms-excel')
+
+    def test_crear_curso_form_correct_xlsx(self):
+        self.crear_curso_form_correct(
+            'test/correctSheet.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+    def crear_curso_form_incomplete(self, filename, content_type):
+        # sheet has 2 alumnos
+        # usernames dmunoz and anoram
+
+        self.client.login(username='profe', password='profe')
+        user = User.objects.get(username='profe')
+        path = BASE_DIR + '/project' + static(filename)
+        upload_file = open(path, 'rb')
+        imf = InMemoryUploadedFile(BytesIO(upload_file.read()), 'file', upload_file.name,
+            content_type, os.path.getsize(path), None, {})
+        file_dict = {'file': imf }
+        form_data = {}
+        form_data['nombre'] = 'Nombre'
+        form_data['anho'] = 2015
+        form_data['file'] = imf
+        form = CrearCursoSubirArchivoForm(form_data, file_dict)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response redirect and message
+        response = self.client.post(reverse('crear_curso'), form_data, follow=True)
+        self.assertRedirects(response, reverse('crear_curso'))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'El archivo no tiene toda la información de un alumno.')
+
+    def test_crear_curso_form_incomplete_ods(self):
+        self.crear_curso_form_incomplete(
+            'test/incompleteSheet.ods',
+            'application/vnd.oasis.opendocument.spreadsheet')
+
+    def test_crear_curso_form_incomplete_xls(self):
+        self.crear_curso_form_incomplete(
+            'test/incompleteSheet.xls',
+            'application/vnd.ms-excel')
+
+    def test_crear_curso_form_incomplete_xlsx(self):
+        self.crear_curso_form_incomplete(
+            'test/incompleteSheet.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+    def test_crear_curso_form_wrong_extension(self):
+        self.client.login(username='profe', password='profe')
+        user = User.objects.get(username='profe')
+        path = BASE_DIR + '/project' + static('test/image.png')
+        upload_file = open(path, 'rb')
+        imf = InMemoryUploadedFile(BytesIO(upload_file.read()), 'file', upload_file.name,
+            'image/png', os.path.getsize(path), None, {})
+        file_dict = {'file': imf }
+        form_data = {}
+        form_data['nombre'] = 'Nombre'
+        form_data['anho'] = 2015
+        form_data['file'] = imf
+        form = CrearCursoSubirArchivoForm(form_data, file_dict)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response redirect and message
+        response = self.client.post(reverse('crear_curso'), form_data, follow=True)
+        self.assertRedirects(response, reverse('crear_curso'))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'El archivo debe ser formato XLS, XLSX u ODS.')
 
 class CrearTareaTestCase(TestCase):
     fixtures = todos_los_fixtures

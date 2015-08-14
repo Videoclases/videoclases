@@ -95,6 +95,7 @@ class CrearCursoFormView(FormView):
         return super(CrearCursoFormView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form, *args, **kwargs):
+        #(self, file, field_name, name, content_type, size, charset, content_type_extra=None)
         f = form.cleaned_data['file']
         path = settings.MEDIA_ROOT + '/' + f.name
         with open(path, 'wb+') as destination:
@@ -118,10 +119,10 @@ class CrearCursoFormView(FormView):
         for i in range(1,len(sheet)):
             alumno_array = sheet[i]
             complete = True
-            complete &= alumno_array[0] != None
-            complete &= alumno_array[1] != None
-            complete &= alumno_array[2] != None
-            complete &= alumno_array[3] != None
+            complete &= alumno_array[0] not in [None,'']
+            complete &= alumno_array[1] not in [None,'']
+            complete &= alumno_array[2] not in [None,'']
+            complete &= alumno_array[3] not in [None,'']
             if not complete:
                 messages.info(self.request, 'El archivo no tiene toda la información de un alumno.')
                 return HttpResponseRedirect(reverse('crear_curso'))
