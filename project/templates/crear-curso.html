@@ -46,6 +46,20 @@
                         <h4>Si deseas subir una planilla, sigue este formato:</h4>
                         <img src="{% static "img/formatoPlanilla.png" %}" />
                     </div>
+                    <div class="row">
+                        <div class="col-md-3 col-md-offset-3">
+                            <h4>Descargar planilla: </h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4><a href="{% static "templates/template.ods" %}">ODS</a></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4><a href="{% static "templates/template.xls" %}">XLS</a></h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4><a href="{% static "templates/template.xlsx" %}">XLSX</a></h4>
+                        </div>
+                    </div>
                 </div>
             </div>
             <form method="post" enctype="multipart/form-data">
