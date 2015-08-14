@@ -29,11 +29,5 @@ urlpatterns = patterns('',
     url(r'^profesor/', vv.ProfesorView.as_view(), name='profesor'),
     #url(r'^videoclases/', vv.videoclases, name='videoclases'),
 
-
-    url(r'^ui/', vv.ui, name='ui'),
-    url(r'^forms/', vv.forms, name='forms'),
     url(r'^admin/', include(admin.site.urls)),
-    #url(r'^complete/(?P<backend>[^/]+)/$', vv.IndexView.as_view()),
-    #url(r'^login-error/$', vv.LoginError.as_view()),
-    #url('', include('social.apps.django_app.urls', namespace='social'))
 )

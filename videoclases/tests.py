@@ -1,14 +1,22 @@
 #-*- coding: UTF-8 -*-
 
+import os
+
 from datetime import timedelta
+from django.conf import settings
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User, Group
 from django.db.models import Count, Q
+from django.templatetags.static import static
 from django.test import TestCase
 from django.utils import timezone
+from io import BytesIO
 from videoclases.forms import *
 from videoclases.models import *
+from videoclases.views import *
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 todos_los_fixtures = ['devgroups', 'devusers', 'devcursos', 'devalumnos', 'devprofesores', 
     'devcolegio', 'devtareas', 'devgrupos', 'devvideoclasesevaluando', 'devnotasfinales',
     'devrespuestasdealumnos', 'devevaluacionesdealumnos']
@@ -76,6 +84,35 @@ class CrearCursoTestCase(TestCase):
     def test_anonymous_user_permissions(self):
         response = self.client.get(reverse('crear_curso'))
         self.assertEqual(response.status_code, 302)
+
+    def test_crear_curso_form_correct_ods(self):
+        self.client.login(username='profe', password='profe')
+        user = User.objects.get(username='profe')
+        path = BASE_DIR + '/project' + static('test/correctODSSheet.ods')
+        upload_file = open(path, 'rb')
+        imf = InMemoryUploadedFile(BytesIO(upload_file.read()), 'file', upload_file.name,
+            'application/vnd.oasis.opendocument.spreadsheet', os.path.getsize(path), None, {})
+        file_dict = {'file': imf }
+        form_data = {}
+        form_data['nombre'] = 'Nombre'
+        form_data['anho'] = 2015
+        form_data['file'] = imf
+        form = CrearCursoSubirArchivoForm(form_data, file_dict)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('crear_curso'), form_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('profesor'))
+
+        # assert valid creation of object
+        curso = Curso.objects.filter(nombre='Nombre', anho=2015, colegio=user.profesor.colegio)
+        self.assertTrue(curso.exists())
+        self.assertEqual(curso.count(), 1)
+
+        # assert valid creation of alumnos
 
 class CrearTareaTestCase(TestCase):
     fixtures = todos_los_fixtures

@@ -2,6 +2,7 @@
 
 import codecs
 import json
+import os
 import random
 
 from django.conf import settings
@@ -150,8 +151,10 @@ class CrearCursoFormView(FormView):
                         a.cursos.add(curso)
                         a.save()
         else:
+            os.remove(path)
             messages.info(self.request, 'Ya existe un curso con ese nombre en este año.')
             return HttpResponseRedirect(reverse('crear_curso'))
+        os.remove(path)
         messages.info(self.request, 'El curso se ha creado exitosamente')
         return HttpResponseRedirect(reverse('profesor'))
 
@@ -179,7 +182,6 @@ class CrearTareaFormView(FormView):
         return super(CrearTareaFormView, self).dispatch(*args, **kwargs)
 
     def form_invalid(self, form):
-        print form.errors
         result_dict = {}
         result_dict['success'] = False
         result_dict['id'] = -1
