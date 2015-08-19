@@ -30,13 +30,7 @@ function viewModel() {
             alert("Debes seleccionar una respuesta");
             return;
         }
-        if (self.valor() == 0) {
-            if (confirm("¿Seguro que deseas seguir sin poner \"Me gusta?")) {
-                $( "#respuestaForm" ).submit();
-            }
-        } else {
-            $( "#respuestaForm" ).submit();
-        }
+        $( "#respuestaForm" ).submit();
     }
 
     self.submitEvaluacionDeAlumno = function(data, event) {
