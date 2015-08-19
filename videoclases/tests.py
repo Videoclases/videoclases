@@ -804,6 +804,23 @@ class VideoClaseModelMethodsTestCase(TestCase):
         porcentaje = int(round(100*incorrectas/total))
         self.assertEqual(vc.porcentaje_respuestas_incorrectas(), porcentaje)
 
+    def test_integrantes_y_respuestas(self):
+        vc = VideoClase.objects.get(id=35)
+        a = vc.grupo.alumnos.all()[0]
+        respuestas = RespuestasDeAlumnos.objects.filter(
+                        videoclase__grupo__tarea=vc.grupo.tarea,
+                        alumno=a)
+        correctas = 0
+        for r in respuestas:
+            correctas += r.respuesta == r.videoclase.alternativa_correcta
+        incorrectas = 0
+        for r in respuestas:
+            incorrectas += r.respuesta == r.videoclase.alternativa_2 \
+                or r.respuesta == r.videoclase.alternativa_3
+        result_dict = vc.integrantes_y_respuestas()
+        self.assertEqual(result_dict[0]['cantidad_correctas'], correctas)
+        self.assertEqual(result_dict[0]['cantidad_incorrectas'], incorrectas)
+
 class VideoclasesAlumnoTestCase(TestCase):
     fixtures = todos_los_fixtures
 

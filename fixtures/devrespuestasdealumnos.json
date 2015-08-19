@@ -192,7 +192,7 @@
     "fields": {
         "alumno": 2,
         "videoclase": 32,
-        "respuesta": "b"
+        "respuesta": "c"
     },
     "model": "videoclases.respuestasdealumnos",
     "pk": 26

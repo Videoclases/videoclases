@@ -185,15 +185,16 @@ class VideoClase(models.Model):
         alumnos_array = []
         for a in alumnos:
             alumno_dict = {}
-            correctas = RespuestasDeAlumnos.objects.filter(
-                            alumno=a,
+            respuestas = RespuestasDeAlumnos.objects.filter(
                             videoclase__grupo__tarea=self.grupo.tarea,
-                            respuesta=self.alternativa_correcta).count()
-            incorrectas = RespuestasDeAlumnos.objects.filter(
-                                videoclase__grupo__tarea=self.grupo.tarea,
-                                alumno=a) \
-                                .filter(Q(respuesta=self.alternativa_2) | Q(respuesta=self.alternativa_3)) \
-                                .count()
+                            alumno=a)
+            correctas = 0
+            for r in respuestas:
+                correctas += r.respuesta == r.videoclase.alternativa_correcta
+            incorrectas = 0
+            for r in respuestas:
+                incorrectas += r.respuesta == r.videoclase.alternativa_2 \
+                    or r.respuesta == r.videoclase.alternativa_3
             alumno_dict['user_id'] = a.usuario.id
             alumno_dict['nombre'] = a.usuario.first_name + ' ' + a.usuario.last_name
             alumno_dict['cantidad_correctas'] = correctas
@@ -274,5 +275,5 @@ class RespuestasDeAlumnos(models.Model):
     respuesta = models.CharField(max_length=100, blank=True, null=True)
 
     def __unicode__(self):
-        return 'Responde: ' + self.alumno.usuario.first_name + '. Respuesta: ' + str(self.respuesta) + \
+        return 'Responde: ' + self.alumno.usuario.first_name + '. Respuesta: ' + unicode(self.respuesta) + \
         ' .Videoclase ' + str(self.videoclase.id) + ' ' + self.videoclase.grupo.tarea.titulo
