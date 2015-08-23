@@ -46,7 +46,6 @@
             // initial data for grupos
             $.when($.ajax("{% url 'descargar_grupos_tarea' tarea.id %}")).done(
                 function (result) {
-                    b=result;
                     vm.asignarGrupo.alumnos.removeAll();
                     vm.curso.nombre(result.curso.nombre);
                     vm.curso.id(result.curso.id);
