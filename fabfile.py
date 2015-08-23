@@ -101,7 +101,7 @@ def reload():
     sudo('service apache2 restart')
 
 # deploy on development server
-def deploy_devserver():
+def deploy():
     require('hosts', provided_by=[devserver])
     if _confirm():
         update()
