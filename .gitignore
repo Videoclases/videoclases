@@ -60,4 +60,5 @@ target/
 db.sqlite3
 project/site_media/static/*
 project/site_media/media/*
+project/fabfile_secret.py
 project/settings_secret.py

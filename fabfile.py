@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from fabric.api import env, require, run, sudo, cd, local, get
 
+from project.fabfile_secret import *
 from videoclases.models import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -25,6 +26,92 @@ def _load_data(reboot=False):
         'devtareas']
         for f in fixtures:
             local('python manage.py loaddata ' + f)
+
+# fab devserver -> states that you will connect to devserver server
+def devserver():
+    env.hosts = [env.server_name]
+
+# activates videoclases virtualenv in server
+def virtualenv(command, use_sudo=False):
+    if use_sudo:
+        func = sudo
+    else:
+        func = run
+    func('source %sbin/activate && %s' % (env.virtualenv_root, command))
+
+# creates file in ~/
+# usage: fab devserver test_connection
+def test_connection():
+    require('hosts', provided_by=[devserver])
+    virtualenv('echo "It works!" > fabric_connection_works.txt')
+
+# util for prompt confirmation
+def _confirm():
+    prompt = "Please confirm you want to sync the branch 'master' in the server 'buho'"
+    prompt = '%s [%s/%s]: ' % (prompt, 'y', 'n')
+
+    while True:
+        ans = raw_input(prompt)
+        if not ans:
+            print 'Please answer Y or N.'
+            continue
+        if ans not in ['y', 'Y', 'n', 'N']:
+            print 'Please answer Y or N.'
+            continue
+        if ans == 'y' or ans == 'Y':
+            return True
+        if ans == 'n' or ans == 'N':
+            return False
+
+# updates dev server project from git repository
+def update():
+    require('hosts', provided_by=[devserver])
+    with cd(env.repo_root):
+        run('git pull origin master')
+
+# installs requirements in server
+def install_requirements():
+    require('hosts', provided_by=[devserver])
+    virtualenv('pip install -q -r %(requirements_file)s' % env)
+
+# aux function for calling manage.py functions
+def manage_py(command, use_sudo=False):
+    require('hosts', provided_by=[devserver])
+    with cd(env.manage_dir):
+        virtualenv('python manage.py %s' % command, use_sudo)
+
+# syncs db in server
+def makemigrations():
+    require('hosts', provided_by=[devserver])
+    manage_py('makemigrations')
+
+# south migrate for db
+def migrate():
+    require('hosts', provided_by=[devserver])
+    manage_py('migrate')
+
+# collects static files
+def collectstatic():
+    require('hosts', provided_by=[devserver])
+    manage_py('collectstatic --noinput -l')
+
+# restarts apache in server
+def reload():
+    require('hosts', provided_by=[devserver])
+    sudo('service apache2 restart')
+
+# deploy on development server
+def deploy_devserver():
+    require('hosts', provided_by=[devserver])
+    if _confirm():
+        update()
+        install_requirements()
+        makemigrations()
+        migrate()
+        collectstatic()
+        reload()
+    else:
+        print 'Deploy cancelado'
 
 # sync and migrate local db and start server
 def restart(reboot=False):
