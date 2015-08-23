@@ -1,14 +1,3 @@
-"""
-Django settings for videoclases project, on Heroku. Fore more info, see:
-https://github.com/heroku/heroku-django-template
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.8/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.8/ref/settings/
-"""
-
 import os
 
 from settings_secret import *
@@ -18,14 +7,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
-
 
 # Application definition
 
@@ -38,7 +23,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     # external
-    #'social.apps.django_app.default',
     'datetimewidget',
 
     # project
@@ -73,8 +57,6 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                #'social.apps.django_app.context_processors.backends',
-                #'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -117,7 +99,6 @@ FIXTURE_DIRS = [
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 AUTHENTICATION_BACKENDS = (
-    #'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 LOGIN_REDIRECT_URL = '/'
