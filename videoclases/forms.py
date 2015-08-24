@@ -43,6 +43,7 @@ class CrearTareaForm(forms.ModelForm):
             self._errors['fecha_evaluacion'] = self.error_class([msg])
 
 class EditarTareaForm(forms.ModelForm):
+    fecha_subida = forms.DateField(input_formats=['%Y-%m-%d'])
 
     class Meta:
         model = Tarea
@@ -59,8 +60,14 @@ class EditarTareaForm(forms.ModelForm):
         }
 
     def clean(self):
-        fecha_subida = self.cleaned_data.get('fecha_subida')
-        fecha_evaluacion = self.cleaned_data.get('fecha_evaluacion')
+        if self.cleaned_data.get('fecha_subida'):
+            fecha_subida = self.cleaned_data.get('fecha_subida')
+        else:
+            fecha_subida = self.instance.fecha_subida
+        if self.cleaned_data.get('fecha_evaluacion'):
+            fecha_evaluacion = self.cleaned_data.get('fecha_evaluacion')
+        else:
+            fecha_evaluacion = self.instance.fecha_evaluacion
         if fecha_evaluacion < fecha_subida:
             msg = u'Fecha para evaluar debe ser posterior a Fecha para subir tarea.'
             self._errors['fecha_evaluacion'] = self.error_class([msg])
