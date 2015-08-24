@@ -4,7 +4,7 @@
 
 function viewModel() {
     var self = this;
-    self.asignarGrupo = new AsignarGrupo();
+    self.editarGrupo = new EditarGrupo();
     self.select = new Select();
     self.editarTareaBoolean = ko.observable(false);
     self.id = ko.observable();

@@ -387,6 +387,7 @@ class DescargarGruposTareaTestCase(TestCase):
                 alumno_dict['apellido'] = a.usuario.last_name
                 alumno_dict['nombre'] = a.usuario.first_name
                 alumno_dict['grupo'] = g.numero
+                alumno_dict['videoclase'] = g.videoclase.video in [None,'']
                 alumnos_array.append(alumno_dict)
         result_dict['alumnos'] = alumnos_array
         result_dict['curso'] = curso_dict

@@ -19,7 +19,7 @@
             ]
         }
     </script>
-    <script src="{% static "js/src/asignarGrupo.js" %}"></script>
+    <script src="{% static "js/src/editarGrupo.js" %}"></script>
     <script src="{% static "js/src/tareaDetalle.js" %}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -46,14 +46,14 @@
             // initial data for grupos
             $.when($.ajax("{% url 'descargar_grupos_tarea' tarea.id %}")).done(
                 function (result) {
-                    vm.asignarGrupo.alumnos.removeAll();
+                    vm.editarGrupo.alumnos.removeAll();
                     vm.curso.nombre(result.curso.nombre);
                     vm.curso.id(result.curso.id);
                     for (i = 0; i < result.alumnos.length; i++) {
                         var a = result.alumnos[i];
-                        vm.asignarGrupo.alumnos.push(new Alumno(parseInt(a.id), a.apellido, a.nombre, parseInt(a.grupo)));
+                        vm.editarGrupo.alumnos.push(new Alumno(parseInt(a.id), a.apellido, a.nombre, parseInt(a.grupo), a.videoclase));
                     }
-                    vm.asignarGrupo.sortTable('grupo');
+                    vm.editarGrupo.sortTable('grupo');
                 }
             );
         });
@@ -210,25 +210,26 @@
                     <div class="row">
                         <div class="col-md-3">Alumnos por grupo</div>
                         <div class="col-md-3">
-                            <input data-bind="value: asignarGrupo.cantidadPorGrupo" type="number" value="1" min="1" step="1" class="form-control"></input>
+                            <input data-bind="value: editarGrupo.cantidadPorGrupo" type="number" value="1" min="1" step="1" class="form-control"></input>
                         </div>
                         <div class="col-md-6">
-                            <button class="btn btn-success" data-bind="click: asignarGrupo.asignarAleatorio">Designar grupos aleatoriamente</button>
+                            <button class="btn btn-success" data-bind="click: editarGrupo.asignarAleatorio">Designar grupos aleatoriamente</button>
                         </div>
                     </div>
                     <div class="row">
                         <div class="table-responsive col-md-12">
                             <table class="table table-bordered table-hover">
                                 <thead>
-                                    <tr data-bind="foreach: asignarGrupo.headers">
-                                        <th data-bind="click: $parent.asignarGrupo.sort, text: title"></th>
+                                    <tr data-bind="foreach: editarGrupo.headers">
+                                        <th data-bind="click: $parent.editarGrupo.sort, text: title"></th>
                                     </tr>
                                 </thead>
-                                <tbody data-bind="foreach: asignarGrupo.alumnos">
+                                <tbody data-bind="foreach: editarGrupo.alumnos">
                                     <tr>
                                         <td><span data-bind="text: $data.apellido"></span></td>
                                         <td><span data-bind="text: $data.nombre"></span></td>
                                         <td><input class="form-control" data-bind="value: $data.grupo" /></td>
+                                        <td><span data-bind="text: $root.editarGrupo.getVideoclaseText($data.videoclase)"></span></td>
                                     </tr>
                                 </tbody>
                             </table>

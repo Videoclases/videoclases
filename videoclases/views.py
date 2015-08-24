@@ -261,6 +261,8 @@ def descargar_grupos_tarea(request, tarea_id):
             alumno_dict['apellido'] = a.usuario.last_name
             alumno_dict['nombre'] = a.usuario.first_name
             alumno_dict['grupo'] = g.numero
+            print g.videoclase.video
+            alumno_dict['videoclase'] = g.videoclase.video not in [None,'']
             alumnos_array.append(alumno_dict)
     result_dict['alumnos'] = alumnos_array
     result_dict['curso'] = curso_dict
