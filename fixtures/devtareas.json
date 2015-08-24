@@ -45,7 +45,7 @@
     "fields": {
         "fecha_subida": "2015-07-27",
         "curso": 2,
-        "video": "",
+        "video": "https://www.youtube.com/embed/JFfcD-SkqIc",
         "revisiones": 4,
         "descripcion": "L\u00ednea 1 de descripci\u00f3n.\r\n\r\nOtras l\u00edneas\r\nFin",
         "titulo": "M\u00edo Cid Campeador",

@@ -193,13 +193,6 @@ class CrearTareaFormView(FormView):
     def form_valid(self, form):
         result_dict = {}
         tarea = form.save(commit=False)
-        if tarea.video:
-            processed_link, success = VideoClase.process_youtube_default_link(tarea.video)
-            if success:
-                tarea.video = processed_link
-            else:
-                result_dict['success'] = False
-                return JsonResponse(result_dict)
         tarea.profesor = self.request.user.profesor
         tarea.save()
         result_dict['id'] = tarea.id
@@ -474,7 +467,14 @@ class TareaDetalleView(UpdateView):
         return context
 
     def form_valid(self, form):
-        self.object = form.save()
+        self.object = self.get_object()
+        if self.object.video:
+            video = self.object.video
+        else:
+            video = ''
+        self.object = form.save(commit=False)
+        self.object.video = video
+        self.object.save()
         result_dict = {}
         result_dict['id'] = self.object.id
         return JsonResponse(result_dict)

@@ -43,7 +43,6 @@ class CrearTareaForm(forms.ModelForm):
             self._errors['fecha_evaluacion'] = self.error_class([msg])
 
 class EditarTareaForm(forms.ModelForm):
-    fecha_subida = forms.DateField(input_formats=['%Y-%m-%d'])
 
     class Meta:
         model = Tarea
@@ -74,13 +73,13 @@ class EditarTareaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EditarTareaForm, self).__init__(*args, **kwargs)
+        self.fields['video'].required = False
         self.fields['titulo'].required = False
         self.fields['descripcion'].required = False
         self.fields['curso'].required = False
         self.fields['revisiones'].required = False
         self.fields['fecha_subida'].required = False
         self.fields['fecha_evaluacion'].required = False
-        self.fields['video'].required = False
 
 class EnviarVideoclaseForm(forms.ModelForm):
 

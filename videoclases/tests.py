@@ -686,6 +686,10 @@ class TareaDetalleTestCase(TestCase):
         # assert valid form
         self.assertTrue(form.is_valid())
 
+        # assert processing of link
+        link, success = Tarea.process_youtube_default_link('https://www.youtube.com/embed/JFfcD-SkqIc')
+        self.assertEqual(link, u'https://www.youtube.com/embed/JFfcD-SkqIc')
+
         # assert valid response
         response = self.client.post(reverse('editar_tarea_form', kwargs={'tarea_id':9}), form_data)
         self.assertEqual(response.status_code, 200)
@@ -693,6 +697,8 @@ class TareaDetalleTestCase(TestCase):
         # assert valid edit of object
         tarea_editada = Tarea.objects.get(id=9)
         self.assertNotEqual(tarea_editada.revisiones, tarea_original.revisiones)
+        self.assertEqual(tarea_editada.fecha_subida, tarea_original.fecha_subida)
+        self.assertEqual(tarea_editada.video, tarea_original.video)
         self.assertEqual(5, Tarea.objects.get(id=9).revisiones)
 
 class VerVideoclaseTestCase(TestCase):

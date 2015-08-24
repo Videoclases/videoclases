@@ -80,6 +80,28 @@ class Tarea(models.Model):
         else:
             return 'Terminada'
 
+    @staticmethod
+    def process_youtube_default_link(link):
+        if 'youtu.be/' in link:
+            video_id = link.split('youtu.be/',1)[1]
+            return 'https://www.youtube.com/embed/' + str(video_id), True
+        url_data = urlparse.urlparse(link)
+        query = urlparse.parse_qs(url_data.query)
+        if 'youtube.com/embed/' in link:
+            return link, True
+        try:
+            video_id = query['v'][0]
+            return 'https://www.youtube.com/embed/' + str(video_id), True
+        except:
+            return None, False
+
+    def save(self, *args, **kwargs):
+        if self.video:
+            link, success = self.process_youtube_default_link(self.video)
+            if success:
+                self.video = unicode(link)
+        super(Tarea, self).save(*args, **kwargs)
+
 class Grupo(models.Model):
     numero         = models.IntegerField()
     tarea          = models.ForeignKey(Tarea, related_name='grupos')
@@ -232,12 +254,11 @@ class VideoClase(models.Model):
             return None, False
 
     def save(self, *args, **kwargs):
-        super(VideoClase, self).save(*args, **kwargs)
         if self.video:
             link, success = self.process_youtube_default_link(self.video)
             if success:
                 self.video = link
-                self.save()
+        super(VideoClase, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return 'Tarea: ' + self.grupo.tarea.titulo + '. Grupo: ' + str(self.grupo.numero)
