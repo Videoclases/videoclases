@@ -141,13 +141,20 @@ function viewModel() {
                     fd.append("video", self.tarea.video());
                 }
             }
+            var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
             if (self.tarea.fecha_subida().localeCompare(self.tareaDatosIniciales.fecha_subida()) != 0) {
                 mustSubmit = true;
-                fd.append("fecha_subida", self.tarea.fecha_subida());
+                var subidaArray = reggie.exec(self.tarea.fecha_subida());
+                var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
+                    +(+subidaArray[1]);
+                fd.append("fecha_subida", subidaDate);
             }
             if (self.tarea.fecha_evaluacion().localeCompare(self.tareaDatosIniciales.fecha_evaluacion()) != 0) {
                 mustSubmit = true;
-                fd.append("fecha_evaluacion", self.tarea.fecha_evaluacion());
+                var evaluacionArray = reggie.exec(self.tarea.fecha_evaluacion());
+                var evaluacionDate = (+evaluacionArray[3]) + '-' + (+evaluacionArray[2]) + '-'
+                    +(+evaluacionArray[1]);
+                fd.append("fecha_evaluacion", evaluacionDate);
             }
             if (mustSubmit) {
                 $.ajaxSetup({

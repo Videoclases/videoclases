@@ -38,7 +38,7 @@ function viewModel() {
         fd.append("titulo", self.tarea.titulo());
         fd.append("video", self.tarea.video());
         var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-        var subidaArray = reggie.exec(self.tarea.fecha_subida()); 
+        var subidaArray = reggie.exec(self.tarea.fecha_subida());
         var evaluacionArray = reggie.exec(self.tarea.fecha_evaluacion());
         var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
             +(+subidaArray[1]);
