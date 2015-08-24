@@ -472,6 +472,8 @@ class TareaDetalleView(UpdateView):
             video = self.object.video
         else:
             video = ''
+        if form.cleaned_data['video'] == 'empty video':
+            video = ''
         self.object = form.save(commit=False)
         self.object.video = video
         self.object.save()

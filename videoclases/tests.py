@@ -701,6 +701,27 @@ class TareaDetalleTestCase(TestCase):
         self.assertEqual(tarea_editada.video, tarea_original.video)
         self.assertEqual(5, Tarea.objects.get(id=9).revisiones)
 
+    def test_editar_tarea_form_empty_video(self):
+        self.client.login(username='profe', password='profe')
+        tarea_original = Tarea.objects.get(id=9)
+        form_data = {}
+        form_data['video'] = 'empty video'
+        form = EditarTareaForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('editar_tarea_form', kwargs={'tarea_id':9}), form_data)
+        self.assertEqual(response.status_code, 200)
+
+        # assert valid edit of object
+        tarea_editada = Tarea.objects.get(id=9)
+        self.assertNotEqual(tarea_editada.video, tarea_original.video)
+        self.assertEqual(tarea_editada.revisiones, tarea_original.revisiones)
+        self.assertEqual(tarea_editada.fecha_subida, tarea_original.fecha_subida)
+        self.assertEqual('', Tarea.objects.get(id=9).video)
+
 class VerVideoclaseTestCase(TestCase):
     fixtures = todos_los_fixtures
 

@@ -143,7 +143,7 @@ function viewModel() {
             } else {
                 if (self.tareaDatosIniciales.video()) {
                     mustSubmit = true;
-                    fd.append("video", "");
+                    fd.append("video", "empty video");
                 }
             }
             var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
