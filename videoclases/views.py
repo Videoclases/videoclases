@@ -468,10 +468,10 @@ class TareaDetalleView(UpdateView):
 
     def form_valid(self, form):
         self.object = self.get_object()
-        if self.object.video:
+        if self.object.video not in ['',None]:
             video = self.object.video
         else:
-            video = ''
+            video = form.cleaned_data['video']
         if form.cleaned_data['video'] == 'empty video':
             video = ''
         self.object = form.save(commit=False)
