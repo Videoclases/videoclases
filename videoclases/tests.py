@@ -254,6 +254,7 @@ class CrearTareaTestCase(TestCase):
         # assert valid creation of object
         new_tarea = Tarea.objects.get(titulo='titulo', descripcion='descripcion')
         self.assertEqual(new_tarea, Tarea.objects.latest('id'))
+        self.assertEqual(new_tarea.video, u'https://www.youtube.com/embed/8a7sd82s')
 
     def test_asignar_grupo_form(self):
         self.client.login(username='profe', password='profe')

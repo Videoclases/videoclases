@@ -191,10 +191,17 @@ class CrearTareaFormView(FormView):
         return JsonResponse(result_dict)
 
     def form_valid(self, form):
+        result_dict = {}
         tarea = form.save(commit=False)
+        if tarea.video:
+            processed_link, success = VideoClase.process_youtube_default_link(tarea.video)
+            if success:
+                tarea.video = processed_link
+            else:
+                result_dict['success'] = False
+                return JsonResponse(result_dict)
         tarea.profesor = self.request.user.profesor
         tarea.save()
-        result_dict = {}
         result_dict['id'] = tarea.id
         return JsonResponse(result_dict)
 
@@ -261,7 +268,6 @@ def descargar_grupos_tarea(request, tarea_id):
             alumno_dict['apellido'] = a.usuario.last_name
             alumno_dict['nombre'] = a.usuario.first_name
             alumno_dict['grupo'] = g.numero
-            print g.videoclase.video
             alumno_dict['videoclase'] = g.videoclase.video not in [None,'']
             alumnos_array.append(alumno_dict)
     result_dict['alumnos'] = alumnos_array
