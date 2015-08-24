@@ -140,6 +140,11 @@ function viewModel() {
                     mustSubmit = true;
                     fd.append("video", self.tarea.video());
                 }
+            } else {
+                if (self.tareaDatosIniciales.video()) {
+                    mustSubmit = true;
+                    fd.append("video", "");
+                }
             }
             var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
             if (self.tarea.fecha_subida().localeCompare(self.tareaDatosIniciales.fecha_subida()) != 0) {
