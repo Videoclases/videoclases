@@ -1,5 +1,5 @@
 /*
- *  ViewModel for TareaDetalle template
+ *  ViewModel for EditarTarea template
  */
 
 function viewModel() {

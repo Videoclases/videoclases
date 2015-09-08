@@ -267,6 +267,45 @@ def descargar_grupos_tarea(request, tarea_id):
     result_dict['curso'] = curso_dict
     return JsonResponse(result_dict)
 
+class EditarTareaView(UpdateView):
+    template_name = 'editar-tarea.html'
+    form_class = EditarTareaForm
+    success_url = reverse_lazy('profesor')
+    model = Tarea
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(EditarTareaView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(EditarTareaView, self).get_context_data(**kwargs)
+        tarea = Tarea.objects.get(id=self.kwargs['tarea_id'])
+        context['cursos'] = self.request.user.profesor.cursos.all()
+        context['tarea'] = tarea
+        context['videoclases_recibidas'] = Grupo.objects.filter(tarea=tarea) \
+                                .exclude(videoclase__video__isnull=True) \
+                                .exclude(videoclase__video__exact='').count()
+        return context
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        if self.object.video not in ['',None]:
+            video = self.object.video
+        else:
+            video = form.cleaned_data['video']
+        if form.cleaned_data['video'] == 'empty video':
+            video = ''
+        self.object = form.save(commit=False)
+        self.object.video = video
+        self.object.save()
+        result_dict = {}
+        result_dict['id'] = self.object.id
+        return JsonResponse(result_dict)
+
+    def get_object(self):
+        obj = get_object_or_404(self.model, pk=self.kwargs['tarea_id'])
+        return obj
+
 class EnviarVideoclaseView(UpdateView):
     template_name = 'enviar-videoclase.html'
     form_class = EnviarVideoclaseForm
@@ -445,45 +484,6 @@ class SubirNotaFormView(FormView):
     def form_invalid(self, form):
         result_dict = {}
         return JsonResponse(result_dict)
-
-class TareaDetalleView(UpdateView):
-    template_name = 'tarea-detalle.html'
-    form_class = EditarTareaForm
-    success_url = reverse_lazy('profesor')
-    model = Tarea
-
-    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
-    def dispatch(self, *args, **kwargs):
-        return super(TareaDetalleView, self).dispatch(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(TareaDetalleView, self).get_context_data(**kwargs)
-        tarea = Tarea.objects.get(id=self.kwargs['tarea_id'])
-        context['cursos'] = self.request.user.profesor.cursos.all()
-        context['tarea'] = tarea
-        context['videoclases_recibidas'] = Grupo.objects.filter(tarea=tarea) \
-                                .exclude(videoclase__video__isnull=True) \
-                                .exclude(videoclase__video__exact='').count()
-        return context
-
-    def form_valid(self, form):
-        self.object = self.get_object()
-        if self.object.video not in ['',None]:
-            video = self.object.video
-        else:
-            video = form.cleaned_data['video']
-        if form.cleaned_data['video'] == 'empty video':
-            video = ''
-        self.object = form.save(commit=False)
-        self.object.video = video
-        self.object.save()
-        result_dict = {}
-        result_dict['id'] = self.object.id
-        return JsonResponse(result_dict)
-
-    def get_object(self):
-        obj = get_object_or_404(self.model, pk=self.kwargs['tarea_id'])
-        return obj
 
 class VerVideoclaseView(TemplateView):
     template_name = 'alumno-ver-videoclase.html'

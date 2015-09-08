@@ -394,6 +394,80 @@ class DescargarGruposTareaTestCase(TestCase):
         result_dict['curso'] = curso_dict
         self.assertJSONEqual(response.content,result_dict)
 
+class EditarTareaTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('tarea', kwargs={'tarea_id':1}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        response = self.client.get(reverse('tarea', kwargs={'tarea_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('tarea', kwargs={'tarea_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_tarea_get_data(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('tarea', kwargs={'tarea_id':1}))
+        tarea = Tarea.objects.get(id=1)
+        user = User.objects.get(username='profe')
+        videoclases_recibidas = Grupo.objects.filter(tarea=tarea).exclude(videoclase__video__isnull=True) \
+                                .exclude(videoclase__video__exact='').count()
+        cursos = user.profesor.cursos.all()
+        self.assertEqual(response.context['videoclases_recibidas'], videoclases_recibidas)
+        self.assertEqual(response.context['tarea'], tarea)
+
+    def test_editar_tarea_form(self):
+        self.client.login(username='profe', password='profe')
+        tarea_original = Tarea.objects.get(id=9)
+        form_data = {}
+        form_data['revisiones'] = 5
+        form = EditarTareaForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert processing of link
+        link, success = Tarea.process_youtube_default_link('https://www.youtube.com/embed/JFfcD-SkqIc')
+        self.assertEqual(link, u'https://www.youtube.com/embed/JFfcD-SkqIc')
+
+        # assert valid response
+        response = self.client.post(reverse('editar_tarea_form', kwargs={'tarea_id':9}), form_data)
+        self.assertEqual(response.status_code, 200)
+
+        # assert valid edit of object
+        tarea_editada = Tarea.objects.get(id=9)
+        self.assertNotEqual(tarea_editada.revisiones, tarea_original.revisiones)
+        self.assertEqual(tarea_editada.fecha_subida, tarea_original.fecha_subida)
+        self.assertEqual(tarea_editada.video, tarea_original.video)
+        self.assertEqual(5, Tarea.objects.get(id=9).revisiones)
+
+    def test_editar_tarea_form_empty_video(self):
+        self.client.login(username='profe', password='profe')
+        tarea_original = Tarea.objects.get(id=9)
+        form_data = {}
+        form_data['video'] = 'empty video'
+        form = EditarTareaForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('editar_tarea_form', kwargs={'tarea_id':9}), form_data)
+        self.assertEqual(response.status_code, 200)
+
+        # assert valid edit of object
+        tarea_editada = Tarea.objects.get(id=9)
+        self.assertNotEqual(tarea_editada.video, tarea_original.video)
+        self.assertEqual(tarea_editada.revisiones, tarea_original.revisiones)
+        self.assertEqual(tarea_editada.fecha_subida, tarea_original.fecha_subida)
+        self.assertEqual('', Tarea.objects.get(id=9).video)
+
 class EnviarVideoclaseTestCase(TestCase):
     fixtures = todos_los_fixtures
 
@@ -647,80 +721,6 @@ class SubirNotaFormTestCase(TestCase):
             self.assertEqual(notas_editadas.nota_profesor, 3)
         else:
             self.assertEqual(notas_editadas.nota_profesor, 5)
-
-class TareaDetalleTestCase(TestCase):
-    fixtures = todos_los_fixtures
-
-    def test_profesor_permissions(self):
-        self.client.login(username='profe', password='profe')
-        response = self.client.get(reverse('tarea', kwargs={'tarea_id':1}))
-        self.assertEqual(response.status_code, 200)
-
-    def test_alumno_permissions(self):
-        self.client.login(username='alumno', password='alumno')
-        response = self.client.get(reverse('tarea', kwargs={'tarea_id':1}))
-        self.assertEqual(response.status_code, 302)
-
-    def test_anonymous_user_permissions(self):
-        response = self.client.get(reverse('tarea', kwargs={'tarea_id':1}))
-        self.assertEqual(response.status_code, 302)
-
-    def test_tarea_get_data(self):
-        self.client.login(username='profe', password='profe')
-        response = self.client.get(reverse('tarea', kwargs={'tarea_id':1}))
-        tarea = Tarea.objects.get(id=1)
-        user = User.objects.get(username='profe')
-        videoclases_recibidas = Grupo.objects.filter(tarea=tarea).exclude(videoclase__video__isnull=True) \
-                                .exclude(videoclase__video__exact='').count()
-        cursos = user.profesor.cursos.all()
-        self.assertEqual(response.context['videoclases_recibidas'], videoclases_recibidas)
-        self.assertEqual(response.context['tarea'], tarea)
-
-    def test_editar_tarea_form(self):
-        self.client.login(username='profe', password='profe')
-        tarea_original = Tarea.objects.get(id=9)
-        form_data = {}
-        form_data['revisiones'] = 5
-        form = EditarTareaForm(form_data)
-
-        # assert valid form
-        self.assertTrue(form.is_valid())
-
-        # assert processing of link
-        link, success = Tarea.process_youtube_default_link('https://www.youtube.com/embed/JFfcD-SkqIc')
-        self.assertEqual(link, u'https://www.youtube.com/embed/JFfcD-SkqIc')
-
-        # assert valid response
-        response = self.client.post(reverse('editar_tarea_form', kwargs={'tarea_id':9}), form_data)
-        self.assertEqual(response.status_code, 200)
-
-        # assert valid edit of object
-        tarea_editada = Tarea.objects.get(id=9)
-        self.assertNotEqual(tarea_editada.revisiones, tarea_original.revisiones)
-        self.assertEqual(tarea_editada.fecha_subida, tarea_original.fecha_subida)
-        self.assertEqual(tarea_editada.video, tarea_original.video)
-        self.assertEqual(5, Tarea.objects.get(id=9).revisiones)
-
-    def test_editar_tarea_form_empty_video(self):
-        self.client.login(username='profe', password='profe')
-        tarea_original = Tarea.objects.get(id=9)
-        form_data = {}
-        form_data['video'] = 'empty video'
-        form = EditarTareaForm(form_data)
-
-        # assert valid form
-        self.assertTrue(form.is_valid())
-
-        # assert valid response
-        response = self.client.post(reverse('editar_tarea_form', kwargs={'tarea_id':9}), form_data)
-        self.assertEqual(response.status_code, 200)
-
-        # assert valid edit of object
-        tarea_editada = Tarea.objects.get(id=9)
-        self.assertNotEqual(tarea_editada.video, tarea_original.video)
-        self.assertEqual(tarea_editada.revisiones, tarea_original.revisiones)
-        self.assertEqual(tarea_editada.fecha_subida, tarea_original.fecha_subida)
-        self.assertEqual('', Tarea.objects.get(id=9).video)
 
 class VerVideoclaseTestCase(TestCase):
     fixtures = todos_los_fixtures
