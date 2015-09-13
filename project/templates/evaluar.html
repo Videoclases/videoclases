@@ -49,10 +49,10 @@
                     <iframe width="100%" height="315" src="{{ grupo.videoclase.video }}" frameborder="0" allowfullscreen></iframe>
                     <form data-bind="event: {'submit': submitEvaluacionDeAlumno}">
                         <div class="col-md-6" align="right">
-                            <input id="meGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbUp }" />
+                            <input id="meGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbUp }, click: evaluar(1)" />
                         </div>
                         <div class="col-md-6">
-                            <input id="noMeGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbDown }" />
+                            <input id="noMeGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbDown }, click: evaluar(-1)" />
                         </div>
                     </form>
                 </div>

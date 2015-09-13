@@ -33,8 +33,14 @@ function viewModel() {
         $( "#respuestaForm" ).submit();
     }
 
+    self.evaluar = function(valor) {
+        self.responseValues.valor(valor);
+    }
+
     self.submitEvaluacionDeAlumno = function(data, event) {
-        var inputId = event.originalEvent.explicitOriginalTarget.id;
+        a = event;
+        /*var inputId = event.originalEvent.explicitOriginalTarget.id;
+        console.log(inputId);
         if (inputId.localeCompare("meGustaInput") == 0) {
             self.responseValues.valor(1);
         } else if (inputId.localeCompare("noMeGustaInput") == 0) {
@@ -42,6 +48,7 @@ function viewModel() {
         } else {
             self.responseValues.valor(0);
         }
+        */
         var fd = new FormData();
         fd.append("valor", parseInt(self.valor()));
         fd.append("videoclase", parseInt(self.responseValues.videoclase()));
