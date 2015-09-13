@@ -23,7 +23,7 @@ class Curso(models.Model):
 class Profesor(models.Model):
     colegio = models.ForeignKey(Colegio)
     usuario = models.OneToOneField(User)
-    cursos = models.ManyToManyField(Curso)
+    cursos = models.ManyToManyField(Curso, blank=True)
 
     def __unicode__(self):
         return self.usuario.first_name + ' ' + self.usuario.last_name
