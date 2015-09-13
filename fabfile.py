@@ -93,7 +93,7 @@ def migrate():
 # collects static files
 def collectstatic():
     require('hosts', provided_by=[devserver])
-    manage_py('collectstatic --noinput -l')
+    manage_py('collectstatic --noinput')
 
 # restarts apache in server
 def reload():
