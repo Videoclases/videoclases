@@ -15,6 +15,7 @@ from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.validators import URLValidator
 from django.db.models import Count, Q
+from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -266,6 +267,120 @@ def descargar_grupos_tarea(request, tarea_id):
     result_dict['alumnos'] = alumnos_array
     result_dict['curso'] = curso_dict
     return JsonResponse(result_dict)
+
+class EditarGrupoFormView(FormView):
+    template_name = 'blank.html'
+    form_class = AsignarGrupoForm
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(EditarGrupoFormView, self).dispatch(*args, **kwargs)
+
+    def all_alumnos_have_grupo(self, grupos, original_grupos):
+        original_grupos_alumnos_count = 0
+        grupos_alumnos_count = 0
+        for g in original_grupos:
+            original_grupos_alumnos_count += g.alumnos.all().count()
+        for numero in grupos:
+            for alumno_id in grupos[numero]:
+                grupos_alumnos_count += 1
+        return original_grupos_alumnos_count == grupos_alumnos_count
+
+    def can_delete_grupo(self, grupo, tarea):
+        can_delete = True
+        for a in grupo.alumnos.all():
+            nf = NotasFinales.objects.get(grupo__tarea=tarea, alumno=a)
+            if nf.grupo == grupo:
+                return False, 'raise'
+        return True, None
+
+    def can_edit_grupo(self, grupo, list_submitted_alumnos, list_contains_at_least_one_original):
+        # if database grupo is the same than submitted grupo nothing happens
+        if list(grupo.alumnos.all()) == list_submitted_alumnos:
+            return False, None
+        elif grupo.videoclase.video:
+            # if database grupo has videoclase uploaded the grupo has to maintain
+            # at least one original member
+            if not list_contains_at_least_one_original:
+                return False, 'raise'
+            # if there is at least one original member, edit grupo
+            else:
+                return True, None
+        # if there is no uploaded videoclase, all members can be changed
+        else:
+            return True, None
+
+    @method_decorator(transaction.atomic)
+    def form_valid(self, form):
+        message = ''
+        try:
+            grupos = json.loads(form.cleaned_data['grupos'])
+            tarea = Tarea.objects.get(id=form.cleaned_data['tarea'])
+            original_grupos = Grupo.objects.filter(tarea=tarea)
+            # check if all alumnos from the original grupos have a grupo in submitted data
+            if not self.all_alumnos_have_grupo(grupos, original_grupos):
+                message = 'Datos incompletos, todos los alumnos deben tener grupo.'
+                raise ValueError
+            # check grupos from submitted info
+            for numero in grupos:
+                grupo_qs = Grupo.objects.filter(tarea=tarea, numero=int(numero))
+                # check if grupo exists in database
+                if grupo_qs.exists():
+                    grupo = grupo_qs[0]
+                    list_contains_at_least_one_original = False
+                    # create list of alumnos from submitted info
+                    list_submitted_alumnos = []
+                    for alumno_id in grupos[numero]:
+                        list_submitted_alumnos.append(Alumno.objects.get(id=alumno_id))
+                        if grupo.alumnos.filter(id=alumno_id).exists():
+                            list_contains_at_least_one_original = True
+                    # check if can edit grupo
+                    can_edit, exception = self.can_edit_grupo(grupo, list_submitted_alumnos, 
+                        list_contains_at_least_one_original)
+                    if exception == 'raise':
+                        message = 'No se pueden cambiar todos los alumnos de un grupo ' + \
+                                'que ya ha enviado videoclase: grupo número ' + str(grupo.numero)
+                        raise ValueError
+                    elif can_edit:
+                        grupo.alumnos.clear()
+                        for a in list_submitted_alumnos:
+                            grupo.alumnos.add(a)
+                            nf = NotasFinales.objects.get(grupo__tarea=tarea, alumno=a)
+                            nf.grupo = grupo
+                            nf.save()
+                # if grupo does not exist, create grupo and add alumnos
+                else:
+                    grupo = Grupo.objects.create(tarea=tarea, numero=int(numero))
+                    for a in list_submitted_alumnos:
+                        grupo.alumnos.add(a)
+                    grupo.save()
+            # check if there are grupos that were not in the uploaded info
+            # first, create a list of grupos ids submitted
+            list_submitted_grupo_ids = []
+            for numero in grupos:
+                list_submitted_grupo_ids.append(int(numero))
+            # get grupo queryset for other grupos
+            grupos_not_submitted = Grupo.objects.filter(tarea=tarea) \
+                                                .exclude(numero__in=list_submitted_grupo_ids)
+            for g in grupos_not_submitted:
+                can_delete, exception = self.can_delete_grupo(g, tarea)
+                if exception == 'raise':
+                    message = 'No se puede eliminar el grupo ' + g.numero + '.'
+                    raise ValueError
+                else:
+                    g.delete()
+            result_dict = {}
+            result_dict['success'] = True
+            return JsonResponse(result_dict)
+        except ValueError:
+            result_dict = {}
+            result_dict['success'] = False
+            result_dict['message'] = unicode(message)
+            return JsonResponse(result_dict)
+
+    def form_invalid(self, form):
+        print form.errors
+        return super(EditarGrupoFormView, self).form_invalid(form)
 
 class EditarTareaView(UpdateView):
     template_name = 'editar-tarea.html'

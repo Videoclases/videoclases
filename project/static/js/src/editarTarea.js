@@ -175,10 +175,11 @@ function viewModel() {
                     processData: false,
                     contentType: false,
                     success: function(response){
-                        alert("La tarea se ha editado exitosamente.");
-                        location.reload();
+                        $("#editar-grupo-form-submit").click();
                     }
                 });
+            } else {
+                $("#editar-grupo-form-submit").click();
             }
         } else {
             self.changeFormErrorsVisible(true);
@@ -188,7 +189,34 @@ function viewModel() {
         }
     }
 
-    self.submitGruposForm = function() {}
+    self.submitForms = function() {
+        if ($("#editar-tarea-form").valid()) {
+            $("#editar-tarea-form-submit").click();
+        }
+    }
+
+    self.submitGruposForm = function() {
+        self.editarGrupo.tareaActual(self.id());
+        var grupos = {};
+        for (var i = 0; i < self.editarGrupo.alumnos().length; i++) {
+            alumno = self.editarGrupo.alumnos()[i];
+            try {
+                grupos[alumno.grupo().toString()].push(alumno.id());
+            } catch(err) {
+                grupos[alumno.grupo().toString()] = [alumno.id()];
+            }
+        }
+        $.when(self.editarGrupo.submitGrupos(grupos, "/profesor/editar-grupo-form/")).done(
+            function (result) {
+                if (result.success) {
+                    alert("Tarea editada correctamente.");
+                    window.location = '/profesor/';
+                } else {
+                    alert(result.message);
+                }
+            }
+        );
+    }
 }
 
 var vm = new viewModel();

@@ -5,6 +5,7 @@
 
 {% block extra-head %}
     {{ form.media }}
+    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
     <script type="text/javascript">
         function Select() {
             var self = this;
@@ -21,6 +22,8 @@
     </script>
     <script src="{% static "js/src/editarGrupo.js" %}"></script>
     <script src="{% static "js/src/editarTarea.js" %}"></script>
+    <script src="{% static "js/libs/jquery.validate.min.js" %}"></script>
+    <script src="{% static "js/src/editarTareaDocumentReady.js" %}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             ko.applyBindings(vm);
@@ -84,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <form id="form" name="form" data-bind="submit: submitEditarTarea">
+            <form id="editar-tarea-form" name="editar-tarea-form" data-bind="submit: submitEditarTarea">
                 <div class="row">
                     <div align="center" class="col-md-12">
                         <h6 class="page-head-line"></h6>
@@ -206,6 +209,7 @@
                         </div>
                     </div>
                 </div>
+                <input id="editar-tarea-form-submit" type="submit" value="Submit" style="display: none;">
             </form>
             <form data-bind="submit: submitGruposForm">
                 <div class="row">
@@ -227,12 +231,12 @@
                         </table>
                     </div>
                 </div>
-            <input id="asignar-grupo-form-submit" type="submit" value="Submit" style="display: none;" />
+            <input id="editar-grupo-form-submit" type="submit" value="Submit" style="display: none;" />
             </form>
             <div class="row">
                 <div align="center" class="col-md-12">
                     <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar tarea</button>
-                    <button type="submit" class="btn btn-success" data-bind="visible: editarTareaBoolean">Guardar tarea</button>
+                    <button data-bind="click: submitForms, visible: editarTareaBoolean" class="btn btn-success">Guardar Tarea</button>
                     <button class="btn btn-danger" data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">Descartar cambios</button>
                     </div>
                 </div>
