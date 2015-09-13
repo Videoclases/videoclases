@@ -38,17 +38,6 @@ function viewModel() {
     }
 
     self.submitEvaluacionDeAlumno = function(data, event) {
-        a = event;
-        /*var inputId = event.originalEvent.explicitOriginalTarget.id;
-        console.log(inputId);
-        if (inputId.localeCompare("meGustaInput") == 0) {
-            self.responseValues.valor(1);
-        } else if (inputId.localeCompare("noMeGustaInput") == 0) {
-            self.responseValues.valor(-1);
-        } else {
-            self.responseValues.valor(0);
-        }
-        */
         var fd = new FormData();
         fd.append("valor", parseInt(self.valor()));
         fd.append("videoclase", parseInt(self.responseValues.videoclase()));
