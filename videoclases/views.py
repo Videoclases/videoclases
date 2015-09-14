@@ -509,20 +509,6 @@ class EvaluarVideoclaseView(FormView):
             return HttpResponseRedirect(reverse('alumno'))
         return super(EvaluarVideoclaseView, self).dispatch(*args, **kwargs)
 
-    def form_valid(self, form, *args, **kwargs):
-        alumno = self.request.user.alumno
-        videoclase = form.cleaned_data['videoclase']
-        respuesta = form.cleaned_data['respuesta']
-        try:
-            instancia = RespuestasDeAlumnos.objects.get(alumno=alumno,
-                videoclase=videoclase)
-            instancia.respuesta = respuesta
-            instancia.save()
-        except:
-            RespuestasDeAlumnos.objects.create(alumno=alumno, videoclase=videoclase,
-                respuesta=respuesta).save()
-        return super(EvaluarVideoclaseView, self).form_valid(form, *args, **kwargs)
-
     def get(self, request, *args, **kwargs):
         tarea = get_object_or_404(Tarea, pk=self.kwargs['tarea_id'])
         grupo = get_object_or_404(Grupo, alumnos=self.request.user.alumno, tarea=tarea)
@@ -557,6 +543,41 @@ class EvaluarVideoclaseView(FormView):
 
     def get_success_url(self, *args, **kwargs):
         return reverse('evaluar_videoclase', kwargs={'tarea_id': self.kwargs['tarea_id']})
+
+class EvaluarVideoclaseFormView(FormView):
+    template_name = 'blank.html'
+    form_class = RespuestasDeAlumnosForm
+
+    @method_decorator(user_passes_test(in_alumnos_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(EvaluarVideoclaseFormView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form, *args, **kwargs):
+        alumno = self.request.user.alumno
+        videoclase = form.cleaned_data['videoclase']
+        respuesta = form.cleaned_data['respuesta']
+        result_dict = {}
+        result_dict['success'] = True
+        result_dict['correct_answer'] = videoclase.alternativa_correcta
+        try:
+            instancia = RespuestasDeAlumnos.objects.get(alumno=alumno,
+                videoclase=videoclase)
+            instancia.respuesta = respuesta
+            instancia.save()
+            result_dict['is_correct'] = instancia.is_correct()
+        except:
+            print 'except'
+            RespuestasDeAlumnos.objects.create(alumno=alumno,
+                videoclase=videoclase, respuesta=respuesta).save()
+            instancia = RespuestasDeAlumnos.objects.get(alumno=alumno,
+                videoclase=videoclase, respuesta=respuesta)
+            result_dict['is_correct'] = instancia.is_correct()
+        return JsonResponse(result_dict)
+
+    def form_invalid(self, form):
+        print form.errors
+        result_dict = {}
+        return JsonResponse(result_dict)
 
 def logout_view(request):
     logout(request)

@@ -310,6 +310,9 @@ class RespuestasDeAlumnos(models.Model):
     alumno = models.ForeignKey(Alumno)
     respuesta = models.CharField(max_length=100, blank=True, null=True)
 
+    def is_correct(self):
+        return self.respuesta == self.videoclase.alternativa_correcta
+
     def __unicode__(self):
         return 'Responde: ' + self.alumno.usuario.first_name + '. Respuesta: ' + unicode(self.respuesta) + \
         ' .Videoclase ' + str(self.videoclase.id) + ' ' + self.videoclase.grupo.tarea.titulo

@@ -32,6 +32,16 @@
 {% endblock %}
 
 {% block body %}
+    <div class="correct-answer" data-bind="visible: correctAnswer">
+        <div align="center">
+            <strong>¡Felicitaciones! Tu respuesta es correcta. En unos segundos cargará la siguiente VideoClase.</strong>
+        </div>
+    </div>
+    <div class="wrong-answer" data-bind="visible: wrongAnswer">
+        <div align="center">
+            <strong>¡Oh no! La respuesta correcta era <span data-bind="text: correctAnswerText"></span>. En unos segundos cargará la siguiente VideoClase.</strong>
+        </div>
+    </div>
     <div class="content-wrapper">
         <div class="container">
             <div class="row">

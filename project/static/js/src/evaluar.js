@@ -7,6 +7,10 @@ function viewModel() {
 
     self.responseValues = new ResponseValues();
 
+    self.correctAnswer = ko.observable(false);
+    self.wrongAnswer = ko.observable(false);
+    self.correctAnswerText = ko.observable("");
+
     self.url = ko.observable(window.location.pathname);
     self.valor = ko.computed(function() { return self.responseValues.valor(); });
     self.respuesta = ko.observable();
@@ -30,7 +34,7 @@ function viewModel() {
             alert("Debes seleccionar una respuesta");
             return;
         }
-        $( "#respuestaForm" ).submit();
+        self.submitRespuestaDeAlumno();
     }
 
     self.evaluar = function(valor) {
@@ -54,6 +58,39 @@ function viewModel() {
             processData: false,
             contentType: false,
             success: function(response){
+            }
+        });
+    }
+
+    self.submitRespuestaDeAlumno = function() {
+        var fd = new FormData();
+        fd.append("respuesta", self.respuesta());
+        fd.append("videoclase", self.responseValues.videoclase());
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        console.log(self.respuesta());
+        console.log(self.responseValues.videoclase());
+        return $.ajax('/alumno/evaluar-videoclase-form/', {
+            data: fd,
+            type: "post",
+            processData: false,
+            contentType: false,
+            success: function(response){
+                console.log(response);
+                if (response.success) {
+                    if (response.is_correct) {
+                        self.correctAnswer(true);
+                    } else {
+                        self.correctAnswerText(response.correct_answer);
+                        self.wrongAnswer(true);
+                    }
+                    setTimeout(function() { location.reload(); }, 2500);
+                }
             }
         });
     }

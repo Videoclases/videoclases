@@ -674,7 +674,6 @@ class EvaluarVideoclaseTestCase(TestCase):
         self.client.login(username='alumno1', password='alumno')
         response = self.client.get(reverse('evaluar_videoclase', kwargs={'tarea_id':1}))
         self.assertEqual(response.status_code, 302)
-        #self.assertEqual(response.context['tareas'], tareas)
 
     def test_alumno_tarea_does_not_exist_permissions(self):
         self.client.login(username='alumno1', password='alumno')
@@ -716,7 +715,6 @@ class EvaluarVideoclaseTestCase(TestCase):
         # videoclase question not responded before
         self.assertFalse(response_grupo.videoclase.respuestas.filter(alumno=user.alumno))
         
-
     def test_evaluar_video_correct_data(self):
         self.client.login(username='alumno1', password='alumno')
         alumno = User.objects.get(username='alumno1').alumno
@@ -742,6 +740,26 @@ class EvaluarVideoclaseTestCase(TestCase):
         self.assertNotEqual(evaluacion_editada.valor, evaluacion_original.valor)
         self.assertEqual(valor, evaluacion_editada.valor)
 
+class EvaluarVideoclaseFormViewTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_alumno_has_tarea_permissions(self):
+        self.client.login(username='alumno2', password='alumno')
+        response = self.client.get(reverse('evaluar_videoclase_form'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('evaluar_videoclase_form'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('evaluar_videoclase_form'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_evaluar_videoclase_form(self):
+        self.client.login(username='alumno2', password='alumno')
+
     def test_responder_pregunta_correct_data(self):
         self.client.login(username='alumno10', password='alumno')
         alumno = User.objects.get(username='alumno1').alumno
@@ -755,7 +773,7 @@ class EvaluarVideoclaseTestCase(TestCase):
         self.assertTrue(form.is_valid())
 
         # assert valid response
-        response = self.client.get(reverse('evaluar_videoclase', kwargs={'tarea_id':10}), form_data)
+        response = self.client.get(reverse('evaluar_videoclase_form'), form_data)
         self.assertEqual(response.status_code, 200)
 
         # assert valid update of object
