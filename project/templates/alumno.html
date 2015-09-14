@@ -68,7 +68,7 @@
                                     {% if grupo.tarea.get_estado == 1 %}
                                         {% if grupo.videoclase.alumnos_subida %}
                                         <td>
-                                            <button onclick="location.href = '{% url 'enviar_videoclase' grupo.tarea.id %}';" class="btn btn-info">Editar</button>
+                                            <button onclick="location.href = '{% url 'enviar_videoclase' grupo.tarea.id %}';" class="btn btn-warning">Editar</button>
                                         </td>
                                         {% else %}
                                         <td>
