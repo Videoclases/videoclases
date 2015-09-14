@@ -28,6 +28,8 @@ from pyexcel_xlsx import get_data as xlsx_get_data
 from videoclases.forms import *
 from videoclases.models import *
 
+SHOW_CORRECT_ANSWER = 'Mostrar alternativa correcta'
+
 def in_alumnos_group(user):
     if user:
         return user.groups.filter(name='Alumnos').exists()
@@ -558,20 +560,24 @@ class EvaluarVideoclaseFormView(FormView):
         respuesta = form.cleaned_data['respuesta']
         result_dict = {}
         result_dict['success'] = True
-        result_dict['correct_answer'] = videoclase.alternativa_correcta
+        show_correct_answer = BooleanParameters.objects.get(description=SHOW_CORRECT_ANSWER).value
+        result_dict['show_correct_answer'] = show_correct_answer
         try:
             instancia = RespuestasDeAlumnos.objects.get(alumno=alumno,
                 videoclase=videoclase)
             instancia.respuesta = respuesta
             instancia.save()
-            result_dict['is_correct'] = instancia.is_correct()
+            if show_correct_answer:
+                result_dict['correct_answer'] = videoclase.alternativa_correcta
+                result_dict['is_correct'] = instancia.is_correct()
         except:
-            print 'except'
             RespuestasDeAlumnos.objects.create(alumno=alumno,
                 videoclase=videoclase, respuesta=respuesta).save()
             instancia = RespuestasDeAlumnos.objects.get(alumno=alumno,
                 videoclase=videoclase, respuesta=respuesta)
-            result_dict['is_correct'] = instancia.is_correct()
+            if show_correct_answer:
+                result_dict['correct_answer'] = videoclase.alternativa_correcta
+                result_dict['is_correct'] = instancia.is_correct()
         return JsonResponse(result_dict)
 
     def form_invalid(self, form):

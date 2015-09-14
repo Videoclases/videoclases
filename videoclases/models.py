@@ -8,8 +8,6 @@ from django.db.models import Q
 from django.db.models.signals import post_save
 from django.utils import timezone
 
-SHOW_CORRECT_ANSWER = 'Mostrar alternativa correcta'
-
 class BooleanParameters(models.Model):
     description = models.CharField(max_length=256)
     value = models.BooleanField()

@@ -9,6 +9,7 @@ function viewModel() {
 
     self.correctAnswer = ko.observable(false);
     self.wrongAnswer = ko.observable(false);
+    self.doNotShowAnswer = ko.observable(false);
     self.correctAnswerText = ko.observable("");
 
     self.url = ko.observable(window.location.pathname);
@@ -73,23 +74,24 @@ function viewModel() {
                 }
             }
         });
-        console.log(self.respuesta());
-        console.log(self.responseValues.videoclase());
         return $.ajax('/alumno/evaluar-videoclase-form/', {
             data: fd,
             type: "post",
             processData: false,
             contentType: false,
             success: function(response){
-                console.log(response);
                 if (response.success) {
-                    if (response.is_correct) {
-                        self.correctAnswer(true);
+                    if (response.show_correct_answer) {
+                        if (response.is_correct) {
+                            self.correctAnswer(true);
+                        } else {
+                            self.correctAnswerText(response.correct_answer);
+                            self.wrongAnswer(true);
+                        }
+                        setTimeout(function() { location.reload(); }, 2500);
                     } else {
-                        self.correctAnswerText(response.correct_answer);
-                        self.wrongAnswer(true);
+                        location.reload();
                     }
-                    setTimeout(function() { location.reload(); }, 2500);
                 }
             }
         });
