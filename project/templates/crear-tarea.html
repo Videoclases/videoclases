@@ -27,6 +27,11 @@
 {% endblock %}
 
 {% block body %}
+    <div class="loader" data-bind="visible: loading">
+        <div class="loader-text" align="center">
+            <strong>Creando tarea, espere un momento</strong>
+        </div>
+    </div>
     <div class="content-wrapper">
         <div class="container">
             <div class="row">

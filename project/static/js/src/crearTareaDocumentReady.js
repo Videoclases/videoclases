@@ -1,6 +1,7 @@
 
 $(document).ready(function() {
     ko.applyBindings(vm);
+    $(".loader").fadeOut();
     $.validator.addMethod(
         "greaterThan",
         function(value, element, params) {

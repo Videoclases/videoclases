@@ -5,6 +5,8 @@
 function viewModel() {
     var self = this;
 
+    self.loading = ko.observable(false);
+
     self.formErrorsVisible = ko.observable(false);
     self.formErrors = ko.observableArray();
 
@@ -67,6 +69,8 @@ function viewModel() {
 
     self.submitForms = function() {
         if ($("#crear-tarea-form").valid()) {
+            self.loading(true);
+            $(".loader").fadeIn("slow");
             $("#crear-tarea-form-submit").click();
         }
     }
@@ -103,6 +107,8 @@ function viewModel() {
         }
         $.when(self.asignarGrupo.submitGrupos(grupos, "/profesor/asignar-grupo-form/")).done(
             function (result) {
+                $(".loader").fadeOut("slow");
+                alert("Tarea creada exitosamente.");
                 window.location = '/profesor/';
             }
         );
