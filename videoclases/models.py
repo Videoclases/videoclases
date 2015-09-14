@@ -1,3 +1,5 @@
+#-*- coding: UTF-8 -*-
+
 import urlparse
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator
@@ -5,6 +7,19 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.utils import timezone
+
+SHOW_CORRECT_ANSWER = 'Mostrar alternativa correcta'
+
+class BooleanParameters(models.Model):
+    description = models.CharField(max_length=256)
+    value = models.BooleanField()
+
+    def __unicode__(self):
+        return self.description + ': ' + str(self.value)
+
+    class Meta:
+        verbose_name = 'Mis Parámetros'
+        verbose_name_plural = 'Mis Parámetros'
 
 class Colegio(models.Model):
     nombre = models.CharField(max_length=64)

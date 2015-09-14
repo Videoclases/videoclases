@@ -1,0 +1,10 @@
+[
+{
+    "fields": {
+        "description": "Mostrar alternativa correcta",
+        "value": true
+    },
+    "model": "videoclases.booleanparameters",
+    "pk": 1
+}
+]
