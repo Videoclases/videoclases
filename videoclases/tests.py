@@ -69,6 +69,58 @@ class AlumnoTestCase(TestCase):
         grupos = Grupo.objects.filter(alumnos=alumno)
         self.assertEqual(list(response.context['grupos']), list(grupos))
 
+class BorrarTareaTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('crear_curso'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        response = self.client.get(reverse('crear_curso'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('crear_curso'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_borrar_tarea_form(self):
+        self.client.login(username='profe', password='profe')
+        tarea_id = 10
+        form_data = {}
+        form_data['tarea'] = tarea_id
+        form = BorrarTareaForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response redirect and message
+        response = self.client.post(reverse('borrar_tarea'), form_data, follow=True)
+        self.assertRedirects(response, reverse('profesor'))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'La tarea se ha eliminado exitosamente')
+
+        # assert valid deletion of object
+        tarea_qs = Tarea.objects.filter(id=tarea_id)
+        self.assertFalse(tarea_qs.exists())
+
+        # assert valid deletion of other related objects
+        grupos_qs = Grupo.objects.filter(tarea__id=tarea_id)
+        videoclases_qs = VideoClase.objects.filter(grupo__tarea__id=tarea_id)
+        notasfinales_qs = NotasFinales.objects.filter(grupo__tarea__id=tarea_id)
+        evaluacionesdealumnos_qs = EvaluacionesDeAlumnos.objects \
+                                    .filter(videoclase__grupo__tarea__id=tarea_id)
+        respuestasdealumnos_qs = RespuestasDeAlumnos.objects \
+                                    .filter(videoclase__grupo__tarea__id=tarea_id)
+        self.assertFalse(grupos_qs.exists())
+        self.assertFalse(videoclases_qs.exists())
+        self.assertFalse(notasfinales_qs.exists())
+        self.assertFalse(evaluacionesdealumnos_qs.exists())
+        self.assertFalse(respuestasdealumnos_qs.exists())
+
 class CrearCursoTestCase(TestCase):
     fixtures = todos_los_fixtures
 

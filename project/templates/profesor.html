@@ -3,6 +3,16 @@
 
 {% block profesor-active %}class="menu-top-active"{% endblock %}
 
+{% block extra-head %}
+<script type="text/javascript">
+    function deleteTarea(tareaId) {
+        if (confirm("¿Seguro que deseas borrar esta tarea?")) {
+
+        }
+    }
+</script>
+{% endblock %}
+
 {% block body %}
     <div class="content-wrapper">
         <div class="container">
@@ -45,6 +55,7 @@
                             <th>Estado de tarea</th>
                             <th>Fecha de entrega</th>
                             <th>Fecha de evaluación</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,6 +67,13 @@
                                 <td>{{ t.get_estado_nombre }}</td>
                                 <td>{{ t.fecha_subida|date:'d-m-Y' }}</td>
                                 <td>{{ t.fecha_evaluacion|date:'d-m-Y' }}</td>
+                                <td><form action="{% url 'borrar_tarea' %}" method="post">
+                                        {% csrf_token %}
+                                        <input name="tarea" style="display: none" value="{{t.id}}" />
+
+                                        <input type="submit" value="Borrar" class="btn btn-danger" onclick="deleteTarea({{t.id}})" />
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
                         {% for c in cursos_sin_tarea %}
@@ -63,6 +81,7 @@
                                 <td class="table-clickable" onclick="location.href = '{% url 'curso' c.id %}';"><a>{{ c.nombre }}</a></td>
                                 <td>{{ c.alumno_set.count }}</td>
                                 <td>Sin tareas</td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

@@ -9,6 +9,9 @@ class AsignarGrupoForm(forms.Form):
     grupos = forms.CharField(max_length=1000000000, required=True)
     tarea = forms.IntegerField(min_value=1, required=True)
 
+class BorrarTareaForm(forms.Form):
+    tarea = forms.IntegerField(min_value=1, required=True)
+
 class CrearCursoSubirArchivoForm(forms.Form):
     file = forms.FileField()
     nombre = forms.CharField(required=True)

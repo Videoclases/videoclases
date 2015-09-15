@@ -88,10 +88,25 @@ class AsignarGrupoFormView(FormView):
     def get(self, request, *args, **kwargs):
         return super(AsignarGrupoFormView, self).get(request, *args, **kwargs)
 
+class BorrarTareaFormView(FormView):
+    template_name = 'blank.html'
+    form_class = BorrarTareaForm
+    success_url = reverse_lazy('profesor')
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(BorrarTareaFormView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form, *args, **kwargs):
+        tarea = Tarea.objects.get(id=form.cleaned_data['tarea'])
+        tarea.delete()
+        messages.info(self.request, 'La tarea se ha eliminado exitosamente')
+        return super(BorrarTareaFormView, self).form_valid(form, *args, **kwargs)
+
 class CrearCursoFormView(FormView):
     template_name = 'crear-curso.html'
     form_class = CrearCursoSubirArchivoForm
-    success_url = '/profesor/'
+    success_url = reverse_lazy('profesor')
 
     @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
