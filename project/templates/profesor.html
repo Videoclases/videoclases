@@ -40,7 +40,7 @@
                     <thead>
                         <tr>
                             <th>Curso</th>
-                            <th># Alumnos</th>
+                            <th>Profesor</th>
                             <th>Tareas</th>
                             <th>Estado de tarea</th>
                             <th>Fecha de entrega</th>
@@ -51,7 +51,7 @@
                         {% for t in tareas %}
                             <tr>
                                 <td class="table-clickable" onclick="location.href = '{% url 'curso' t.curso.id %}';"><a>{{ t.curso.nombre }}</a></td>
-                                <td>{{ t.curso.alumno_set.count }}</td>
+                                <td>{{ t.profesor.usuario.get_full_name }}</td>
                                 <td class="table-clickable" onclick="location.href = '{% url 'videoclases_tarea' t.id %}';"><a>{{ t.titulo }}</a></td>
                                 <td>{{ t.get_estado_nombre }}</td>
                                 <td>{{ t.fecha_subida|date:'d-m-Y' }}</td>
