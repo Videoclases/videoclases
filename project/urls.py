@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.contrib.auth.views import password_change
 
 from django.contrib import admin
 admin.autodiscover()
@@ -13,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^alumno/evaluar-videoclase-form/$', vv.EvaluarVideoclaseFormView.as_view(), name='evaluar_videoclase_form'),
     url(r'^alumno/ver-videoclase/(?P<tarea_id>\d+)/$', vv.VerVideoclaseView.as_view(), name='ver_videoclase'),
     url(r'^alumno/', vv.AlumnoView.as_view(), name='alumno'),
+    url(r'^cambiar-contrasena/', vv.ChangePasswordView.as_view(), name='change_password'),
     url(r'^login/', vv.IndexView.as_view(), name='login'),
     url(r'^logout/', vv.logout_view, name='logout'),
     url(r'^profesor/alumnos/(?P<alumno_id>\d+)/$', vv.VideoclasesAlumnoView.as_view(), name='videoclases_alumno'),

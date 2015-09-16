@@ -12,6 +12,51 @@ class AsignarGrupoForm(forms.Form):
 class BorrarTareaForm(forms.Form):
     tarea = forms.IntegerField(min_value=1, required=True)
 
+class ChangePasswordForm(forms.Form):
+    error_messages = {
+        'password_mismatch': "Las contraseñas no coinciden.",
+    }
+
+    old_password = forms.CharField(label="Contraseña antigua",
+                                   widget=forms.PasswordInput)
+    new_password1 = forms.CharField(label="Nueva contraseña",
+                                    widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label="Confirmar nueva contraseña",
+                                    widget=forms.PasswordInput)
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(ChangePasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(
+                    self.error_messages['password_mismatch'],
+                    code='password_mismatch',
+                )
+        return password2
+
+    def save(self, commit=True):
+        self.user.set_password(self.cleaned_data['new_password1'])
+        if commit:
+            self.user.save()
+        return self.user
+
+    def clean_old_password(self):
+        """
+        Validates that the old_password field is correct.
+        """
+        old_password = self.cleaned_data["old_password"]
+        if not self.user.check_password(old_password):
+            raise forms.ValidationError(
+                self.error_messages['password_incorrect'],
+                code='password_incorrect',
+            )
+        return old_password
+
 class CrearCursoSubirArchivoForm(forms.Form):
     file = forms.FileField()
     nombre = forms.CharField(required=True)

@@ -121,6 +121,71 @@ class BorrarTareaTestCase(TestCase):
         self.assertFalse(evaluacionesdealumnos_qs.exists())
         self.assertFalse(respuestasdealumnos_qs.exists())
 
+class ChangePasswordTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('change_password'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        user = User.objects.get(username='profe')
+        response = self.client.get(reverse('change_password'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'], user)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        user = User.objects.get(username='alumno')
+        response = self.client.get(reverse('change_password'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'], user)
+
+    def test_change_password_profesor_form(self):
+        self.client.login(username='profe', password='profe')
+        user = User.objects.get(username='profe')
+        new_password = 'profe2'
+        form_data = {}
+        form_data['old_password'] = 'profe'
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = new_password
+        form = ChangePasswordForm(user, form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('change_password'), form_data, follow=True)
+        self.assertRedirects(response, reverse('profesor'))
+        self.assertEqual(response.status_code, 200)
+
+        # assert valid change of password
+        new_user = User.objects.get(username='profe')
+        self.assertTrue(new_user.check_password(new_password))
+
+    def test_change_password_alumno_form(self):
+        self.client.login(username='alumno1', password='alumno')
+        user = User.objects.get(username='alumno1')
+        new_password = 'alumno1'
+        form_data = {}
+        form_data['old_password'] = 'alumno'
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = new_password
+        form = ChangePasswordForm(user, form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('change_password'), form_data, follow=True)
+        self.assertRedirects(response, reverse('alumno'))
+        self.assertEqual(response.status_code, 200)
+
+        # assert valid change of password
+        new_user = User.objects.get(username='alumno1')
+        self.assertTrue(new_user.check_password(new_password))
+
 class CrearCursoTestCase(TestCase):
     fixtures = todos_los_fixtures
 

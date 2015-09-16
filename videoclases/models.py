@@ -37,6 +37,7 @@ class Profesor(models.Model):
     colegio = models.ForeignKey(Colegio)
     usuario = models.OneToOneField(User)
     cursos = models.ManyToManyField(Curso, blank=True)
+    changed_password = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.usuario.first_name + ' ' + self.usuario.last_name
@@ -44,6 +45,7 @@ class Profesor(models.Model):
 class Alumno(models.Model):
     usuario = models.OneToOneField(User)
     cursos = models.ManyToManyField(Curso)
+    changed_password = models.BooleanField(default=False)
 
     def curso_actual(self):
         curso_qs = self.cursos.filter(anho=timezone.now().year)

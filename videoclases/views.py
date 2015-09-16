@@ -103,6 +103,40 @@ class BorrarTareaFormView(FormView):
         messages.info(self.request, 'La tarea se ha eliminado exitosamente')
         return super(BorrarTareaFormView, self).form_valid(form, *args, **kwargs)
 
+class ChangePasswordView(FormView):
+    template_name = 'cambiar-contrasena.html'
+    form_class = ChangePasswordForm
+
+    def form_valid(self, form, *args, **kwargs):
+        form.save()
+        user = authenticate(username=self.request.user.username,
+            password=form.cleaned_data['new_password1'])
+        login(self.request, user)
+        messages.info(self.request, 'Tu contraseña fue cambiada exitosamente')
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        user = self.request.user
+        if user.groups.filter(name='Profesores').exists():
+            user.profesor.changed_password = True
+            user.profesor.save()
+            return reverse('profesor')
+        elif user.groups.filter(name='Alumnos').exists():
+            user.alumno.changed_password = True
+            user.alumno.save()
+            return reverse('alumno')
+
+    def get_form(self, form_class):
+        return form_class(self.request.user, **self.get_form_kwargs())
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        return super(ChangePasswordView, self).get(self, request, *args, **kwargs)
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        return super(ChangePasswordView, self).post(self, request, *args, **kwargs)
+
 class CrearCursoFormView(FormView):
     template_name = 'crear-curso.html'
     form_class = CrearCursoSubirArchivoForm
@@ -600,6 +634,35 @@ class EvaluarVideoclaseFormView(FormView):
         result_dict = {}
         return JsonResponse(result_dict)
 
+class IndexView(FormView):
+    template_name = 'index.html'
+    form_class = AuthenticationForm
+
+    def form_valid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(username=form.get_user(), password=password)
+        if user is not None:
+            if user.is_active:
+                login(self.request, form.get_user())
+                return HttpResponseRedirect(self.get_success_url(user))
+        return super(IndexView, self).form_valid(form)
+
+    def get_success_url(self, user):
+        if user.groups.filter(name='Profesores').exists():
+            if user.profesor.changed_password:
+                return reverse('profesor')
+            else:
+                return reverse('change_password')
+        elif user.groups.filter(name='Alumnos').exists():
+            if user.alumno.changed_password:
+                return reverse('alumno')
+            else:
+                return reverse('change_password')
+
+    def get(self, request, *args, **kwargs):
+        return super(IndexView, self).get(request, *args, **kwargs)
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
@@ -699,29 +762,6 @@ def ui(request):
 
 def forms(request):
     return render(request, 'forms.html')
-
-class IndexView(FormView):
-    template_name = 'index.html'
-    form_class = AuthenticationForm
-
-    def form_valid(self, form):
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        user = authenticate(username=form.get_user(), password=password)
-        if user is not None:
-            if user.is_active:
-                login(self.request, form.get_user())
-                return HttpResponseRedirect(self.get_success_url(user))
-        return super(IndexView, self).form_valid(form)
-
-    def get_success_url(self, user):
-        if user.groups.filter(name='Profesores').exists():
-            return reverse('profesor')
-        elif user.groups.filter(name='Alumnos').exists():
-            return reverse('alumno')
-
-    def get(self, request, *args, **kwargs):
-        return super(IndexView, self).get(request, *args, **kwargs)
  
 class LoginError(View):
     def get(self, request, *args, **kwargs):
