@@ -4,11 +4,26 @@
 {% block body %}
     <div class="content-wrapper">
         <div class="container">
-        	<form method="post">
-        		{% csrf_token %}
-				{{form.as_table}}
-				<input type="submit" class="btn btn-success" value="Cambiar" />
-			</form>
-		</div>
-	</div>
+            {% if form.errors %}
+            <div class="row">
+                <div class="alert alert-info alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <div align="center">{{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                
+                <tr><th><label for="id_old_password">Contraseña antigua:</label></th><td><input id="id_old_password" name="old_password" type="password" /></td></tr>
+                <tr><th><label for="id_new_password1">Nueva contraseña:</label></th><td><input id="id_new_password1" name="new_password1" type="password" /></td></tr>
+                <tr><th><label for="id_new_password2">Confirmar nueva contraseña:</label></th><td><input id="id_new_password2" name="new_password2" type="password" /></td></tr>
+                <input type="submit" class="btn btn-success" value="Cambiar" />
+            </form>
+        </div>
+    </div>
 {% endblock %}

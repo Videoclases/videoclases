@@ -15,6 +15,7 @@ class BorrarTareaForm(forms.Form):
 class ChangePasswordForm(forms.Form):
     error_messages = {
         'password_mismatch': "Las contraseñas no coinciden.",
+        'password_incorrect': 'Clave incorrecta.',
     }
 
     old_password = forms.CharField(label="Contraseña antigua",
