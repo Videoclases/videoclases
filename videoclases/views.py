@@ -108,8 +108,8 @@ class ChangePasswordView(FormView):
     form_class = ChangePasswordForm
 
     def form_valid(self, form, *args, **kwargs):
-        print 'form_valid'
-        if user.check_password(form.cleaned_data):
+        user = self.request.user
+        if user.check_password(form.cleaned_data['old_password']):
             form.save()
             user = authenticate(username=self.request.user.username,
                 password=form.cleaned_data['new_password1'])
@@ -675,6 +675,13 @@ class IndexView(FormView):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+class PerfilView(TemplateView):
+    template_name = 'perfil.html'
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        return super(PerfilView, self).get(request, *args, **kwargs)
 
 class ProfesorView(TemplateView):
     template_name = 'profesor.html'

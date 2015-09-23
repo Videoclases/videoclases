@@ -901,6 +901,23 @@ class EvaluarVideoclaseFormViewTestCase(TestCase):
                                                    respuesta=videoclase.alternativa_correcta).exists()
         self.assertTrue(respuesta)
 
+class PerfilTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('perfil'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        response = self.client.get(reverse('perfil'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('perfil'))
+        self.assertEqual(response.status_code, 302)
+
 class ProfesorTestCase(TestCase):
     fixtures = todos_los_fixtures
 
