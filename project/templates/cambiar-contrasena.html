@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load videoclases_tags %}
 
 {% block body %}
     <div class="content-wrapper">
@@ -18,10 +19,12 @@
             {% endif %}
             <form method="post">
                 {% csrf_token %}
-                
-                <tr><th><label for="id_old_password">Contraseña antigua:</label></th><td><input id="id_old_password" name="old_password" type="password" /></td></tr>
-                <tr><th><label for="id_new_password1">Nueva contraseña:</label></th><td><input id="id_new_password1" name="new_password1" type="password" /></td></tr>
-                <tr><th><label for="id_new_password2">Confirmar nueva contraseña:</label></th><td><input id="id_new_password2" name="new_password2" type="password" /></td></tr>
+                {% ifusergroup Alumnos %}
+                <tr><th><label for="{{form.email.id_for_label}}">{{form.email.label}}:</label></th><td><input id="{{form.email.id_for_label}}" name="{{form.email.name}}" type="email" value="{{form.email.value|default_if_none:""}}" /></td></tr>
+                {% endifusergroup %}
+                <tr><th><label for="{{form.old_password.id_for_label}}">{{form.old_password.label}}:</label></th><td><input id="{{form.old_password.id_for_label}}" name="{{form.old_password.name}}" type="password" /></td></tr>
+                <tr><th><label for="{{form.new_password1.id_for_label}}">{{form.new_password1.label}}:</label></th><td><input id="{{form.new_password1.id_for_label}}" name="{{form.new_password1.name}}" type="password" /></td></tr>
+                <tr><th><label for="{{form.new_password2.id_for_label}}">{{form.new_password2.label}}:</label></th><td><input id="{{form.new_password2.id_for_label}}" name="{{form.new_password2.name}}" type="password" /></td></tr>
                 <input type="submit" class="btn btn-success" value="Cambiar" />
             </form>
         </div>

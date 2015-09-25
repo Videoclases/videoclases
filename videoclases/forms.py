@@ -14,8 +14,9 @@ class BorrarTareaForm(forms.Form):
 
 class ChangePasswordForm(forms.Form):
     error_messages = {
-        'password_mismatch': "Las contraseñas no coinciden.",
+        'email_required': 'Debes ingresar un correo.',
         'password_incorrect': 'Clave incorrecta.',
+        'password_mismatch': 'Las contraseñas no coinciden.',
     }
 
     old_password = forms.CharField(label="Contraseña antigua",
@@ -24,10 +25,27 @@ class ChangePasswordForm(forms.Form):
                                     widget=forms.PasswordInput)
     new_password2 = forms.CharField(label="Confirmar nueva contraseña",
                                     widget=forms.PasswordInput)
+    email = forms.EmailField(label="Ingresa tu correo",
+                             required=False)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(ChangePasswordForm, self).__init__(*args, **kwargs)
+
+    def in_alumnos_group(self, user):
+        if user:
+            return user.groups.filter(name='Alumnos').exists()
+        return False
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if self.in_alumnos_group(self.user):
+            if not email:
+                raise forms.ValidationError(
+                    self.error_messages['email_required'],
+                    code='email_required',
+                )
+        return email
 
     def clean_new_password2(self):
         password1 = self.cleaned_data.get('new_password1')
@@ -40,23 +58,25 @@ class ChangePasswordForm(forms.Form):
                 )
         return password2
 
-    def save(self, commit=True):
-        self.user.set_password(self.cleaned_data['new_password1'])
-        if commit:
-            self.user.save()
-        return self.user
-
     def clean_old_password(self):
         """
         Validates that the old_password field is correct.
         """
-        old_password = self.cleaned_data["old_password"]
+        old_password = self.cleaned_data['old_password']
         if not self.user.check_password(old_password):
             raise forms.ValidationError(
                 self.error_messages['password_incorrect'],
                 code='password_incorrect',
             )
         return old_password
+
+    def save(self, commit=True):
+        self.user.set_password(self.cleaned_data['new_password1'])
+        if self.in_alumnos_group(self.user) and self.cleaned_data.get('email'):
+            self.user.email = self.cleaned_data['email']
+        if commit:
+            self.user.save()
+        return self.user
 
 class CrearCursoSubirArchivoForm(forms.Form):
     file = forms.FileField()

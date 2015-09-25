@@ -164,7 +164,24 @@ class ChangePasswordTestCase(TestCase):
         new_user = User.objects.get(username='profe')
         self.assertTrue(new_user.check_password(new_password))
 
-    def test_change_password_alumno_form(self):
+    def test_change_password_form_initial_data_alumno(self):
+        self.client.login(username='alumno1', password='alumno')
+        user = User.objects.get(username='alumno1')
+
+        # Check that name is pre-filled
+        response = self.client.get(reverse('change_password'))
+        self.assertEqual(response.context['form'].initial['email'], user.email)
+
+    def test_change_password_form_initial_data_profesor(self):
+        self.client.login(username='profe', password='profe')
+        user = User.objects.get(username='profe')
+
+        # Check that name is pre-filled
+        response = self.client.get(reverse('change_password'))
+        with self.assertRaises(KeyError) as raises:
+            response.context['form'].initial['email']
+
+    def test_change_password_alumno_with_email_correct_form(self):
         self.client.login(username='alumno1', password='alumno')
         user = User.objects.get(username='alumno1')
         new_password = 'alumno1'
@@ -172,6 +189,7 @@ class ChangePasswordTestCase(TestCase):
         form_data['old_password'] = 'alumno'
         form_data['new_password1'] = new_password
         form_data['new_password2'] = new_password
+        form_data['email'] = user.email
         form = ChangePasswordForm(user, form_data)
 
         # assert valid form
@@ -185,6 +203,120 @@ class ChangePasswordTestCase(TestCase):
         # assert valid change of password
         new_user = User.objects.get(username='alumno1')
         self.assertTrue(new_user.check_password(new_password))
+
+    def test_change_password_alumno_without_email_correct_form(self):
+        self.client.login(username='alumno2', password='alumno')
+        user = User.objects.get(username='alumno2')
+        new_password = 'alumno2'
+        email = 'alumno2@alumno.com'
+        form_data = {}
+        form_data['old_password'] = 'alumno'
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = new_password
+        form_data['email'] = email
+        form = ChangePasswordForm(user, form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('change_password'), form_data, follow=True)
+        self.assertRedirects(response, reverse('alumno'))
+        self.assertEqual(response.status_code, 200)
+
+        # assert valid change of password
+        new_user = User.objects.get(username='alumno2')
+        self.assertTrue(new_user.check_password(new_password))
+        self.assertEqual(new_user.email, email)
+
+    def test_change_password_email_not_valid_error_form(self):
+        self.client.login(username='alumno2', password='alumno')
+        user = User.objects.get(username='alumno2')
+        new_password = 'alumno2'
+        form_data = {}
+        form_data['old_password'] = 'alumno'
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = new_password
+        form_data['email'] = 'this is not an email'
+        form = ChangePasswordForm(user, form_data)
+
+        # assert valid form
+        self.assertFalse(form.is_valid())
+
+        # assert valid response redirect and form error
+        response = self.client.post(reverse('change_password'), form_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'email', u'Introduzca una dirección de correo electrónico válida.')
+
+        # assert did not change password
+        new_user = User.objects.get(username='alumno2')
+        self.assertFalse(new_user.check_password(new_password))
+
+    def test_change_password_email_required_error_form(self):
+        self.client.login(username='alumno2', password='alumno')
+        user = User.objects.get(username='alumno2')
+        new_password = 'alumno2'
+        form_data = {}
+        form_data['old_password'] = 'alumno'
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = new_password
+        form = ChangePasswordForm(user, form_data)
+
+        # assert valid form
+        self.assertFalse(form.is_valid())
+
+        # assert valid response redirect and form error
+        response = self.client.post(reverse('change_password'), form_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'email', u'Debes ingresar un correo.')
+
+        # assert did not change password
+        new_user = User.objects.get(username='alumno2')
+        self.assertFalse(new_user.check_password(new_password))
+
+    def test_change_password_password_incorrect_error_form(self):
+        self.client.login(username='alumno1', password='alumno')
+        user = User.objects.get(username='alumno1')
+        new_password = 'alumno1'
+        form_data = {}
+        form_data['old_password'] = 'wrong_password'
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = new_password
+        form = ChangePasswordForm(user, form_data)
+
+        # assert valid form
+        self.assertFalse(form.is_valid())
+
+        # assert valid response redirect and form error
+        response = self.client.post(reverse('change_password'), form_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'old_password', 'Clave incorrecta.')
+
+        # assert did not change password
+        new_user = User.objects.get(username='alumno1')
+        self.assertFalse(new_user.check_password(new_password))
+
+    def test_change_password_password_mismatch_error_form(self):
+        self.client.login(username='alumno1', password='alumno')
+        user = User.objects.get(username='alumno1')
+        new_password = 'alumno1'
+        form_data = {}
+        form_data['old_password'] = 'alumno'
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = 'wrong_new_password'
+        form = ChangePasswordForm(user, form_data)
+
+        # assert valid form
+        self.assertFalse(form.is_valid())
+
+        # assert valid response redirect and form error
+        response = self.client.post(reverse('change_password'), form_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'new_password2', u'Las contraseñas no coinciden.')
+
+        # assert did not change password
+        new_user = User.objects.get(username='alumno1')
+        self.assertFalse(new_user.check_password(new_password))
 
 class CrearCursoTestCase(TestCase):
     fixtures = todos_los_fixtures

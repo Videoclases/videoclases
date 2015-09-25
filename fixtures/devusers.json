@@ -71,7 +71,7 @@
         ],
         "user_permissions": [],
         "password": "pbkdf2_sha256$20000$8IcUA5aznYej$0GOqtpZBz3dy+BLVJwbvT/hRL7kPBk9kHIL6TE2I0Rg=",
-        "email": "",
+        "email": "alumno1@alumno.com",
         "date_joined": "2015-07-08T20:53:06.554Z"
     },
     "model": "auth.user",

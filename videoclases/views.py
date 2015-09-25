@@ -113,12 +113,10 @@ class ChangePasswordView(FormView):
             form.save()
             user = authenticate(username=self.request.user.username,
                 password=form.cleaned_data['new_password1'])
-
             login(self.request, user)
             messages.info(self.request, 'Tu contraseña fue cambiada exitosamente')
             return HttpResponseRedirect(self.get_success_url())
         else:
-            messages.info(self.request, 'Clave incorrecta.')
             return HttpResponseRedirect(reverse('change_password'))
 
     def form_invalid(self, form, *args, **kwargs):
@@ -137,6 +135,10 @@ class ChangePasswordView(FormView):
 
     def get_form(self, form_class):
         return form_class(self.request.user, **self.get_form_kwargs())
+
+    def get_initial(self):
+        if in_alumnos_group(self.request.user):
+            return {'email': self.request.user.email}
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
