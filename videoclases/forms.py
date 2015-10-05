@@ -78,6 +78,46 @@ class ChangePasswordForm(forms.Form):
             self.user.save()
         return self.user
 
+'''
+ModelChoiceField to override label in form
+'''
+class AlumnoChoiceField(forms.models.ModelChoiceField):
+    
+    def label_from_instance(self, obj):
+        return obj.usuario.get_full_name()
+
+class ChangeStudentPasswordForm(forms.Form):
+    error_messages = {
+        'invalid_choice': 'Debes seleccionar un alumno.',
+        'password_mismatch': 'Las contraseñas no coinciden.',
+    }
+    alumno = AlumnoChoiceField(queryset=Alumno.objects.all(), error_messages=error_messages)
+    new_password1 = forms.CharField(label="Nueva contraseña",
+                                    widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label="Confirmar nueva contraseña",
+                                    widget=forms.PasswordInput)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(
+                    self.error_messages['password_mismatch'],
+                    code='password_mismatch',
+                )
+        return password2
+
+    def save(self, commit=True):
+        alumno_user = self.cleaned_data['alumno'].usuario
+        alumno_user.set_password(self.cleaned_data['new_password1'])
+        if commit:
+            alumno_user.save()
+        return alumno_user
+
+class ChangeStudentPasswordSelectCursoForm(forms.Form):
+    curso = forms.ModelChoiceField(queryset=Curso.objects.all())
+
 class CrearCursoSubirArchivoForm(forms.Form):
     file = forms.FileField()
     nombre = forms.CharField(required=True)

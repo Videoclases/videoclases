@@ -318,6 +318,118 @@ class ChangePasswordTestCase(TestCase):
         new_user = User.objects.get(username='alumno1')
         self.assertFalse(new_user.check_password(new_password))
 
+class ChangeStudentPasswordTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_anonymous_user_permissions(self):
+        curso = Curso.objects.get(id=1)
+        response = self.client.get(reverse('change_student_password', kwargs={'curso_id':curso.id}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        curso = Curso.objects.get(id=1)
+        response = self.client.get(reverse('change_student_password', kwargs={'curso_id':curso.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        curso = Curso.objects.get(id=1)
+        response = self.client.get(reverse('change_student_password', kwargs={'curso_id':curso.id}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_change_student_password_correct_form(self):
+        self.client.login(username='profe', password='profe')
+        student_user = User.objects.get(username='alumno3')
+        curso = student_user.alumno.cursos.all()[0]
+        new_password = 'alumno3'
+        form_data = {}
+        form_data['alumno'] = student_user.alumno.pk
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = new_password
+        form = ChangeStudentPasswordForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('change_student_password', kwargs={'curso_id':curso.id}),
+            form_data, follow=True)
+        self.assertRedirects(response, reverse('profesor'))
+        self.assertEqual(response.status_code, 200)
+
+        # assert valid change of password
+        new_user = User.objects.get(username='alumno3')
+        self.assertTrue(new_user.check_password(new_password))
+
+    def test_get_form_alumnos(self):
+        self.client.login(username='profe', password='profe')
+        curso = Curso.objects.all()[0]
+        response = self.client.get(reverse('change_student_password', kwargs={'curso_id':curso.id}))
+        
+        # assert valid alumnos variable in form in context
+        self.assertEqual(list(response.context['form'].fields['alumno'].queryset), 
+            list(curso.alumnos.all()))
+
+    def test_change_password_alumno_invalid_choice_error_form(self):
+        self.client.login(username='profe', password='profe')
+        student_user = User.objects.get(username='alumno2')
+        curso = student_user.alumno.cursos.all()[0]
+        new_password = 'alumno2'
+        form_data = {}
+        form_data['alumno'] = None
+        form_data['new_password1'] = new_password
+        form_data['new_password2'] = new_password
+        form = ChangeStudentPasswordForm(form_data)
+
+        # assert valid form
+        self.assertFalse(form.is_valid())
+
+        # assert valid response redirect and form error
+        response = self.client.post(reverse('change_student_password', kwargs={'curso_id':curso.id}),
+                                    form_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'alumno', u'Debes seleccionar un alumno.')
+
+        # assert did not change password
+        new_user = User.objects.get(username='alumno2')
+        self.assertFalse(new_user.check_password(new_password))
+
+class ChangeStudentPasswordSelectCursoTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('change_student_password_select_curso'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        user = User.objects.get(username='profe')
+        response = self.client.get(reverse('change_student_password_select_curso'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'], user)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        response = self.client.get(reverse('change_student_password_select_curso'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_change_student_password_select_curso_form(self):
+        self.client.login(username='profe', password='profe')
+        curso = Curso.objects.get(id=1)
+        new_password = 'alumno1'
+        form_data = {}
+        form_data['curso'] = curso.id
+        form = ChangeStudentPasswordSelectCursoForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('change_student_password_select_curso'), form_data, follow=True)
+        self.assertRedirects(response, reverse('change_student_password', kwargs={'curso_id':curso.id}))
+        self.assertEqual(response.status_code, 200)
+
 class CrearCursoTestCase(TestCase):
     fixtures = todos_los_fixtures
 
@@ -551,7 +663,7 @@ class CursoTestCase(TestCase):
         self.client.login(username='profe', password='profe')
         response = self.client.get(reverse('curso', kwargs={'curso_id':1}))
         curso = Curso.objects.get(id=1)
-        alumnos = curso.alumno_set.all()
+        alumnos = curso.alumnos.all()
         alumnos_array = []
         for alumno in alumnos:
             alumno_dict = {}
@@ -591,7 +703,7 @@ class DescargarCursoTestCase(TestCase):
         response = self.client.get(reverse('descargar_curso', kwargs={'curso_id':1}))
         result_dict = {}
         curso = Curso.objects.get(id=1)
-        alumnos = curso.alumno_set.all()
+        alumnos = curso.alumnos.all()
         curso_dict = {}
         curso_dict['id'] = curso.id
         curso_dict['nombre'] = curso.nombre

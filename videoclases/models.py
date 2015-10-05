@@ -44,7 +44,7 @@ class Profesor(models.Model):
 
 class Alumno(models.Model):
     usuario = models.OneToOneField(User)
-    cursos = models.ManyToManyField(Curso)
+    cursos = models.ManyToManyField(Curso, related_name='alumnos')
     changed_password = models.BooleanField(default=False)
 
     def curso_actual(self):

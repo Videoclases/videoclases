@@ -148,6 +148,55 @@ class ChangePasswordView(FormView):
     def post(self, request, *args, **kwargs):
         return super(ChangePasswordView, self).post(self, request, *args, **kwargs)
 
+class ChangeStudentPasswordView(FormView):
+    template_name = 'cambiar-contrasena-alumno.html'
+    form_class = ChangeStudentPasswordForm
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(ChangeStudentPasswordView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form, *args, **kwargs):
+        form.save()
+        messages.info(self.request, 'Clave cambiada exitosamente.')
+        return super(ChangeStudentPasswordView, self).form_valid(form, *args, **kwargs)
+
+    def form_invalid(self, form, *args, **kwargs):
+        return super(ChangeStudentPasswordView, self).form_invalid(form, *args, **kwargs)
+
+    def get_form(self, form_class):
+        form = form_class(**self.get_form_kwargs())
+        curso = Curso.objects.get(id=self.kwargs['curso_id'])
+        form.fields['alumno'].queryset = curso.alumnos.all()
+        return form
+
+    def get_success_url(self):
+        return reverse('profesor')
+
+class ChangeStudentPasswordSelectCursoView(FormView):
+    template_name = 'cambiar-contrasena-alumno-seleccionar-curso.html'
+    form_class = ChangeStudentPasswordSelectCursoForm
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(ChangeStudentPasswordSelectCursoView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form, *args, **kwargs):
+        self.kwargs['form'] = form
+        return super(ChangeStudentPasswordSelectCursoView, self).form_valid(form, *args, **kwargs)
+
+    def form_invalid(self, form, *args, **kwargs):
+        return super(ChangeStudentPasswordSelectCursoView, self).form_invalid(form, *args, **kwargs)
+
+    def get_form(self, form_class):
+        form = form_class(**self.get_form_kwargs())
+        form.fields['curso'].queryset = self.request.user.profesor.cursos.all()
+        return form
+
+    def get_success_url(self):
+        curso = self.kwargs['form'].cleaned_data['curso']
+        return reverse('change_student_password', kwargs={'curso_id':curso.id})
+
 class CrearCursoFormView(FormView):
     template_name = 'crear-curso.html'
     form_class = CrearCursoSubirArchivoForm
@@ -267,7 +316,7 @@ class CursoView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(CursoView, self).get_context_data(**kwargs)
         curso = Curso.objects.get(id=kwargs['curso_id'])
-        alumnos = curso.alumno_set.all()
+        alumnos = curso.alumnos.all()
         alumnos_array = []
         for alumno in alumnos:
             alumno_dict = {}
@@ -294,7 +343,7 @@ class CursoView(TemplateView):
 def descargar_curso(request, curso_id):
     result_dict = {}
     curso = Curso.objects.get(id=curso_id)
-    alumnos = curso.alumno_set.all()
+    alumnos = curso.alumnos.all()
     curso_dict = {}
     curso_dict['id'] = curso.id
     curso_dict['nombre'] = curso.nombre

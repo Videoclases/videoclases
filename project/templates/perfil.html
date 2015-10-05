@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load videoclases_tags %}
 
 {% block perfil-active %}class="menu-top-active"{% endblock %}
 
@@ -12,6 +13,10 @@
         </div>
         <div class="row">
             <a href="{% url 'change_password' %}">Cambiar contraseña</a>
+            {% ifusergroup Profesores %}
+            <br/>
+            <a href="{% url 'change_student_password_select_curso' %}">Cambiar contraseña de un alumno</a>
+            {% endifusergroup %}
         </div>
     </div>
 </div>
