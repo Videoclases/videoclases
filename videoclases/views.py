@@ -224,11 +224,8 @@ class CrearCursoFormView(FormView):
             os.remove(path)
             messages.info(self.request, 'El archivo debe ser formato XLS, XLSX u ODS.')
             return HttpResponseRedirect(reverse('crear_curso'))
-        try:
-            sheet = data['Sheet1']
-        except:
-            sheet = data['Hoja 1']
-        # Check if alumnos data is complete
+        # assumes first sheet has info
+        key, sheet = data.popitem()
         for i in range(1,len(sheet)):
             alumno_array = sheet[i]
             complete = True
