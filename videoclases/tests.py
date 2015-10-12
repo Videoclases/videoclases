@@ -670,6 +670,7 @@ class CursoTestCase(TestCase):
             alumno_dict['id'] = alumno.id
             alumno_dict['apellido'] = alumno.usuario.last_name
             alumno_dict['nombre'] = alumno.usuario.first_name
+            alumno_dict['username'] = alumno.usuario.username
             alumno_dict['tareas_entregadas'] = alumno.grupo_set.exclude(videoclase__video__isnull=True) \
                                     .exclude(videoclase__video__exact='').count()
             alumno_dict['tareas_pendientes'] = alumno.grupo_set \

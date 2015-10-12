@@ -35,6 +35,7 @@
                                 <tr>
                                     <th>Apellido</th>
                                     <th>Nombre</th>
+                                    <th>Nombre de usuario</th>
                                     <th>Tareas entregadas</th>
                                     <th>Tareas pendientes</th>
                                     <th>VideoClases respondidas</th>
@@ -45,6 +46,7 @@
                                     <tr>
                                         <td class="table-clickable" onclick="location.href = '{% url 'videoclases_alumno' a.id %}';"><a>{{ a.apellido }}</a></td>
                                         <td class="table-clickable" onclick="location.href = '{% url 'videoclases_alumno' a.id %}';"><a>{{ a.nombre }}</a></td>
+                                        <td>{{ a.username }}</td>
                                         <td>{{ a.tareas_entregadas }}</td>
                                         <td>{{ a.tareas_pendientes }}</td>
                                         <td>{{ a.videoclases_respondidas }}</td>
