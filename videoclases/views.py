@@ -395,6 +395,19 @@ def descargar_grupos_tarea(request, tarea_id):
     result_dict['curso'] = curso_dict
     return JsonResponse(result_dict)
 
+class EditarCursoView(TemplateView):
+    template_name = 'editar-curso.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(EditarCursoView, self).get_context_data(**kwargs)
+        curso = Curso.objects.get(id=kwargs['curso_id'])
+        context['curso'] = curso
+        return context
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(EditarCursoView, self).dispatch(*args, **kwargs)
+
 class EditarGrupoFormView(FormView):
     template_name = 'blank.html'
     form_class = AsignarGrupoForm
