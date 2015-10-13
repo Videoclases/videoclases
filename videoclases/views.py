@@ -88,6 +88,23 @@ class AsignarGrupoFormView(FormView):
     def get(self, request, *args, **kwargs):
         return super(AsignarGrupoFormView, self).get(request, *args, **kwargs)
 
+class BorrarCursoFormView(FormView):
+    template_name = 'blank.html'
+    form_class = BorrarCursoForm
+    success_url = reverse_lazy('profesor')
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(BorrarCursoFormView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form, *args, **kwargs):
+        curso = get_object_or_404(Curso, pk=self.kwargs['curso_id'])
+        if curso not in self.request.user.profesor.cursos.all():
+            messages.info(self.request, 'No tienes permisos para esta acción')
+            return HttpResponseRedirect(reverse('profesor'))
+        messages.info(self.request, 'El curso se ha eliminado exitosamente')
+        return super(BorrarCursoFormView, self).form_valid(form, *args, **kwargs)
+
 class BorrarTareaFormView(FormView):
     template_name = 'blank.html'
     form_class = BorrarTareaForm

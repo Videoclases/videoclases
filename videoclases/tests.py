@@ -69,6 +69,96 @@ class AlumnoTestCase(TestCase):
         grupos = Grupo.objects.filter(alumnos=alumno)
         self.assertEqual(list(response.context['grupos']), list(grupos))
 
+class BorrarCursoTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('borrar_curso', kwargs={'curso_id':1}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        response = self.client.get(reverse('borrar_curso', kwargs={'curso_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('borrar_curso', kwargs={'curso_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_borrar_curso_profesor_not_assigned(self):
+        self.client.login(username='profe', password='profe')
+        # curso 4 is not assigned to profesor 'profe'
+        curso_id = 4
+        form_data = {}
+        form_data['curso'] = curso_id
+        form = BorrarCursoForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response redirect and message
+        response = self.client.post(reverse('borrar_curso', kwargs={'curso_id':curso_id}),
+                                    form_data, follow=True)
+        self.assertRedirects(response, reverse('profesor'))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'No tienes permisos para esta acción')
+
+    def test_borrar_curso_does_not_exist_error(self):
+        self.client.login(username='profe', password='profe')
+        # curso 4 is not assigned to profesor 'profe'
+        curso_id = 123123123
+        form_data = {}
+        form_data['curso'] = curso_id
+        form = BorrarCursoForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response redirect and message
+        response = self.client.post(reverse('borrar_curso', kwargs={'curso_id':curso_id}),
+                                    form_data)
+        self.assertEqual(response.status_code, 404)
+
+    def test_borrar_curso_correct_form(self):
+        self.client.login(username='profe', password='profe')
+        # curso 4 is not assigned to profesor 'profe'
+        curso_id = 1
+        form_data = {}
+        form_data['curso'] = curso_id
+        form = BorrarCursoForm(form_data)
+
+        # assert valid form
+        self.assertTrue(form.is_valid())
+
+        # assert valid response redirect and message
+        response = self.client.post(reverse('borrar_curso', kwargs={'curso_id':curso_id}),
+                                    form_data, follow=True)
+        self.assertRedirects(response, reverse('profesor'))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'El curso se ha eliminado exitosamente')
+
+        # assert valid deletion of object
+        curso_qs = Curso.objects.filter(id=curso_id)
+        self.assertFalse(curso_qs.exists())
+
+        # assert valid deletion of other related objects
+        grupos_qs = Grupo.objects.filter(tarea__curso__id=curso_id)
+        videoclases_qs = VideoClase.objects.filter(grupo__tarea__curso__id=curso_id)
+        notasfinales_qs = NotasFinales.objects.filter(grupo__tarea__curso__id=curso_id)
+        evaluacionesdealumnos_qs = EvaluacionesDeAlumnos.objects \
+                                    .filter(videoclase__grupo__tarea__curso__id=curso_id)
+        respuestasdealumnos_qs = RespuestasDeAlumnos.objects \
+                                    .filter(videoclase__grupo__tarea__curso__id=curso_id)
+        self.assertFalse(grupos_qs.exists())
+        self.assertFalse(videoclases_qs.exists())
+        self.assertFalse(notasfinales_qs.exists())
+        self.assertFalse(evaluacionesdealumnos_qs.exists())
+        self.assertFalse(respuestasdealumnos_qs.exists())
+
+
 class BorrarTareaTestCase(TestCase):
     fixtures = todos_los_fixtures
 
@@ -1187,7 +1277,7 @@ class ProfesorTestCase(TestCase):
         current_year = timezone.now().year
         tareas = Tarea.objects.filter(curso__profesor=user.profesor) \
                                          .filter(curso__anho=current_year)
-        cursos_sin_tarea = Curso.objects.filter(tarea=None)
+        cursos_sin_tarea = Curso.objects.filter(tarea=None).filter(profesor=user.profesor)
         self.assertEqual(list(response.context['tareas']), list(tareas))
         self.assertEqual(list(response.context['cursos_sin_tarea']), list(cursos_sin_tarea))
 
