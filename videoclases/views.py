@@ -102,6 +102,7 @@ class BorrarCursoFormView(FormView):
         if curso not in self.request.user.profesor.cursos.all():
             messages.info(self.request, 'No tienes permisos para esta acción')
             return HttpResponseRedirect(reverse('profesor'))
+        curso.delete()
         messages.info(self.request, 'El curso se ha eliminado exitosamente')
         return super(BorrarCursoFormView, self).form_valid(form, *args, **kwargs)
 
