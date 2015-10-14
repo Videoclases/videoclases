@@ -43,10 +43,38 @@
                 </div>
             </div>
             {% endif %}
+            <div class="row">
+                <div class="table-responsive col-md-12">
+                    {% if curso.alumnos.all %}
+                        <table id="example" class="cell-border" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Apellido</th>
+                                    <th>Nombre</th>
+                                    <th>Nombre de usuario</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in curso.alumnos.all %}
+                                    <tr>
+                                        <td>{{ a.usuario.last_name }}</td>
+                                        <td>{{ a.usuario.first_name }}</td>
+                                        <td>{{ a.usuario.username }}</td>
+                                        <td><a href="{% url 'editar_alumno' curso.id a.id %}"><button class="btn btn-info">Editar alumno</button></a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <label>Este curso no tiene alumnos asignados</label>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block extra-script %}
-{% include 'aux/profesor-table.html' %}
+{% include 'aux/alumno-table-translation-es.html' %}
 {% endblock %}

@@ -154,6 +154,10 @@ class CrearTareaForm(forms.ModelForm):
             msg = u'Fecha para evaluar debe ser posterior a Fecha para subir tarea.'
             self._errors['fecha_evaluacion'] = self.error_class([msg])
 
+class EditarAlumnoForm(forms.Form):
+    first_name = forms.CharField(required=True, label='Nombres')
+    last_name = forms.CharField(required=True, label='Apellidos')
+
 class EditarTareaForm(forms.ModelForm):
 
     class Meta:

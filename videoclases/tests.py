@@ -848,6 +848,125 @@ class DescargarGruposTareaTestCase(TestCase):
         result_dict['curso'] = curso_dict
         self.assertJSONEqual(response.content,result_dict)
 
+class EditarAlumnoTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        alumno_id = 1
+        curso_id = Alumno.objects.get(id=alumno_id).cursos.all()[0].id
+        response = self.client.get(reverse('editar_alumno',
+                                   kwargs={'alumno_id':alumno_id, 'curso_id':curso_id}))
+        self.assertEqual(response.status_code, 200)
+
+        # test initial form values
+        alumno = Alumno.objects.get(id=alumno_id)
+        self.assertEqual(response.context['form'].initial['first_name'], alumno.usuario.first_name)
+        self.assertEqual(response.context['form'].initial['last_name'], alumno.usuario.last_name)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        response = self.client.get(reverse('editar_alumno', kwargs={'alumno_id':1, 'curso_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('editar_alumno', kwargs={'alumno_id':1, 'curso_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_alumno_not_in_curso(self):
+        self.client.login(username='profe', password='profe')
+        alumno_id = 1
+        alumno = Alumno.objects.get(id=alumno_id)
+        curso = Curso.objects.exclude(alumnos=alumno)[0]
+        response = self.client.get(reverse('editar_alumno',
+                                   kwargs={'alumno_id':alumno_id, 'curso_id':curso.id}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_change_alumno_first_name(self):
+        self.client.login(username='profe', password='profe')
+        alumno_id = 1
+        alumno = Alumno.objects.get(id=alumno_id)
+        alumno_original_first_name = alumno.usuario.first_name
+        alumno_original_last_name = alumno.usuario.last_name
+        curso = alumno.cursos.all()[0]
+        new_first_name = 'new first name'
+        form_data = {}
+        form_data['first_name'] = new_first_name
+        form_data['last_name'] = alumno_original_last_name
+        form = EditarAlumnoForm(form_data)
+
+        # assert form is valid
+        self.assertTrue(form.is_valid())
+
+        # assert valid response, redirect and message
+        response = self.client.post(reverse('editar_alumno',
+                                    kwargs={'alumno_id':alumno_id, 'curso_id':curso.id}),
+                                    form_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('editar_curso', kwargs={'curso_id': curso.id}))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'El alumno ha sido editado exitosamente.')
+
+        # assert valid edition of object
+        new_alumno = Alumno.objects.get(id=alumno_id)
+        new_alumno_first_name = new_alumno.usuario.first_name
+        new_alumno_last_name = new_alumno.usuario.last_name
+        self.assertNotEqual(alumno_original_first_name, new_alumno_first_name)
+        self.assertEqual(new_alumno_first_name, new_first_name)
+        self.assertEqual(new_alumno_last_name, alumno_original_last_name)
+
+    def test_change_alumno_last_name(self):
+        self.client.login(username='profe', password='profe')
+        alumno_id = 1
+        alumno = Alumno.objects.get(id=alumno_id)
+        alumno_original_first_name = alumno.usuario.first_name
+        alumno_original_last_name = alumno.usuario.last_name
+        curso = alumno.cursos.all()[0]
+        new_last_name = 'new last name'
+        form_data = {}
+        form_data['first_name'] = alumno_original_first_name
+        form_data['last_name'] = new_last_name
+        form = EditarAlumnoForm(form_data)
+
+        # assert form is valid
+        self.assertTrue(form.is_valid())
+
+        # assert valid response, redirect and message
+        response = self.client.post(reverse('editar_alumno',
+                                    kwargs={'alumno_id':alumno_id, 'curso_id':curso.id}),
+                                    form_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('editar_curso', kwargs={'curso_id': curso.id}))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'El alumno ha sido editado exitosamente.')
+
+        # assert valid edition of object
+        new_alumno = Alumno.objects.get(id=alumno_id)
+        new_alumno_first_name = new_alumno.usuario.first_name
+        new_alumno_last_name = new_alumno.usuario.last_name
+        self.assertNotEqual(alumno_original_last_name, new_alumno_last_name)
+        self.assertEqual(new_alumno_last_name, new_last_name)
+        self.assertEqual(new_alumno_first_name, alumno_original_first_name)
+
+class EditarCursoTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('editar_curso', kwargs={'curso_id':1}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        response = self.client.get(reverse('editar_curso', kwargs={'curso_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('editar_curso', kwargs={'curso_id':1}))
+        self.assertEqual(response.status_code, 302)
+
 class EditarGrupoTestCase(TestCase):
     fixtures = todos_los_fixtures
 

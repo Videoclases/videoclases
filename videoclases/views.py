@@ -16,7 +16,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.validators import URLValidator
 from django.db.models import Count, Q
 from django.db import transaction
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -395,18 +395,55 @@ def descargar_grupos_tarea(request, tarea_id):
     result_dict['curso'] = curso_dict
     return JsonResponse(result_dict)
 
+class EditarAlumnoView(FormView):
+    template_name = 'editar-alumno.html'
+    form_class = EditarAlumnoForm
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(EditarAlumnoView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form, *args, **kwargs):
+        alumno = Alumno.objects.get(id=self.kwargs['alumno_id'])
+        alumno.usuario.first_name = form.cleaned_data['first_name']
+        alumno.usuario.last_name = form.cleaned_data['last_name']
+        alumno.usuario.save()
+        messages.info(self.request, 'El alumno ha sido editado exitosamente.')
+        return super(EditarAlumnoView, self).form_valid(form, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        alumno = Alumno.objects.get(id=self.kwargs['alumno_id'])
+        curso = Curso.objects.get(id=self.kwargs['curso_id'])
+        if alumno not in curso.alumnos.all():
+            raise Http404
+        return super(EditarAlumnoView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(EditarAlumnoView, self).get_context_data(**kwargs)
+        alumno = Alumno.objects.get(id=self.kwargs['alumno_id'])
+        context['alumno'] = alumno
+        return context
+
+    def get_initial(self):
+        alumno = Alumno.objects.get(id=self.kwargs['alumno_id'])
+        return {'first_name': alumno.usuario.first_name if alumno.usuario.first_name is not None else '',
+                'last_name' : alumno.usuario.last_name  if alumno.usuario.last_name  is not None else '' }
+
+    def get_success_url(self, *args, **kwargs):
+        return reverse('editar_curso', kwargs={'curso_id': self.kwargs['curso_id']})
+
 class EditarCursoView(TemplateView):
     template_name = 'editar-curso.html'
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(EditarCursoView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(EditarCursoView, self).get_context_data(**kwargs)
         curso = Curso.objects.get(id=kwargs['curso_id'])
         context['curso'] = curso
         return context
-
-    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
-    def dispatch(self, *args, **kwargs):
-        return super(EditarCursoView, self).dispatch(*args, **kwargs)
 
 class EditarGrupoFormView(FormView):
     template_name = 'blank.html'
