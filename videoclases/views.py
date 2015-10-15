@@ -315,6 +315,12 @@ class CrearTareaFormView(FormView):
         result_dict = {}
         result_dict['success'] = False
         result_dict['id'] = -1
+        form_errors = []
+        for field, errors in form.errors.items():
+            print errors
+            for error in errors:
+                form_errors.append(error)
+        result_dict['errors'] = form_errors
         return JsonResponse(result_dict)
 
     def form_valid(self, form):
@@ -322,7 +328,9 @@ class CrearTareaFormView(FormView):
         tarea = form.save(commit=False)
         tarea.profesor = self.request.user.profesor
         tarea.save()
+        result_dict['success'] = True
         result_dict['id'] = tarea.id
+        result_dict['errors'] = []
         return JsonResponse(result_dict)
 
 class CursoView(TemplateView):

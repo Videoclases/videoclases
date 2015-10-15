@@ -61,8 +61,21 @@ function viewModel() {
             processData: false,
             contentType: false,
             success: function(response){
-                self.asignarGrupo.tareaActual(response.id);
-                $("#asignar-grupo-form-submit").click();
+                console.log(response);
+                if (response.success) {
+                    self.asignarGrupo.tareaActual(response.id);
+                    $("#asignar-grupo-form-submit").click();
+                } else {
+                    $(".loader").fadeOut("slow");
+                    self.formErrors.removeAll();
+                    self.changeFormErrorsVisible(true);
+                    for (var i = 0; i < response.errors.length; i++) {
+                        self.formErrors.push(response.errors[i]);
+                    }
+                    $('html,body').animate({
+                        scrollTop: $("#top-form-head-line").offset().top},
+                        'slow');
+                        }
             }
         });
     }

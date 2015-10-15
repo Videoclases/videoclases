@@ -76,31 +76,31 @@
                                 <div class="row">
                                     <div class="col-md-4">Link de VideoClase</div>
                                     <div class="col-md-8">
-                                        <input name="{{ form.video.name }}" id="videoLink" type="text" class="form-control" placeholder="Copiar link de video en Youtube" value="{{ form.initial.video }}" />
+                                        <input name="{{ form.video.name }}" id="videoLink" type="text" class="form-control" maxlength="100" placeholder="Copiar link de video en Youtube" value="{{ form.initial.video }}" />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">Pregunta</div>
                                     <div class="col-md-8">
-                                        <input name="{{ form.pregunta.name }}" class="form-control" type="text" value="{{ form.initial.pregunta }}"></input>
+                                        <input name="{{ form.pregunta.name }}" class="form-control" maxlength="100" type="text" value="{{ form.initial.pregunta }}"></input>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">Alternativa correcta</div>
                                     <div class="col-md-8">
-                                        <input name="{{ form.alternativa_correcta.name }}" class="form-control" type="text" value="{{ form.initial.alternativa_correcta }}"></input>
+                                        <input name="{{ form.alternativa_correcta.name }}" class="form-control" maxlength="100" type="text" value="{{ form.initial.alternativa_correcta }}"></input>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">Alternativa 2</div>
                                     <div class="col-md-8">
-                                        <input name="{{ form.alternativa_2.name }}" class="form-control" type="text" value="{{ form.initial.alternativa_2 }}"></input>
+                                        <input name="{{ form.alternativa_2.name }}" class="form-control" maxlength="100" type="text" value="{{ form.initial.alternativa_2 }}"></input>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">Alternativa 3</div>
                                     <div class="col-md-8">
-                                        <input name="{{ form.alternativa_3.name }}" class="form-control" type="text" value="{{ form.initial.alternativa_3 }}"></input>
+                                        <input name="{{ form.alternativa_3.name }}" class="form-control" maxlength="100" type="text" value="{{ form.initial.alternativa_3 }}"></input>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-success">Enviar</button>

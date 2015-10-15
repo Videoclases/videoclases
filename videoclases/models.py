@@ -64,7 +64,7 @@ class Tarea(models.Model):
 
     profesor = models.ForeignKey(Profesor)
     curso = models.ForeignKey(Curso)
-    titulo = models.CharField(max_length=64)
+    titulo = models.CharField(max_length=80)
     descripcion = models.TextField(validators=[MaxLengthValidator(400)])
     video = models.CharField(max_length=100, blank=True, null=True)
     fecha_subida = models.DateField()
