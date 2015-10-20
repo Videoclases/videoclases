@@ -126,7 +126,7 @@ class Grupo(models.Model):
         unique_together = (('numero', 'tarea'),)
 
     def __unicode__(self):
-        return 'Curso: ' + self.grupo.tarea.curso.nombre + '. Tarea: ' + \
+        return 'Curso: ' + self.tarea.curso.nombre + '. Tarea: ' + \
         self.tarea.titulo + '. Grupo: ' + str(self.numero)
 
 class VideoClase(models.Model):

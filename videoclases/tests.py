@@ -984,7 +984,7 @@ class EditarGrupoTestCase(TestCase):
         response = self.client.get(reverse('editar_grupo_form'))
         self.assertEqual(response.status_code, 302)
 
-    def test_editar_grupo_form_simple_case(self):
+    def test_editar_grupo_form_simple_case_remove_grupo(self):
         self.client.login(username='profe', password='profe')
 
         # alumnos to use in tests
@@ -1017,6 +1017,7 @@ class EditarGrupoTestCase(TestCase):
         tarea = Tarea.objects.get(id=2)
         edited_grupo = Grupo.objects.get(numero=3, tarea=tarea)
         self.assertEqual(list(edited_grupo.alumnos.all()), list(alumnos))
+        self.assertTrue(edited_grupo.videoclase not in [None,''])
 
         # assert valid creation of NotasFinales
         nf1 = NotasFinales.objects.filter(grupo=edited_grupo, alumno=a1)
@@ -1033,6 +1034,45 @@ class EditarGrupoTestCase(TestCase):
         deleted_nf = NotasFinales.objects.filter(grupo=deleted_grupo)
         self.assertFalse(deleted_grupo.exists())
         self.assertFalse(deleted_nf.exists())
+
+    def test_editar_grupo_form_simple_case_add_grupo(self):
+        self.client.login(username='profe', password='profe')
+
+        # alumnos to use in tests
+        a1 = Alumno.objects.get(id=32)
+        a2 = Alumno.objects.get(id=33)
+        a3 = Alumno.objects.get(id=35)
+        a4 = Alumno.objects.get(id=36)
+
+        # assign grupos for test
+        original_grupos_data = {}
+        original_grupos_data['grupos'] = '{"1":[34,37,38],"2":[31,39,40],"3":[32,33,35,36]}'
+        original_grupos_data['tarea'] = 2
+        self.client.post(reverse('asignar_grupo_form'), original_grupos_data)
+
+        # post edited grupos data
+        edited_grupos_data = {}
+        edited_grupos_data['grupos'] = '{"1":[34,37,38],"2":[31,39,40],"3":[33,35,36], "4":[32]}'
+        edited_grupos_data['tarea'] = 2
+        form = AsignarGrupoForm(edited_grupos_data)
+
+        # assert form is valid
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('editar_grupo_form'), edited_grupos_data)
+        self.assertEqual(response.status_code, 200)
+
+        # assert valid creation of new grupo
+        alumnos = [a1]
+        tarea = Tarea.objects.get(id=2)
+        created_grupo = Grupo.objects.get(numero=4, tarea=tarea)
+        self.assertEqual(list(created_grupo.alumnos.all()), list(alumnos))
+        self.assertTrue(created_grupo.videoclase not in [None,''])
+
+        # assert valid creation of NotasFinales
+        nf1 = NotasFinales.objects.filter(grupo=created_grupo, alumno=a1)
+        self.assertTrue(nf1.exists())
 
     def test_editar_grupo_incomplete_data(self):
         self.client.login(username='profe', password='profe')
@@ -1066,6 +1106,7 @@ class EditarGrupoTestCase(TestCase):
         tarea = Tarea.objects.get(id=2)
         not_edited_grupo = Grupo.objects.get(numero=2, tarea=tarea)
         self.assertEqual(list(not_edited_grupo.alumnos.all()), list(alumnos))
+        self.assertTrue(not_edited_grupo.videoclase not in [None,''])
 
         # assert NotasFinales were not changed
         nf1 = NotasFinales.objects.filter(grupo=not_edited_grupo, alumno=a1)
@@ -1079,6 +1120,74 @@ class EditarGrupoTestCase(TestCase):
         resp_json = json.loads(response.content)
         self.assertFalse(resp_json['success'])
         self.assertEqual(resp_json['message'], u'Datos incompletos, todos los alumnos deben tener grupo.')
+
+    def test_editar_grupo_incomplete_data_with_rare_group_numbers(self):
+        self.client.login(username='profe', password='profe')
+
+        # alumnos to use in tests
+        a1 = Alumno.objects.get(id=31)
+        a2 = Alumno.objects.get(id=39)
+        a3 = Alumno.objects.get(id=40)
+
+        # assign grupos for test
+        original_grupos_data = {}
+        original_grupos_data['grupos'] = '{"1":[34,37,38],"2":[31,39,40],"3":[33,35,36],"4":[32]}'
+        original_grupos_data['tarea'] = 2
+        self.client.post(reverse('asignar_grupo_form'), original_grupos_data)
+
+        # post edited grupos data
+        edited_grupos_data = {}
+        edited_grupos_data['grupos'] = '{"45":[34,37,38],"67":[31,39],"88":[33,35,36],"110":[32]}'
+        edited_grupos_data['tarea'] = 2
+        form = AsignarGrupoForm(edited_grupos_data)
+
+        # assert form is valid
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('editar_grupo_form'), edited_grupos_data)
+        self.assertEqual(response.status_code, 200)
+
+        # assert that grupos were not changed
+        alumnos = [a1, a2, a3]
+        tarea = Tarea.objects.get(id=2)
+        not_edited_grupo = Grupo.objects.get(numero=2, tarea=tarea)
+        self.assertEqual(list(not_edited_grupo.alumnos.all()), list(alumnos))
+        self.assertTrue(not_edited_grupo.videoclase not in [None,''])
+
+        # assert NotasFinales were not changed
+        nf1 = NotasFinales.objects.filter(grupo=not_edited_grupo, alumno=a1)
+        nf2 = NotasFinales.objects.filter(grupo=not_edited_grupo, alumno=a2)
+        nf3 = NotasFinales.objects.filter(grupo=not_edited_grupo, alumno=a3)
+        self.assertTrue(nf1.exists())
+        self.assertTrue(nf2.exists())
+        self.assertTrue(nf3.exists())
+
+        # assert correct response
+        resp_json = json.loads(response.content)
+        self.assertFalse(resp_json['success'])
+        self.assertEqual(resp_json['message'], u'Los números de los grupos no son consecutivos. Revisa si hay algún error.')
+
+    def test_editar_grupo_data_with_rare_group_numbers(self):
+        self.client.login(username='profe', password='profe')
+
+        # post edited grupos data
+        edited_grupos_data = {}
+        edited_grupos_data['grupos'] = '{"24":[34,37,38],"55":[31,39,40],"110":[32,33,35,36]}'
+        edited_grupos_data['tarea'] = 2
+        form = AsignarGrupoForm(edited_grupos_data)
+
+        # assert form is valid
+        self.assertTrue(form.is_valid())
+
+        # assert valid response
+        response = self.client.post(reverse('editar_grupo_form'), edited_grupos_data)
+        self.assertEqual(response.status_code, 200)
+
+        # assert correct response
+        resp_json = json.loads(response.content)
+        self.assertFalse(resp_json['success'])
+        self.assertEqual(resp_json['message'], u'Los números de los grupos no son consecutivos. Revisa si hay algún error.')
 
 class EditarTareaTestCase(TestCase):
     fixtures = todos_los_fixtures

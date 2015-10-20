@@ -495,11 +495,24 @@ class EditarGrupoFormView(FormView):
         else:
             return True, None
 
+    def grupos_numbers_correct(self, grupos_json):
+        numbers = range(1, len(grupos_json) + 1)
+        for numero in grupos_json:
+            numero_int = int(numero)
+            try:
+                numbers.remove(numero_int)
+            except:
+                pass
+        return numbers == []
+
     @method_decorator(transaction.atomic)
     def form_valid(self, form):
         message = ''
         try:
             grupos = json.loads(form.cleaned_data['grupos'])
+            if not self.grupos_numbers_correct(grupos):
+                message = u'Los números de los grupos no son consecutivos. Revisa si hay algún error.'
+                raise ValueError
             tarea = Tarea.objects.get(id=form.cleaned_data['tarea'])
             original_grupos = Grupo.objects.filter(tarea=tarea)
             # check if all alumnos from the original grupos have a grupo in submitted data
@@ -536,9 +549,18 @@ class EditarGrupoFormView(FormView):
                 # if grupo does not exist, create grupo and add alumnos
                 else:
                     grupo = Grupo.objects.create(tarea=tarea, numero=int(numero))
+                    # create list of alumnos from submitted info
+                    list_submitted_alumnos = []
+                    for alumno_id in grupos[numero]:
+                        list_submitted_alumnos.append(Alumno.objects.get(id=alumno_id))
                     for a in list_submitted_alumnos:
                         grupo.alumnos.add(a)
                     grupo.save()
+                    for a in grupo.alumnos.all():
+                        nf = NotasFinales.objects.get(grupo__tarea=tarea, alumno=a)
+                        nf.grupo = grupo
+                        nf.save()
+                    VideoClase.objects.get_or_create(grupo=grupo)
             # check if there are grupos that were not in the uploaded info
             # first, create a list of grupos ids submitted
             list_submitted_grupo_ids = []
@@ -550,7 +572,7 @@ class EditarGrupoFormView(FormView):
             for g in grupos_not_submitted:
                 can_delete, exception = self.can_delete_grupo(g, tarea)
                 if exception == 'raise':
-                    message = 'No se puede eliminar el grupo ' + g.numero + '.'
+                    message = 'No se puede eliminar el grupo ' + str(g.numero) + '.'
                     raise ValueError
                 else:
                     g.delete()
