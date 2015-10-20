@@ -126,7 +126,8 @@ class Grupo(models.Model):
         unique_together = (('numero', 'tarea'),)
 
     def __unicode__(self):
-        return 'Tarea: ' + self.tarea.titulo + '. Grupo: ' + str(self.numero)
+        return 'Curso: ' + self.grupo.tarea.curso.nombre + '. Tarea: ' + \
+        self.tarea.titulo + '. Grupo: ' + str(self.numero)
 
 class VideoClase(models.Model):
     grupo          = models.OneToOneField(Grupo)
@@ -276,7 +277,8 @@ class VideoClase(models.Model):
         super(VideoClase, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return 'Tarea: ' + self.grupo.tarea.titulo + '. Grupo: ' + str(self.grupo.numero)
+        return 'Curso: ' + self.grupo.tarea.curso.nombre + '. Tarea: ' + \
+        self.grupo.tarea.titulo + '. Grupo: ' + str(self.grupo.numero)
 
 class NotasFinales(models.Model):
     grupo = models.ForeignKey(Grupo)
@@ -288,7 +290,8 @@ class NotasFinales(models.Model):
         return self.nota_profesor
 
     def __unicode__(self):
-        return 'Tarea: ' + self.grupo.tarea.titulo + '. Grupo: ' + str(self.grupo.numero) + \
+        return 'Curso: ' + self.grupo.tarea.curso.nombre + '. Tarea: ' + \
+        self.grupo.tarea.titulo + '. Grupo: ' + str(self.grupo.numero) + \
         '. Nota: ' + str(self.ponderar_notas())
 
 class EvaluacionesDeAlumnos(models.Model):
