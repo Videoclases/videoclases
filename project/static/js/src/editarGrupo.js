@@ -122,4 +122,23 @@ function EditarGrupo() {
             contentType: false,
         });
     }
+
+    self.validateGrupos = function() {
+        var valid = true;
+        var grupoNumbers = []
+        for (var i = 0; i < self.alumnos().length; i++) {
+            var grupo = parseInt(self.alumnos()[i].grupo());
+            if ($.inArray(grupo, grupoNumbers) == -1) {
+                grupoNumbers.push(grupo)
+            }
+        }
+        grupoNumbers = grupoNumbers.sort(function (a, b) { 
+            return a - b;
+        });
+        for (var i = 0; i < grupoNumbers.length; i++) {
+            if (grupoNumbers[i] != i + 1)
+                valid = false;
+        }
+        return valid;
+    }
 }

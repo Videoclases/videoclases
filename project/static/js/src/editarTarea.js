@@ -190,8 +190,12 @@ function viewModel() {
     }
 
     self.submitForms = function() {
-        if ($("#editar-tarea-form").valid()) {
-            $("#editar-tarea-form-submit").click();
+        if (self.editarGrupo.validateGrupos()) {
+            if ($("#editar-tarea-form").valid()) {
+                $("#editar-tarea-form-submit").click();
+            }
+        } else {
+            alert("Los números de los grupos no son consecutivos. Revisa si hay algún error.");
         }
     }
 
