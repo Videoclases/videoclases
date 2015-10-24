@@ -95,6 +95,13 @@ class Tarea(models.Model):
         else:
             return 'Terminada'
 
+    def get_uploaded_videoclases(self):
+        count = 0
+        for g in self.grupos.all():
+            if g.videoclase.video not in [None, '']:
+                count += 1
+        return count
+
     @staticmethod
     def process_youtube_default_link(link):
         if 'youtu.be/' in link:

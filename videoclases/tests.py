@@ -1552,6 +1552,15 @@ class SubirNotaFormTestCase(TestCase):
         else:
             self.assertEqual(notas_editadas.nota_profesor, 5)
 
+class TareaModelMethodsTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_get_uploaded_videoclases(self):
+        # tarea with every grupo with videoclase uploaded
+        tarea_id = 16
+        tarea = Tarea.objects.get(pk=tarea_id)
+        self.assertEqual(tarea.get_uploaded_videoclases(), tarea.grupos.count())
+
 class VerVideoclaseTestCase(TestCase):
     fixtures = todos_los_fixtures
 

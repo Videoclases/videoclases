@@ -53,6 +53,7 @@
                             <th>Profesor</th>
                             <th>Tareas</th>
                             <th>Estado de tarea</th>
+                            <th>VideoClases subidas</th>
                             <th>Fecha de entrega</th>
                             <th>Fecha de evaluación</th>
                             <th></th>
@@ -65,6 +66,7 @@
                                 <td>{{ t.profesor.usuario.get_full_name }}</td>
                                 <td class="table-clickable" onclick="location.href = '{% url 'videoclases_tarea' t.id %}';"><a>{{ t.titulo }}</a></td>
                                 <td>{{ t.get_estado_nombre }}</td>
+                                <td>{{ t.get_uploaded_videoclases }} / {{ t.grupos.count }}</td>
                                 <td>{{ t.fecha_subida|date:'d-m-Y' }}</td>
                                 <td>{{ t.fecha_evaluacion|date:'d-m-Y' }}</td>
                                 <td><form action="{% url 'borrar_tarea' %}" method="post">
