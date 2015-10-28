@@ -88,6 +88,29 @@ class AsignarGrupoFormView(FormView):
     def get(self, request, *args, **kwargs):
         return super(AsignarGrupoFormView, self).get(request, *args, **kwargs)
 
+class BorrarAlumnoView(TemplateView):
+    template_name = 'blank.html'
+
+    @method_decorator(user_passes_test(in_profesores_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(BorrarAlumnoView, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        alumno = Alumno.objects.get(id=self.kwargs['alumno_id'])
+        curso = Curso.objects.get(id=self.kwargs['curso_id'])
+        if alumno not in curso.alumnos.all():
+            messages.info(self.request, 'El alumno no corresponde a este curso.')
+            return HttpResponseRedirect(reverse('profesor'))
+        if curso not in self.request.user.profesor.cursos.all():
+            messages.info(self.request, 'No tienes permisos para esta acción')
+            return HttpResponseRedirect(reverse('profesor'))
+        curso.alumnos.remove(alumno)
+        messages.info(self.request, 'El alumno fue borrado del curso exitosamente.')
+        return HttpResponseRedirect(reverse('editar_curso', kwargs={'curso_id':curso.id}))
+
+    def get_success_url(self, *args, **kwargs):
+        return reverse('editar_curso', kwargs={'curso_id': self.kwargs['curso_id']})
+
 class BorrarCursoFormView(FormView):
     template_name = 'blank.html'
     form_class = BorrarCursoForm

@@ -69,6 +69,60 @@ class AlumnoTestCase(TestCase):
         grupos = Grupo.objects.filter(alumnos=alumno)
         self.assertEqual(list(response.context['grupos']), list(grupos))
 
+class BorrarAlumnoTestCase(TestCase):
+    fixtures = todos_los_fixtures
+
+    def test_profesor_permissions(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('borrar_alumno',
+                                   kwargs={'alumno_id':1, 'curso_id':1}), follow=True)
+        self.assertRedirects(response, reverse('editar_curso', kwargs={'curso_id':1}))
+
+    def test_alumno_permissions(self):
+        self.client.login(username='alumno', password='alumno')
+        response = self.client.get(reverse('borrar_alumno', kwargs={'alumno_id':1, 'curso_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('borrar_alumno', kwargs={'alumno_id':1, 'curso_id':1}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_alumno_not_in_curso(self):
+        self.client.login(username='profe', password='profe')
+        profesor = User.objects.get(username='profe').profesor
+        curso = profesor.cursos.order_by('?')[0]
+        alumno = Alumno.objects.exclude(cursos=curso).order_by('?')[0]
+        response = self.client.get(reverse('borrar_alumno',
+                                   kwargs={'alumno_id':alumno.id, 'curso_id':curso.id}), follow=True)
+        self.assertRedirects(response, reverse('profesor'))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'El alumno no corresponde a este curso.')
+
+    def test_profesor_not_assigned_to_curso(self):
+        self.client.login(username='profe', password='profe')
+        # curso 4 is not assigned to profesor 'profe'
+        curso_id = 4
+        alumno = Curso.objects.get(id=curso_id).alumnos.all()[0]
+        response = self.client.get(reverse('borrar_alumno',
+                                   kwargs={'alumno_id':alumno.id, 'curso_id':curso_id}), follow=True)
+        self.assertRedirects(response, reverse('profesor'))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'No tienes permisos para esta acción')
+
+    def test_correct_delete(self):
+        self.client.login(username='profe', password='profe')
+        profesor = User.objects.get(username='profe').profesor
+        curso = profesor.cursos.order_by('?')[0]
+        alumno = curso.alumnos.order_by('?')[0]
+        response = self.client.get(reverse('borrar_alumno',
+                                   kwargs={'alumno_id':alumno.id, 'curso_id':curso.id}), follow=True)
+        self.assertRedirects(response, reverse('editar_curso', kwargs={'curso_id':curso.id}))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'El alumno fue borrado del curso exitosamente.')
+
 class BorrarCursoTestCase(TestCase):
     fixtures = todos_los_fixtures
 

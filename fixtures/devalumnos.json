@@ -398,5 +398,15 @@
     },
     "model": "videoclases.alumno",
     "pk": 40
+},
+{
+    "fields": {
+        "cursos": [
+            4
+        ],
+        "usuario": 44
+    },
+    "model": "videoclases.alumno",
+    "pk": 41
 }
 ]

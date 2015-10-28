@@ -856,5 +856,25 @@
     },
     "model": "auth.user",
     "pk": 43
+},
+{
+    "fields": {
+        "username": "alumno41",
+        "first_name": "alumno41",
+        "last_name": "alumno41",
+        "is_active": true,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": null,
+        "groups": [
+            2
+        ],
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$20000$nHDMeD1800rD$DvF9NWziI3xwnMyOIPgdpIJ+KVPVFDt7w7kYCvs7PaA=",
+        "email": "",
+        "date_joined": "2015-07-08T20:53:17.431Z"
+    },
+    "model": "auth.user",
+    "pk": 44
 }
 ]
