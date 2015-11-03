@@ -5,6 +5,12 @@
 
 {% block extra-head %}
 <script type="text/javascript">
+    function deleteAlumno(alumnoId) {
+        if (confirm("¿Seguro que deseas eliminar este alumno del curso?")) {
+            var aId = "deleteAlumno" + alumnoId;
+            document.getElementById(aId).click();
+        }
+    }
     function deleteCurso() {
         if (confirm("¿Seguro que deseas borrar este curso?")) {
             $("#formBorrarCursoSubmit").click();
@@ -61,7 +67,11 @@
                                         <td>{{ a.usuario.last_name }}</td>
                                         <td>{{ a.usuario.first_name }}</td>
                                         <td>{{ a.usuario.username }}</td>
-                                        <td><a href="{% url 'editar_alumno' curso.id a.id %}"><button class="btn btn-info">Editar alumno</button></a></td>
+                                        <td>
+                                            <a href="{% url 'editar_alumno' curso.id a.id %}"><button class="btn btn-info">Editar alumno</button></a>
+                                            <button class="btn btn-danger" onclick="deleteAlumno({{a.id}});">Borrar Alumno</button>
+                                            <a id="deleteAlumno{{a.id}}" href="{% url 'borrar_alumno' curso.id a.id %}"></a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
