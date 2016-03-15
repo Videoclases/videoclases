@@ -37,6 +37,7 @@
                 <div class="col-md-2"><h4>Profesor</h4></div>
                 <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
             </div>
+            {% if alumno.curso_actual %}
             <div class="row">
                 <div class="col-md-2"><h4>Colegio</h4></div>
                 <div class="col-md-2"><h5>{{ alumno.curso_actual.colegio.nombre }}</h5></div>
@@ -49,6 +50,13 @@
                     <h6 class="page-head-line">Curso {{ alumno.curso_actual.nombre }} - {{ alumno.usuario.get_full_name }} ({{ videoclases.count }} VideoClases)</h6>
                 </div>
             </div>
+                {% else %}
+                <div class="row">
+                <div class="col-xs-12">
+                    Sin cursos actuales
+                </div>
+                </div>
+            {% endif %}
             {% for g in grupos %}
                 <div class="row">
                     <div class="col-md-6">

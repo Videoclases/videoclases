@@ -52,8 +52,10 @@ class Alumno(models.Model):
         return curso_qs[0] if curso_qs.exists() else False
 
     def __unicode__(self):
-        return 'Curso: ' + self.curso_actual().nombre + ' ' + str(self.curso_actual().anho) + ' ' + \
-        self.usuario.get_full_name()
+        if self.curso_actual():
+            return 'Curso: ' + self.curso_actual().nombre + ' ' + str(self.curso_actual().anho) + ' ' + \
+                   self.usuario.get_full_name()
+        return 'Sin cursos actualmente'
 
 class Tarea(models.Model):
     estados = (
