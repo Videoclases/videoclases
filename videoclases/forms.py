@@ -3,7 +3,14 @@
 from datetimewidget.widgets import DateWidget
 from django import forms
 from django.utils import timezone
-from videoclases.models import *
+
+from videoclases.models.alumno import Alumno
+from videoclases.models.curso import Curso
+from videoclases.models.evaluaciones_de_alumnos import EvaluacionesDeAlumnos
+from videoclases.models.respuestas_de_alumnos import RespuestasDeAlumnos
+from videoclases.models.tarea import Tarea
+from videoclases.models.video_clase import VideoClase
+
 
 class AsignarGrupoForm(forms.Form):
     grupos = forms.CharField(max_length=1000000000, required=True)

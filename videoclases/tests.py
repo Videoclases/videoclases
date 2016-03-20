@@ -14,7 +14,14 @@ from django.test import TestCase
 from django.utils import timezone
 from io import BytesIO
 from videoclases.forms import *
-from videoclases.models import *
+from videoclases.models.grupo import Grupo
+from videoclases.models.notas_finales import NotasFinales
+from videoclases.models.tarea import Tarea
+from videoclases.models.alumno import Alumno
+from videoclases.models.video_clase import VideoClase
+from videoclases.models.notas_finales import NotasFinales
+from videoclases.models.evaluaciones_de_alumnos import EvaluacionesDeAlumnos
+from videoclases.models.respuestas_de_alumnos import RespuestasDeAlumnos
 from videoclases.views import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -1770,6 +1777,7 @@ class VideoclasesAlumnoTestCase(TestCase):
         vmerge.order_by('-id')
         self.assertEqual(response.context['alumno'], alumno)
         self.assertEqual(list(response.context['grupos']), list(vmerge))
+
 
 class VideoclasesTareaTestCase(TestCase):
     fixtures = todos_los_fixtures

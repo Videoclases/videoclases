@@ -1,5 +1,16 @@
 from django.contrib import admin
-from videoclases.models import *
+
+from videoclases.models.alumno import Alumno
+from videoclases.models.boolean_parameters import BooleanParameters
+from videoclases.models.colegio import Colegio
+from videoclases.models.curso import Curso
+from videoclases.models.evaluaciones_de_alumnos import EvaluacionesDeAlumnos
+from videoclases.models.grupo import Grupo
+from videoclases.models.notas_finales import NotasFinales
+from videoclases.models.profesor import Profesor
+from videoclases.models.respuestas_de_alumnos import RespuestasDeAlumnos
+from videoclases.models.tarea import Tarea
+from videoclases.models.video_clase import VideoClase
 
 admin.site.register(Alumno)
 admin.site.register(BooleanParameters)

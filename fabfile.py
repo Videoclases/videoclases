@@ -1,5 +1,6 @@
 from fabric.contrib import django as ddd
 import django
+
 ddd.project("project")
 django.setup()
 
@@ -12,7 +13,6 @@ from django.utils import timezone
 from fabric.api import env, require, run, sudo, cd, local, get
 
 from project.fabfile_secret import *
-from videoclases.models import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 file_name = 'videoclases/project/settings_secret.py'
@@ -129,6 +129,11 @@ def reboot():
 def _create_teacher():
     print '---------------------------------------'
     print 'Now you will be asked for the necessary data to create a Professor.'
+
+    from videoclases.models.curso import Curso
+    from videoclases.models.profesor import Profesor
+    from videoclases.models.colegio import Colegio
+
     username = raw_input('Insert username: ')
     password = getpass.getpass('Insert password: ')
     password2 = getpass.getpass('Confirm password: ')

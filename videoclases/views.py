@@ -26,7 +26,14 @@ from pyexcel_ods import get_data as ods_get_data
 from pyexcel_xls import get_data as xls_get_data
 from pyexcel_xlsx import get_data as xlsx_get_data
 from videoclases.forms import *
-from videoclases.models import *
+from videoclases.models.grupo import Grupo
+from videoclases.models.colegio import Colegio
+from videoclases.models.alumno import Alumno
+from videoclases.models.profesor import Profesor
+from videoclases.models.respuestas_de_alumnos import RespuestasDeAlumnos
+from videoclases.models.evaluaciones_de_alumnos import EvaluacionesDeAlumnos
+from videoclases.models.notas_finales import NotasFinales
+from videoclases.models.video_clase import VideoClase
 
 SHOW_CORRECT_ANSWER = 'Mostrar alternativa correcta'
 
