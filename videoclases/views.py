@@ -257,19 +257,27 @@ class CrearCursoFormView(FormView):
     def form_valid(self, form, *args, **kwargs):
         #(self, file, field_name, name, content_type, size, charset, content_type_extra=None)
         f = form.cleaned_data['file']
+
         path = settings.MEDIA_ROOT + '/' + f.name
-        with open(path, 'wb+') as destination:
-            for chunk in f.chunks():
-                destination.write(chunk)
+
+        def save_file(f, path):
+            import ipdb
+            ipdb.set_trace()
+            with open(path, 'wb+') as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+
         # Check file extension
         if f.name.endswith('.xlsx'):
+            save_file(f, path)
             data = xlsx_get_data(path)
         elif f.name.endswith('.xls'):
+            save_file(f, path)
             data = xls_get_data(path)
         elif f.name.endswith('.ods'):
+            save_file(f, path)
             data = ods_get_data(path)
         else:
-            os.remove(path)
             messages.info(self.request, 'El archivo debe ser formato XLS, XLSX u ODS.')
             return HttpResponseRedirect(reverse('crear_curso'))
         # assumes first sheet has info
@@ -287,7 +295,7 @@ class CrearCursoFormView(FormView):
                 return HttpResponseRedirect(reverse('crear_curso'))
         # Create Curso
         curso, created = Curso.objects.get_or_create(colegio=self.request.user.profesor.colegio,
-            nombre=form.cleaned_data['nombre'], anho=form.cleaned_data['anho'])
+                                                     nombre=form.cleaned_data['nombre'], anho=form.cleaned_data['anho'])
         self.request.user.profesor.cursos.add(curso)
         self.request.user.profesor.save()
         if created:
@@ -304,8 +312,8 @@ class CrearCursoFormView(FormView):
                         user.alumno.cursos.add(curso)
                         user.alumno.save()
                     except:
-                        user = User.objects.create_user(username=username, password=password, 
-                            first_name=nombre, last_name=apellidos)
+                        user = User.objects.create_user(username=username, password=password,
+                                                        first_name=nombre, last_name=apellidos)
                         user.groups.add(Group.objects.get(name='Alumnos'))
                         a = Alumno.objects.create(usuario=user)
                         a.cursos.add(curso)
