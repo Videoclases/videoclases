@@ -23,11 +23,13 @@ from videoclases.models.notas_finales import NotasFinales
 from videoclases.models.evaluaciones_de_alumnos import EvaluacionesDeAlumnos
 from videoclases.models.respuestas_de_alumnos import RespuestasDeAlumnos
 from videoclases.views import *
+import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 todos_los_fixtures = ['devgroups', 'devusers', 'devcursos', 'devalumnos', 'devprofesores', 
     'devcolegio', 'devtareas', 'devgrupos', 'devvideoclasesevaluando', 'devnotasfinales',
     'devrespuestasdealumnos', 'devevaluacionesdealumnos']
+this_year = datetime.date.today().year
 
 class AlumnoTestCase(TestCase):
     fixtures = todos_los_fixtures
@@ -47,8 +49,8 @@ class AlumnoTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_estados_tarea(self):
-        # fecha_subida = "2015-07-14"
-        # fecha_evaluacion = "2015-07-15"
+        # fecha_subida = today
+        # fecha_evaluacion = today + 10 days
         # estado = 'Terminada'
         tarea = Tarea.objects.get(id=3)
         estados = dict(tarea.estados)
@@ -613,7 +615,7 @@ class CrearCursoTestCase(TestCase):
         file_dict = {'file': imf }
         form_data = {}
         form_data['nombre'] = 'Nombre'
-        form_data['anho'] = 2015
+        form_data['anho'] = this_year
         form_data['file'] = imf
         form = CrearCursoSubirArchivoForm(form_data, file_dict)
 
@@ -628,7 +630,7 @@ class CrearCursoTestCase(TestCase):
         self.assertEqual(str(messages[0]), 'El curso se ha creado exitosamente')
 
         # assert valid creation of object
-        curso = Curso.objects.filter(nombre='Nombre', anho=2015, colegio=user.profesor.colegio)
+        curso = Curso.objects.filter(nombre='Nombre', anho=this_year, colegio=user.profesor.colegio)
         self.assertTrue(curso.exists())
         self.assertEqual(curso.count(), 1)
 
@@ -667,7 +669,7 @@ class CrearCursoTestCase(TestCase):
         file_dict = {'file': imf }
         form_data = {}
         form_data['nombre'] = 'Nombre'
-        form_data['anho'] = 2015
+        form_data['anho'] = this_year
         form_data['file'] = imf
         form = CrearCursoSubirArchivoForm(form_data, file_dict)
 
@@ -706,7 +708,7 @@ class CrearCursoTestCase(TestCase):
         file_dict = {'file': imf }
         form_data = {}
         form_data['nombre'] = 'Nombre'
-        form_data['anho'] = 2015
+        form_data['anho'] = this_year
         form_data['file'] = imf
         form = CrearCursoSubirArchivoForm(form_data, file_dict)
 
@@ -752,8 +754,9 @@ class CrearTareaTestCase(TestCase):
         form_data['descripcion'] = 'descripcion'
         form_data['curso'] = 1
         form_data['revisiones'] = 1
-        form_data['fecha_subida'] = '2015-07-16'
-        form_data['fecha_evaluacion'] = '2015-07-20'
+        today = datetime.datetime.today()
+        form_data['fecha_subida'] = today.strftime('%Y-%m-%d')
+        form_data['fecha_evaluacion'] = (today+datetime.timedelta(days=10)).strftime('%Y-%m-%d')
         form_data['video'] = 'https://www.youtube.com/watch?v=8a7sd82s'
         form = CrearTareaForm(form_data)
 

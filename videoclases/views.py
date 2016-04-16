@@ -261,8 +261,6 @@ class CrearCursoFormView(FormView):
         path = settings.MEDIA_ROOT + '/' + f.name
 
         def save_file(f, path):
-            import ipdb
-            ipdb.set_trace()
             with open(path, 'wb+') as destination:
                 for chunk in f.chunks():
                     destination.write(chunk)
