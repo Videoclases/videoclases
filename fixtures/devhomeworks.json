@@ -1,0 +1,86 @@
+[
+{
+    "fields": {
+        "date_upload": "2018-07-14",
+        "course": 1,
+        "video": "",
+        "revision": 3,
+        "description": "Siempre pendiente",
+        "title": "Siempre pendiente",
+        "teacher": 1,
+        "date_evaluation": "2019-07-14"
+    },
+    "model": "videoclases.homework",
+    "pk": 1
+},
+{
+    "fields": {
+        "date_upload": "2015-07-27",
+        "course": 2,
+        "video": "",
+        "revision": 4,
+        "description": "Tarea sin grupos",
+        "title": "Tarea sin grupos para test",
+        "teacher": 1,
+        "date_evaluation": "2015-08-03"
+    },
+    "model": "videoclases.homework",
+    "pk": 2
+},
+{
+    "fields": {
+        "date_upload": "2014-07-27",
+        "course": 2,
+        "video": "",
+        "revision": 4,
+        "description": "Tarea para probar states",
+        "title": "Tarea para probar states",
+        "teacher": 1,
+        "date_evaluation": "2014-08-03"
+    },
+    "model": "videoclases.homework",
+    "pk": 3
+},
+{
+    "fields": {
+        "date_upload": "2015-07-27",
+        "course": 2,
+        "video": "https://www.youtube.com/embed/JFfcD-SkqIc",
+        "revision": 4,
+        "description": "L\u00ednea 1 de descripci\u00f3n.\r\n\r\nOtras l\u00edneas\r\nFin",
+        "title": "M\u00edo Cid Campeador",
+        "teacher": 1,
+        "date_evaluation": "2015-08-03"
+    },
+    "model": "videoclases.homework",
+    "pk": 9
+},
+{
+    "fields": {
+        "date_upload": "2015-07-26",
+        "course": 1,
+        "video": "",
+        "revision": 3,
+        "description": "Videos de gatos",
+        "title": "Gatos - Evaluando siempre",
+        "teacher": 1,
+        "date_evaluation": "2016-08-04"
+    },
+    "model": "videoclases.homework",
+    "pk": 10
+},
+{
+    "fields": {
+        "date_upload": "2015-07-14",
+        "course": 1,
+        "video": "https://www.youtube.com/watch?v=x2mQmKHgjUI",
+        "revision": 3,
+        "description": "Subir un video friendo un huevo",
+        "title": "Tarea terminada",
+        "teacher": 1,
+        "date_evaluation": "2015-07-21"
+    },
+    "model": "videoclases.homework",
+    "pk": 16
+}
+]

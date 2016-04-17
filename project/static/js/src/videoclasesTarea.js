@@ -5,8 +5,8 @@ function ViewModel() {
 
     self.submitForm = function(grupo_id, alumno_id, myObservable, myVisible) {
         var fd = new FormData();
-        fd.append("alumno", parseInt(alumno_id));
-        fd.append("grupo", parseInt(grupo_id));
+        fd.append("student", parseInt(alumno_id));
+        fd.append("group", parseInt(grupo_id));
         fd.append("nota", parseFloat(myObservable()));
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
@@ -15,7 +15,7 @@ function ViewModel() {
                 }
             }
         });
-        return $.ajax('/profesor/subir-nota/', {
+        return $.ajax('/teacher/subir-nota/', {
             data: fd,
             type: "post",
             processData: false,

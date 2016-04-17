@@ -4,23 +4,23 @@ from datetimewidget.widgets import DateWidget
 from django import forms
 from django.utils import timezone
 
-from videoclases.models.alumno import Alumno
-from videoclases.models.curso import Curso
-from videoclases.models.evaluaciones_de_alumnos import EvaluacionesDeAlumnos
-from videoclases.models.respuestas_de_alumnos import RespuestasDeAlumnos
-from videoclases.models.tarea import Tarea
+from videoclases.models.student import Student
+from videoclases.models.course import Course
+from videoclases.models.student_evaluations import StudentEvaluations
+from videoclases.models.student_responses import StudentResponses
+from videoclases.models.homework import Homework
 from videoclases.models.video_clase import VideoClase
 
 
 class AsignarGrupoForm(forms.Form):
-    grupos = forms.CharField(max_length=1000000000, required=True)
-    tarea = forms.IntegerField(min_value=1, required=True)
+    groups = forms.CharField(max_length=1000000000, required=True)
+    homework = forms.IntegerField(min_value=1, required=True)
 
 class BorrarCursoForm(forms.Form):
-    curso = forms.IntegerField(min_value=1, required=True)
+    course = forms.IntegerField(min_value=1, required=True)
 
 class BorrarTareaForm(forms.Form):
-    tarea = forms.IntegerField(min_value=1, required=True)
+    homework = forms.IntegerField(min_value=1, required=True)
 
 class ChangePasswordForm(forms.Form):
     error_messages = {
@@ -42,14 +42,14 @@ class ChangePasswordForm(forms.Form):
         self.user = user
         super(ChangePasswordForm, self).__init__(*args, **kwargs)
 
-    def in_alumnos_group(self, user):
+    def in_students_group(self, user):
         if user:
             return user.groups.filter(name='Alumnos').exists()
         return False
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if self.in_alumnos_group(self.user):
+        if self.in_students_group(self.user):
             if not email:
                 raise forms.ValidationError(
                     self.error_messages['email_required'],
@@ -82,7 +82,7 @@ class ChangePasswordForm(forms.Form):
 
     def save(self, commit=True):
         self.user.set_password(self.cleaned_data['new_password1'])
-        if self.in_alumnos_group(self.user) and self.cleaned_data.get('email'):
+        if self.in_students_group(self.user) and self.cleaned_data.get('email'):
             self.user.email = self.cleaned_data['email']
         if commit:
             self.user.save()
@@ -94,14 +94,14 @@ ModelChoiceField to override label in form
 class AlumnoChoiceField(forms.models.ModelChoiceField):
     
     def label_from_instance(self, obj):
-        return obj.usuario.get_full_name()
+        return obj.user.get_full_name()
 
 class ChangeStudentPasswordForm(forms.Form):
     error_messages = {
-        'invalid_choice': 'Debes seleccionar un alumno.',
+        'invalid_choice': 'Debes seleccionar un student.',
         'password_mismatch': 'Las contraseñas no coinciden.',
     }
-    alumno = AlumnoChoiceField(queryset=Alumno.objects.all(), error_messages=error_messages)
+    student = AlumnoChoiceField(queryset=Student.objects.all(), error_messages=error_messages)
     new_password1 = forms.CharField(label="Nueva contraseña",
                                     widget=forms.PasswordInput)
     new_password2 = forms.CharField(label="Confirmar nueva contraseña",
@@ -119,47 +119,47 @@ class ChangeStudentPasswordForm(forms.Form):
         return password2
 
     def save(self, commit=True):
-        alumno_user = self.cleaned_data['alumno'].usuario
-        alumno_user.set_password(self.cleaned_data['new_password1'])
+        student_user = self.cleaned_data['student'].user
+        student_user.set_password(self.cleaned_data['new_password1'])
         if commit:
-            alumno_user.save()
-        return alumno_user
+            student_user.save()
+        return student_user
 
 class ChangeStudentPasswordSelectCursoForm(forms.Form):
-    curso = forms.ModelChoiceField(queryset=Curso.objects.all())
+    course = forms.ModelChoiceField(queryset=Course.objects.all())
 
 class CrearCursoSubirArchivoForm(forms.Form):
     file = forms.FileField()
-    nombre = forms.CharField(required=True)
-    anho = forms.IntegerField(min_value=2015, required=True)
+    name = forms.CharField(required=True)
+    year = forms.IntegerField(min_value=2015, required=True)
 
     def __init__(self, *args, **kwargs):
         super(CrearCursoSubirArchivoForm, self).__init__(*args, **kwargs)
-        self.fields['anho'].label = "Año"
-        self.fields['nombre'].label = "Nombre de curso"
+        self.fields['year'].label = "Año"
+        self.fields['name'].label = "Nombre de course"
         self.fields['file'].label = "Planilla"
 
 class CrearTareaForm(forms.ModelForm):
     class Meta:
-        model = Tarea
-        fields = ['video', 'titulo', 'descripcion', 'curso', 'revisiones', 
-                  'fecha_subida', 'fecha_evaluacion']
+        model = Homework
+        fields = ['video', 'title', 'description', 'course', 'revision',
+                  'date_upload', 'date_evaluation']
         dateOptions = {
             'weekStart': 1,
             'todayHighlight': True,
             'startDate': timezone.now().strftime('%d-%m-%Y')
         }
         widgets = {
-            'fecha_subida': DateWidget(options=dateOptions, usel10n=True),
-            'fecha_evaluacion': DateWidget(options=dateOptions, usel10n=True),
+            'date_upload': DateWidget(options=dateOptions, usel10n=True),
+            'date_evaluation': DateWidget(options=dateOptions, usel10n=True),
         }
 
     def clean(self):
-        fecha_subida = self.cleaned_data.get('fecha_subida')
-        fecha_evaluacion = self.cleaned_data.get('fecha_evaluacion')
-        if fecha_evaluacion < fecha_subida:
-            msg = u'Fecha para evaluar debe ser posterior a Fecha para subir tarea.'
-            self._errors['fecha_evaluacion'] = self.error_class([msg])
+        date_upload = self.cleaned_data.get('date_upload')
+        date_evaluation = self.cleaned_data.get('date_evaluation')
+        if date_evaluation < date_upload:
+            msg = u'Fecha para evaluar debe ser posterior a Fecha para subir homework.'
+            self._errors['date_evaluation'] = self.error_class([msg])
 
 class EditarAlumnoForm(forms.Form):
     first_name = forms.CharField(required=True, label='Nombres')
@@ -168,62 +168,62 @@ class EditarAlumnoForm(forms.Form):
 class EditarTareaForm(forms.ModelForm):
 
     class Meta:
-        model = Tarea
-        fields = ['video', 'titulo', 'descripcion', 'curso', 'revisiones', 
-                  'fecha_subida', 'fecha_evaluacion']
+        model = Homework
+        fields = ['video', 'title', 'description', 'course', 'revision',
+                  'date_upload', 'date_evaluation']
         dateOptions = {
             'weekStart': 1,
             'todayHighlight': True,
             'startDate': timezone.now().strftime('%d-%m-%Y')
         }
         widgets = {
-            'fecha_subida': DateWidget(options=dateOptions, usel10n=True),
-            'fecha_evaluacion': DateWidget(options=dateOptions, usel10n=True),
+            'date_upload': DateWidget(options=dateOptions, usel10n=True),
+            'date_evaluation': DateWidget(options=dateOptions, usel10n=True),
         }
 
     def clean(self):
-        if self.cleaned_data.get('fecha_subida'):
-            fecha_subida = self.cleaned_data.get('fecha_subida')
+        if self.cleaned_data.get('date_upload'):
+            date_upload = self.cleaned_data.get('date_upload')
         else:
-            fecha_subida = self.instance.fecha_subida
-        if self.cleaned_data.get('fecha_evaluacion'):
-            fecha_evaluacion = self.cleaned_data.get('fecha_evaluacion')
+            date_upload = self.instance.date_upload
+        if self.cleaned_data.get('date_evaluation'):
+            date_evaluation = self.cleaned_data.get('date_evaluation')
         else:
-            fecha_evaluacion = self.instance.fecha_evaluacion
-        if fecha_evaluacion < fecha_subida:
-            msg = u'Fecha para evaluar debe ser posterior a Fecha para subir tarea.'
-            self._errors['fecha_evaluacion'] = self.error_class([msg])
+            date_evaluation = self.instance.date_evaluation
+        if date_evaluation < date_upload:
+            msg = u'Fecha para evaluar debe ser posterior a Fecha para subir homework.'
+            self._errors['date_evaluation'] = self.error_class([msg])
 
     def __init__(self, *args, **kwargs):
         super(EditarTareaForm, self).__init__(*args, **kwargs)
         self.fields['video'].required = False
-        self.fields['titulo'].required = False
-        self.fields['descripcion'].required = False
-        self.fields['curso'].required = False
-        self.fields['revisiones'].required = False
-        self.fields['fecha_subida'].required = False
-        self.fields['fecha_evaluacion'].required = False
+        self.fields['title'].required = False
+        self.fields['description'].required = False
+        self.fields['course'].required = False
+        self.fields['revision'].required = False
+        self.fields['date_upload'].required = False
+        self.fields['date_evaluation'].required = False
 
 class EnviarVideoclaseForm(forms.ModelForm):
 
     class Meta:
         model = VideoClase
-        fields = ['video', 'pregunta', 'alternativa_correcta', 
-                  'alternativa_2', 'alternativa_3']
+        fields = ['video', 'question', 'correct_alternative',
+                  'alternative_2', 'alternative_3']
 
 class EvaluacionesDeAlumnosForm(forms.ModelForm):
 
     class Meta:
-        model = EvaluacionesDeAlumnos
-        fields = ['valor', 'videoclase']
+        model = StudentEvaluations
+        fields = ['value', 'videoclase']
 
 class RespuestasDeAlumnosForm(forms.ModelForm):
 
     class Meta:
-        model = RespuestasDeAlumnos
-        fields = ['videoclase', 'respuesta']
+        model = StudentResponses
+        fields = ['videoclase', 'answer']
 
 class SubirNotaForm(forms.Form):
-    alumno = forms.IntegerField(min_value=1, required=True)
-    grupo = forms.IntegerField(min_value=1, required=True)
+    student = forms.IntegerField(min_value=1, required=True)
+    group = forms.IntegerField(min_value=1, required=True)
     nota = forms.FloatField(min_value=1, max_value=7, required=True)

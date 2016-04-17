@@ -39,7 +39,7 @@
 },
 {
     "fields": {
-        "username": "alumno",
+        "username": "student",
         "first_name": "Alumno",
         "last_name": "Responsable",
         "is_active": true,
@@ -51,7 +51,7 @@
         ],
         "user_permissions": [],
         "password": "pbkdf2_sha256$20000$51psGGqkBYim$TevndYx3/l0dHawHSNWaq36wKuYFhp0ZPpNsTbUJMzs=",
-        "email": "alumno@alumno.com",
+        "email": "student@student.com",
         "date_joined": "2015-07-08T20:06:24Z"
     },
     "model": "auth.user",
@@ -59,9 +59,9 @@
 },
 {
     "fields": {
-        "username": "alumno1",
-        "first_name": "alumno1",
-        "last_name": "alumno1",
+        "username": "student1",
+        "first_name": "student1",
+        "last_name": "student1",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -71,7 +71,7 @@
         ],
         "user_permissions": [],
         "password": "pbkdf2_sha256$20000$8IcUA5aznYej$0GOqtpZBz3dy+BLVJwbvT/hRL7kPBk9kHIL6TE2I0Rg=",
-        "email": "alumno1@alumno.com",
+        "email": "student1@student.com",
         "date_joined": "2015-07-08T20:53:06.554Z"
     },
     "model": "auth.user",
@@ -79,9 +79,9 @@
 },
 {
     "fields": {
-        "username": "alumno2",
-        "first_name": "alumno2",
-        "last_name": "alumno2",
+        "username": "student2",
+        "first_name": "student2",
+        "last_name": "student2",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -99,9 +99,9 @@
 },
 {
     "fields": {
-        "username": "alumno3",
-        "first_name": "alumno3",
-        "last_name": "alumno3",
+        "username": "student3",
+        "first_name": "student3",
+        "last_name": "student3",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -119,9 +119,9 @@
 },
 {
     "fields": {
-        "username": "alumno4",
-        "first_name": "alumno4",
-        "last_name": "alumno4",
+        "username": "student4",
+        "first_name": "student4",
+        "last_name": "student4",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -139,9 +139,9 @@
 },
 {
     "fields": {
-        "username": "alumno5",
-        "first_name": "alumno5",
-        "last_name": "alumno5",
+        "username": "student5",
+        "first_name": "student5",
+        "last_name": "student5",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -159,9 +159,9 @@
 },
 {
     "fields": {
-        "username": "alumno6",
-        "first_name": "alumno6",
-        "last_name": "alumno6",
+        "username": "student6",
+        "first_name": "student6",
+        "last_name": "student6",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -179,9 +179,9 @@
 },
 {
     "fields": {
-        "username": "alumno7",
-        "first_name": "alumno7",
-        "last_name": "alumno7",
+        "username": "student7",
+        "first_name": "student7",
+        "last_name": "student7",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -199,9 +199,9 @@
 },
 {
     "fields": {
-        "username": "alumno8",
-        "first_name": "alumno8",
-        "last_name": "alumno8",
+        "username": "student8",
+        "first_name": "student8",
+        "last_name": "student8",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -219,9 +219,9 @@
 },
 {
     "fields": {
-        "username": "alumno9",
-        "first_name": "alumno9",
-        "last_name": "alumno9",
+        "username": "student9",
+        "first_name": "student9",
+        "last_name": "student9",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -239,9 +239,9 @@
 },
 {
     "fields": {
-        "username": "alumno10",
-        "first_name": "alumno10",
-        "last_name": "alumno10",
+        "username": "student10",
+        "first_name": "student10",
+        "last_name": "student10",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -259,9 +259,9 @@
 },
 {
     "fields": {
-        "username": "alumno11",
-        "first_name": "alumno11",
-        "last_name": "alumno11",
+        "username": "student11",
+        "first_name": "student11",
+        "last_name": "student11",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -279,9 +279,9 @@
 },
 {
     "fields": {
-        "username": "alumno12",
-        "first_name": "alumno12",
-        "last_name": "alumno12",
+        "username": "student12",
+        "first_name": "student12",
+        "last_name": "student12",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -299,9 +299,9 @@
 },
 {
     "fields": {
-        "username": "alumno13",
-        "first_name": "alumno13",
-        "last_name": "alumno13",
+        "username": "student13",
+        "first_name": "student13",
+        "last_name": "student13",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -319,9 +319,9 @@
 },
 {
     "fields": {
-        "username": "alumno14",
-        "first_name": "alumno14",
-        "last_name": "alumno14",
+        "username": "student14",
+        "first_name": "student14",
+        "last_name": "student14",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -339,9 +339,9 @@
 },
 {
     "fields": {
-        "username": "alumno15",
-        "first_name": "alumno15",
-        "last_name": "alumno15",
+        "username": "student15",
+        "first_name": "student15",
+        "last_name": "student15",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -359,9 +359,9 @@
 },
 {
     "fields": {
-        "username": "alumno16",
-        "first_name": "alumno16",
-        "last_name": "alumno16",
+        "username": "student16",
+        "first_name": "student16",
+        "last_name": "student16",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -379,9 +379,9 @@
 },
 {
     "fields": {
-        "username": "alumno17",
-        "first_name": "alumno17",
-        "last_name": "alumno17",
+        "username": "student17",
+        "first_name": "student17",
+        "last_name": "student17",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -399,9 +399,9 @@
 },
 {
     "fields": {
-        "username": "alumno18",
-        "first_name": "alumno18",
-        "last_name": "alumno18",
+        "username": "student18",
+        "first_name": "student18",
+        "last_name": "student18",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -419,9 +419,9 @@
 },
 {
     "fields": {
-        "username": "alumno19",
-        "first_name": "alumno19",
-        "last_name": "alumno19",
+        "username": "student19",
+        "first_name": "student19",
+        "last_name": "student19",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -439,9 +439,9 @@
 },
 {
     "fields": {
-        "username": "alumno20",
-        "first_name": "alumno20",
-        "last_name": "alumno20",
+        "username": "student20",
+        "first_name": "student20",
+        "last_name": "student20",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -459,9 +459,9 @@
 },
 {
     "fields": {
-        "username": "alumno21",
-        "first_name": "alumno21",
-        "last_name": "alumno21",
+        "username": "student21",
+        "first_name": "student21",
+        "last_name": "student21",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -479,9 +479,9 @@
 },
 {
     "fields": {
-        "username": "alumno22",
-        "first_name": "alumno22",
-        "last_name": "alumno22",
+        "username": "student22",
+        "first_name": "student22",
+        "last_name": "student22",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -499,9 +499,9 @@
 },
 {
     "fields": {
-        "username": "alumno23",
-        "first_name": "alumno23",
-        "last_name": "alumno23",
+        "username": "student23",
+        "first_name": "student23",
+        "last_name": "student23",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -519,9 +519,9 @@
 },
 {
     "fields": {
-        "username": "alumno24",
-        "first_name": "alumno24",
-        "last_name": "alumno24",
+        "username": "student24",
+        "first_name": "student24",
+        "last_name": "student24",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -539,9 +539,9 @@
 },
 {
     "fields": {
-        "username": "alumno25",
-        "first_name": "alumno25",
-        "last_name": "alumno25",
+        "username": "student25",
+        "first_name": "student25",
+        "last_name": "student25",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -559,9 +559,9 @@
 },
 {
     "fields": {
-        "username": "alumno26",
-        "first_name": "alumno26",
-        "last_name": "alumno26",
+        "username": "student26",
+        "first_name": "student26",
+        "last_name": "student26",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -579,9 +579,9 @@
 },
 {
     "fields": {
-        "username": "alumno27",
-        "first_name": "alumno27",
-        "last_name": "alumno27",
+        "username": "student27",
+        "first_name": "student27",
+        "last_name": "student27",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -599,9 +599,9 @@
 },
 {
     "fields": {
-        "username": "alumno28",
-        "first_name": "alumno28",
-        "last_name": "alumno28",
+        "username": "student28",
+        "first_name": "student28",
+        "last_name": "student28",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -619,9 +619,9 @@
 },
 {
     "fields": {
-        "username": "alumno29",
-        "first_name": "alumno29",
-        "last_name": "alumno29",
+        "username": "student29",
+        "first_name": "student29",
+        "last_name": "student29",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -639,9 +639,9 @@
 },
 {
     "fields": {
-        "username": "alumno30",
-        "first_name": "alumno30",
-        "last_name": "alumno30",
+        "username": "student30",
+        "first_name": "student30",
+        "last_name": "student30",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -659,9 +659,9 @@
 },
 {
     "fields": {
-        "username": "alumno31",
-        "first_name": "alumno31",
-        "last_name": "alumno31",
+        "username": "student31",
+        "first_name": "student31",
+        "last_name": "student31",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -679,9 +679,9 @@
 },
 {
     "fields": {
-        "username": "alumno32",
-        "first_name": "alumno32",
-        "last_name": "alumno32",
+        "username": "student32",
+        "first_name": "student32",
+        "last_name": "student32",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -699,9 +699,9 @@
 },
 {
     "fields": {
-        "username": "alumno33",
-        "first_name": "alumno33",
-        "last_name": "alumno33",
+        "username": "student33",
+        "first_name": "student33",
+        "last_name": "student33",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -719,9 +719,9 @@
 },
 {
     "fields": {
-        "username": "alumno34",
-        "first_name": "alumno34",
-        "last_name": "alumno34",
+        "username": "student34",
+        "first_name": "student34",
+        "last_name": "student34",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -739,9 +739,9 @@
 },
 {
     "fields": {
-        "username": "alumno35",
-        "first_name": "alumno35",
-        "last_name": "alumno35",
+        "username": "student35",
+        "first_name": "student35",
+        "last_name": "student35",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -759,9 +759,9 @@
 },
 {
     "fields": {
-        "username": "alumno36",
-        "first_name": "alumno36",
-        "last_name": "alumno36",
+        "username": "student36",
+        "first_name": "student36",
+        "last_name": "student36",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -779,9 +779,9 @@
 },
 {
     "fields": {
-        "username": "alumno37",
-        "first_name": "alumno37",
-        "last_name": "alumno37",
+        "username": "student37",
+        "first_name": "student37",
+        "last_name": "student37",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -799,9 +799,9 @@
 },
 {
     "fields": {
-        "username": "alumno38",
-        "first_name": "alumno38",
-        "last_name": "alumno38",
+        "username": "student38",
+        "first_name": "student38",
+        "last_name": "student38",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -819,9 +819,9 @@
 },
 {
     "fields": {
-        "username": "alumno39",
-        "first_name": "alumno39",
-        "last_name": "alumno39",
+        "username": "student39",
+        "first_name": "student39",
+        "last_name": "student39",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -839,9 +839,9 @@
 },
 {
     "fields": {
-        "username": "alumno40",
-        "first_name": "alumno40",
-        "last_name": "alumno40",
+        "username": "student40",
+        "first_name": "student40",
+        "last_name": "student40",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,
@@ -859,9 +859,9 @@
 },
 {
     "fields": {
-        "username": "alumno41",
-        "first_name": "alumno41",
-        "last_name": "alumno41",
+        "username": "student41",
+        "first_name": "student41",
+        "last_name": "student41",
         "is_active": true,
         "is_superuser": false,
         "is_staff": false,

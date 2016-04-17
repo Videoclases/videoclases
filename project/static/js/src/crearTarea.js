@@ -1,5 +1,5 @@
 /**
- *  ViewModel for the crear-tarea template, using Knockout.js
+ *  ViewModel for the crear-homework template, using Knockout.js
  */
 
 function viewModel() {
@@ -14,40 +14,40 @@ function viewModel() {
         self.formErrorsVisible(visibility);
     }
 
-    self.curso = {
-        nombre: ko.observable(),
+    self.course = {
+        name: ko.observable(),
         id: ko.observable()
     }
 
     self.select = new Select();
-    self.tarea = {
-        descripcion: ko.observable(""),
-        curso: ko.observable(),
-        revisiones: ko.observable(3),
-        titulo: ko.observable(""),
+    self.homework = {
+        description: ko.observable(""),
+        course: ko.observable(),
+        revision: ko.observable(3),
+        title: ko.observable(""),
         video: ko.observable(""),
-        fecha_subida: ko.observable(""),
-        fecha_evaluacion: ko.observable("")
+        date_upload: ko.observable(""),
+        date_evaluation: ko.observable("")
     }
 
     self.asignarGrupo = new AsignarGrupo();
 
     self.submitCrearTareaForm = function() {
         var fd = new FormData();
-        fd.append("descripcion", self.tarea.descripcion());
-        fd.append("curso", self.tarea.curso());
-        fd.append("revisiones", parseInt(self.tarea.revisiones()));
-        fd.append("titulo", self.tarea.titulo());
-        fd.append("video", self.tarea.video());
+        fd.append("description", self.homework.description());
+        fd.append("course", self.homework.course());
+        fd.append("revision", parseInt(self.homework.revision()));
+        fd.append("title", self.homework.title());
+        fd.append("video", self.homework.video());
         var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-        var subidaArray = reggie.exec(self.tarea.fecha_subida());
-        var evaluacionArray = reggie.exec(self.tarea.fecha_evaluacion());
+        var subidaArray = reggie.exec(self.homework.date_upload());
+        var evaluacionArray = reggie.exec(self.homework.date_evaluation());
         var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
             +(+subidaArray[1]);
         var evaluacionDate = (+evaluacionArray[3]) + '-' + (+evaluacionArray[2]) + '-'
             +(+evaluacionArray[1]);
-        fd.append("fecha_subida", subidaDate);
-        fd.append("fecha_evaluacion", evaluacionDate);
+        fd.append("date_upload", subidaDate);
+        fd.append("date_evaluation", evaluacionDate);
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -55,7 +55,7 @@ function viewModel() {
                 }
             }
         });
-        return $.ajax("/profesor/crear-tarea-form/", {
+        return $.ajax("/teacher/crear-homework-form/", {
             data: fd,
             type: "post",
             processData: false,
@@ -64,7 +64,7 @@ function viewModel() {
                 console.log(response);
                 if (response.success) {
                     self.asignarGrupo.tareaActual(response.id);
-                    $("#asignar-grupo-form-submit").click();
+                    $("#asignar-group-form-submit").click();
                 } else {
                     $(".loader").fadeOut("slow");
                     self.formErrors.removeAll();
@@ -81,22 +81,22 @@ function viewModel() {
     }
 
     self.submitForms = function() {
-        if ($("#crear-tarea-form").valid()) {
+        if ($("#crear-homework-form").valid()) {
             self.loading(true);
             $(".loader").fadeIn("slow");
-            $("#crear-tarea-form-submit").click();
+            $("#crear-homework-form-submit").click();
         }
     }
 
     self.onSelectChangeValue = function(value) {
-        $.when($.ajax("/profesor/descargar-curso/" + value + "/")).done(
+        $.when($.ajax("/teacher/descargar-course/" + value + "/")).done(
             function (result) {
-                self.asignarGrupo.alumnos.removeAll();
-                self.curso.nombre(result.curso.nombre);
-                self.curso.id(result.curso.id);
-                for (i = 0; i < result.alumnos.length; i++) {
-                    var a = result.alumnos[i];
-                    self.asignarGrupo.alumnos.push(new Alumno(parseInt(a.id), a.apellido, a.nombre));
+                self.asignarGrupo.students.removeAll();
+                self.course.name(result.course.name);
+                self.course.id(result.course.id);
+                for (i = 0; i < result.students.length; i++) {
+                    var a = result.students[i];
+                    self.asignarGrupo.students.push(new Alumno(parseInt(a.id), a.apellido, a.name));
                 }
                 self.asignarGrupo.hasCurso(true);
             }
@@ -104,25 +104,25 @@ function viewModel() {
     }
 
     // Subscribe function for change in select
-    self.tarea.curso.subscribe(function () {
-        self.onSelectChangeValue(self.tarea.curso());                
+    self.homework.course.subscribe(function () {
+        self.onSelectChangeValue(self.homework.course());                
     });
 
     self.submitGruposForm = function() {
         var grupos = {};
-        for (var i = 0; i < self.asignarGrupo.alumnos().length; i++) {
-            alumno = self.asignarGrupo.alumnos()[i];
+        for (var i = 0; i < self.asignarGrupo.students().length; i++) {
+            student = self.asignarGrupo.students()[i];
             try {
-                grupos[alumno.grupo().toString()].push(alumno.id());
+                grupos[student.group().toString()].push(student.id());
             } catch(err) {
-                grupos[alumno.grupo().toString()] = [alumno.id()];
+                grupos[student.group().toString()] = [student.id()];
             }
         }
-        $.when(self.asignarGrupo.submitGrupos(grupos, "/profesor/asignar-grupo-form/")).done(
+        $.when(self.asignarGrupo.submitGrupos(grupos, "/teacher/asignar-group-form/")).done(
             function (result) {
                 $(".loader").fadeOut("slow");
-                alert("Tarea creada exitosamente.");
-                window.location = '/profesor/';
+                alert("Homework creada exitosamente.");
+                window.location = '/teacher/';
             }
         );
     }

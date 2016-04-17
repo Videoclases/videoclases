@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+﻿﻿{% extends 'base.html' %}
 {% load staticfiles %}
 
 {% block videoclases-active %}class="menu-top-active"{% endblock %}
@@ -16,8 +16,8 @@
                     {% endif %}
                 {% endfor %}
             ]
-            self.valor = ko.observable({{evaluacion.valor}});
-            self.videoclase = ko.observable({{grupo.videoclase.id}});
+            self.value = ko.observable({{evaluacion.value}});
+            self.videoclase = ko.observable({{group.videoclase.id}});
             self.evaluacion = ko.observable({{evaluacion.pk}});
             self.thumbUpGray = ko.observable('{% static "img/thumb-up-gray.png" %}');
             self.thumbUpGreen = ko.observable('{% static "img/thumb-up-green.png" %}');
@@ -34,29 +34,29 @@
 {% block body %}
     <div class="correct-answer" data-bind="visible: correctAnswer">
         <div align="center">
-            <strong>¡Felicitaciones! Tu respuesta es correcta. En unos segundos cargará la siguiente VideoClase.</strong>
+            <strong>¡Felicitaciones! Tu answer es correcta. En unos segundos cargará la siguiente VideoClase.</strong>
         </div>
     </div>
     <div class="wrong-answer" data-bind="visible: wrongAnswer">
         <div align="center">
-            <strong>¡Oh no! La respuesta correcta era <span data-bind="text: correctAnswerText"></span>. En unos segundos cargará la siguiente VideoClase.</strong>
+            <strong>¡Oh no! La answer correcta era <span data-bind="text: correctAnswerText"></span>. En unos segundos cargará la siguiente VideoClase.</strong>
         </div>
     </div>
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
                 <div class="col-md-2 col-md-offset-10">
-                    <button onclick="location.href = '{% url 'alumno' %}';" class="btn btn-info">Volver</button>
+                    <button onclick="location.href = '{% url 'student' %}';" class="btn btn-info">Volver</button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h6 class="page-head-line">{{ user.alumno.curso_actual.colegio.nombre }} - {{ user.alumno.curso_actual.nombre }} - {{ grupo.tarea.titulo }}</h6>
+                    <h6 class="page-head-line">{{ user.student.course_actual.school.name }} - {{ user.student.course_actual.name }} - {{ group.homework.title }}</h6>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <iframe width="100%" height="315" src="{{ grupo.videoclase.video }}" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="100%" height="315" src="{{ group.videoclase.video }}" frameborder="0" allowfullscreen></iframe>
                     <form data-bind="event: {'submit': submitEvaluacionDeAlumno}">
                         <div class="col-md-6" align="right">
                             <input id="meGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbUp }, click: evaluar(1)" />
@@ -70,32 +70,32 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" style="line-height:1.3;">
                             Integrantes:<br/>
-                            {% for a in grupo.alumnos.all %}
+                            {% for a in group.students.all %}
                                 {% if forloop.last %}
-                                    {{ a.usuario.get_full_name }}
+                                    {{ a.user.get_full_name }}
                                 {% else %}
-                                    {{ a.usuario.get_full_name }} - 
+                                    {{ a.user.get_full_name }} -
                                 {% endif %}
                             {% endfor %}
                         </div>
 
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-12"><h4>{{ grupo.videoclase.pregunta }}</h4></div>
+                                <div class="col-md-12"><h4>{{ group.videoclase.question }}</h4></div>
                             </div>
-                            <form id="respuestaForm" method="post">
+                            <form id="answerForm" method="post">
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <select name="respuesta" class="form-control" id="id_respuesta"
+                                        <select name="answer" class="form-control" id="id_answer"
                                             data-bind="options: responseValues.alternativas,
                                             optionsCaption: '-- escoja una alternativa --',
-                                            value: respuesta,
+                                            value: answer,
                                             valueAllowUnset: false"></select>
                                     </div>
                                 </div>
-                                <input type="hidden" name="videoclase" value="{{ grupo.videoclase.id }}" />
-                                <button style="display:none" id="#respuestaButton" type="submit"></button>
+                                <input type="hidden" name="videoclase" value="{{ group.videoclase.id }}" />
+                                <button style="display:none" id="#answerButton" type="submit"></button>
                             </form>
                         </div>
                     </div>

@@ -3,22 +3,22 @@ import urlparse
 from django.db import models
 from django.db.models import Q
 
-from videoclases.models.grupo import Grupo
+from videoclases.models.groupofstudents import GroupOfStudents
 
 
 class VideoClase(models.Model):
-    grupo          = models.OneToOneField(Grupo)
+    group          = models.OneToOneField(GroupOfStudents)
     video          = models.CharField(max_length=100, blank=True, null=True)
-    pregunta       = models.CharField(max_length=100, blank=True, null=True)
-    alternativa_correcta = models.CharField(max_length=100, blank=True, null=True)
-    alternativa_2  = models.CharField(max_length=100, blank=True, null=True)
-    alternativa_3  = models.CharField(max_length=100, blank=True, null=True)
-    alumnos_subida = models.DateTimeField(blank=True, null=True)
+    question       = models.CharField(max_length=100, blank=True, null=True)
+    correct_alternative = models.CharField(max_length=100, blank=True, null=True)
+    alternative_2  = models.CharField(max_length=100, blank=True, null=True)
+    alternative_3  = models.CharField(max_length=100, blank=True, null=True)
+    upload_students = models.DateTimeField(blank=True, null=True)
 
-    # EvaluacionesDeAlumnos
-    def calcular_porcentaje_evaluaciones(self, valor):
-        conjunto = self.evaluaciones.filter(videoclase=self, valor=valor).count()
-        total = self.evaluaciones.filter(videoclase=self).count()
+    # StudentEvaluations
+    def calcular_porcentaje_evaluaciones(self, value):
+        conjunto = self.evaluations.filter(videoclase=self, value=value).count()
+        total = self.evaluations.filter(videoclase=self).count()
         return int(round(100*conjunto/total)) if total else 0
 
     def porcentaje_me_gusta(self):
@@ -31,23 +31,23 @@ class VideoClase(models.Model):
         return self.calcular_porcentaje_evaluaciones(-1)
 
     def cantidad_me_gusta(self):
-        return self.evaluaciones.filter(videoclase=self, valor=1).count()
+        return self.evaluations.filter(videoclase=self, value=1).count()
 
     def cantidad_neutro(self):
-        return self.evaluaciones.filter(videoclase=self, valor=0).count()
+        return self.evaluations.filter(videoclase=self, value=0).count()
 
     def cantidad_no_me_gusta(self):
-        return self.evaluaciones.filter(videoclase=self, valor=-1).count()
+        return self.evaluations.filter(videoclase=self, value=-1).count()
 
-    def integrantes_calcular_porcentaje_evaluaciones(self, valor):
-        from videoclases.models.evaluaciones_de_alumnos import EvaluacionesDeAlumnos
-        otras_vc = VideoClase.objects.filter(grupo__tarea=self.grupo.tarea) \
+    def integrantes_calcular_porcentaje_evaluaciones(self, value):
+        from videoclases.models.student_evaluations import StudentEvaluations
+        otras_vc = VideoClase.objects.filter(group__homework=self.group.homework) \
                                      .exclude(id=self.id)
-        conjunto = EvaluacionesDeAlumnos.objects.filter(autor__in=self.grupo.alumnos.all(),
-                                                        valor=valor,
-                                                        videoclase__in=otras_vc).count()
-        total = EvaluacionesDeAlumnos.objects.filter(autor__in=self.grupo.alumnos.all(),
+        conjunto = StudentEvaluations.objects.filter(author__in=self.group.students.all(),
+                                                     value=value,
                                                      videoclase__in=otras_vc).count()
+        total = StudentEvaluations.objects.filter(author__in=self.group.students.all(),
+                                                  videoclase__in=otras_vc).count()
         return int(round(100*conjunto/total)) if total else 0
 
     def integrantes_porcentaje_me_gusta(self):
@@ -59,13 +59,13 @@ class VideoClase(models.Model):
     def integrantes_porcentaje_no_me_gusta(self):
         return self.integrantes_calcular_porcentaje_evaluaciones(-1)
 
-    def calcular_integrantes_cantidad_votos(self, valor):
-        from videoclases.models.evaluaciones_de_alumnos import EvaluacionesDeAlumnos
-        otras_vc = VideoClase.objects.filter(grupo__tarea=self.grupo.tarea) \
+    def calcular_integrantes_cantidad_votos(self, value):
+        from videoclases.models.student_evaluations import StudentEvaluations
+        otras_vc = VideoClase.objects.filter(group__homework=self.group.homework) \
                                      .exclude(id=self.id)
-        return EvaluacionesDeAlumnos.objects.filter(autor__in=self.grupo.alumnos.all(),
-                                                    valor=valor,
-                                                    videoclase__in=otras_vc).count()
+        return StudentEvaluations.objects.filter(author__in=self.group.students.all(),
+                                                 value=value,
+                                                 videoclase__in=otras_vc).count()
 
     def integrantes_cantidad_me_gusta(self):
         return self.calcular_integrantes_cantidad_votos(1)
@@ -76,61 +76,61 @@ class VideoClase(models.Model):
     def integrantes_cantidad_no_me_gusta(self):
         return self.calcular_integrantes_cantidad_votos(-1)
 
-    # RespuestasDeAlumnos
-    def calcular_porcentaje_respuestas(self, respuestas):
+    # StudentResponses
+    def calcular_porcentaje_answers(self, answers):
         conjunto = 0
-        for r in respuestas:
-            conjunto += self.respuestas.filter(videoclase=self, respuesta=r).count()
-        total = self.respuestas.filter(videoclase=self).count()
+        for r in answers:
+            conjunto += self.answers.filter(videoclase=self, answer=r).count()
+        total = self.answers.filter(videoclase=self).count()
         return int(round(100*conjunto/total)) if total else 0
 
-    def porcentaje_respuestas_correctas(self):
-        return self.calcular_porcentaje_respuestas([self.alternativa_correcta])
+    def porcentaje_answers_correctas(self):
+        return self.calcular_porcentaje_answers([self.correct_alternative])
 
-    def porcentaje_respuestas_incorrectas(self):
-        return self.calcular_porcentaje_respuestas([self.alternativa_2, self.alternativa_3])
+    def porcentaje_answers_incorrectas(self):
+        return self.calcular_porcentaje_answers([self.alternative_2, self.alternative_3])
 
     def cantidad_correctas(self):
-        return self.respuestas.filter(videoclase=self, respuesta=self.alternativa_correcta).count()
+        return self.answers.filter(videoclase=self, answer=self.correct_alternative).count()
 
     def cantidad_incorrectas(self):
-        return self.respuestas.filter(videoclase=self, respuesta__in=[self.alternativa_2,
-                                                                      self.alternativa_3]).count()
+        return self.answers.filter(videoclase=self, answer__in=[self.alternative_2,
+                                                                      self.alternative_3]).count()
 
-    def integrantes_y_respuestas(self):
-        from videoclases.models.respuestas_de_alumnos import RespuestasDeAlumnos
-        alumnos = self.grupo.alumnos.all()
-        alumnos_array = []
-        for a in alumnos:
-            alumno_dict = {}
-            respuestas = RespuestasDeAlumnos.objects.filter(
-                            videoclase__grupo__tarea=self.grupo.tarea,
-                            alumno=a)
+    def integrantes_y_answers(self):
+        from videoclases.models.student_responses import StudentResponses
+        students = self.group.students.all()
+        students_array = []
+        for a in students:
+            student_dict = {}
+            answers = StudentResponses.objects.filter(
+                            videoclase__group__homework=self.group.homework,
+                            student=a)
             correctas = 0
-            for r in respuestas:
-                correctas += r.respuesta == r.videoclase.alternativa_correcta
+            for r in answers:
+                correctas += r.answer == r.videoclase.correct_alternative
             incorrectas = 0
-            for r in respuestas:
-                incorrectas += r.respuesta == r.videoclase.alternativa_2 \
-                    or r.respuesta == r.videoclase.alternativa_3
-            alumno_dict['user_id'] = a.usuario.id
-            alumno_dict['nombre'] = a.usuario.first_name + ' ' + a.usuario.last_name
-            alumno_dict['cantidad_correctas'] = correctas
-            alumno_dict['cantidad_incorrectas'] = incorrectas
+            for r in answers:
+                incorrectas += r.answer == r.videoclase.alternative_2 \
+                    or r.answer == r.videoclase.alternative_3
+            student_dict['user_id'] = a.user.id
+            student_dict['name'] = a.user.first_name + ' ' + a.user.last_name
+            student_dict['cantidad_correctas'] = correctas
+            student_dict['cantidad_incorrectas'] = incorrectas
             total = correctas + incorrectas
-            alumno_dict['porcentaje_correctas'] = int(round(100*correctas/total)) if total else 0
-            alumno_dict['porcentaje_incorrectas'] = int(round(100*incorrectas/total)) if total else 0
-            alumnos_array.append(alumno_dict)
-        return alumnos_array
+            student_dict['porcentaje_correctas'] = int(round(100*correctas/total)) if total else 0
+            student_dict['porcentaje_incorrectas'] = int(round(100*incorrectas/total)) if total else 0
+            students_array.append(student_dict)
+        return students_array
 
-    def respuestas_de_otros(self):
-        from videoclases.models.respuestas_de_alumnos import RespuestasDeAlumnos
-        correctas = RespuestasDeAlumnos.objects.filter(
+    def answers_de_otros(self):
+        from videoclases.models.student_responses import StudentResponses
+        correctas = StudentResponses.objects.filter(
                         videoclase=self,
-                        respuesta=self.alternativa_correcta).count()
-        incorrectas = RespuestasDeAlumnos.objects.filter(
+                        answer=self.correct_alternative).count()
+        incorrectas = StudentResponses.objects.filter(
                             videoclase=self) \
-                            .filter(Q(respuesta=self.alternativa_2) | Q(respuesta=self.alternativa_3)) \
+                            .filter(Q(answer=self.alternative_2) | Q(answer=self.alternative_3)) \
                             .count()
         return_dict = {}
         return_dict['correctas'] = correctas
@@ -158,5 +158,5 @@ class VideoClase(models.Model):
         super(VideoClase, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return 'Curso: ' + self.grupo.tarea.curso.nombre + '. Tarea: ' + \
-        self.grupo.tarea.titulo + '. Grupo: ' + str(self.grupo.numero)
+        return 'Course: ' + self.group.homework.course.name + '. Homework: ' + \
+        self.group.homework.title + '. GroupOfStudents: ' + str(self.group.number)

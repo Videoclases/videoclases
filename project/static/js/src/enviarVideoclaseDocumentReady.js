@@ -6,33 +6,33 @@ $(document).ready(function() {
             video: {
                 required: "Debes ingresar el link del video"
             },
-            pregunta: {
-                required: "Debes ingresar una pregunta"
+            question: {
+                required: "Debes ingresar una question"
             },
-            alternativa_correcta: {
-                required: "Debes ingresar la respuesta correcta"
+            correct_alternative: {
+                required: "Debes ingresar la answer correcta"
             },
-            alternativa_2: {
-                required: "Debes ingresar respuesta incorrecta en Alternativa 2",
+            alternative_2: {
+                required: "Debes ingresar answer incorrecta en Alternativa 2",
             },
-            alternativa_3: {
-                required: "Debes ingresar respuesta incorrecta en Alternativa 3",
+            alternative_3: {
+                required: "Debes ingresar answer incorrecta en Alternativa 3",
             }
         },
         rules: {
             video: {
                 required: true
             },
-            pregunta: {
+            question: {
                 required: true
             },
-            alternativa_correcta: {
+            correct_alternative: {
                 required: true
             },
-            alternativa_2: {
+            alternative_2: {
                 required: true
             },
-            alternativa_3: {
+            alternative_3: {
                 required: true
             }
         },

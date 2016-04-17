@@ -61,7 +61,7 @@
                             <form class="form-inline" action="{% url 'login' %}" method="post" id="login-form">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <input class="input-sm" id="id_username" maxlength="100" name="username" type="text" placeholder="Nombre de usuario" />
+                                    <input class="input-sm" id="id_username" maxlength="100" name="username" type="text" placeholder="Nombre de user" />
                                 </div>
                                 <div class="form-group">
                                     <input class="input-sm" id="id_password" name="password" type="password" placeholder="Contraseña"/>
@@ -90,10 +90,10 @@
                                 Videoclases</a></li>
                                 {% endcomment %}
                                 {% ifusergroup Alumnos %}
-                                    <li><a {% block alumno-active %}{% endblock %} href="{% url 'alumno' %}">Alumno</a></li>
+                                    <li><a {% block student-active %}{% endblock %} href="{% url 'student' %}">Alumno</a></li>
                                 {% endifusergroup %}
                                 {% ifusergroup Profesores %}
-                                    <li><a {% block profesor-active %}{% endblock %} href="{% url 'profesor' %}">Profesor</a></li>
+                                    <li><a {% block teacher-active %}{% endblock %} href="{% url 'teacher' %}">Profesor</a></li>
                                 {% endifusergroup %}
                                 {% if not user.is_anonymous %}
                                     <li><a {% block perfil-active %}{% endblock %} href="{% url 'perfil' %}"><img width="20px" height="20px" src="{% static "img/settings.png" %}" /></a></li>
@@ -116,7 +116,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    ¿Quiere usar VideoClases en su colegio? 
+                    ¿Quiere usar VideoClases en su school?
                     <button class="btn btn-success btn-sm">
                         <span class="glyphicon glyphicon-pencil"> <a href="mailto:contacto@tuapp.org">contacto@tuapp.org</a></span>
                     </button>

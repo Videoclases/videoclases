@@ -13,17 +13,17 @@ function viewModel() {
     self.correctAnswerText = ko.observable("");
 
     self.url = ko.observable(window.location.pathname);
-    self.valor = ko.computed(function() { return self.responseValues.valor(); });
-    self.respuesta = ko.observable();
+    self.value = ko.computed(function() { return self.responseValues.value(); });
+    self.answer = ko.observable();
     self.thumbUp = ko.computed(function() { 
-        if (parseInt(self.valor()) == 1) {
+        if (parseInt(self.value()) == 1) {
             return self.responseValues.thumbUpGreen(); 
         } else {
             return self.responseValues.thumbUpGray(); 
         }
     });
     self.thumbDown = ko.computed(function() { 
-        if (parseInt(self.valor()) == -1) {
+        if (parseInt(self.value()) == -1) {
             return self.responseValues.thumbDownRed(); 
         } else {
             return self.responseValues.thumbDownGray(); 
@@ -31,20 +31,20 @@ function viewModel() {
     });
 
     self.clickSiguienteVideoclase = function() {
-        if (self.respuesta() == undefined) {
-            alert("Debes seleccionar una respuesta");
+        if (self.answer() == undefined) {
+            alert("Debes seleccionar una answer");
             return;
         }
         self.submitRespuestaDeAlumno();
     }
 
-    self.evaluar = function(valor) {
-        self.responseValues.valor(valor);
+    self.evaluar = function(value) {
+        self.responseValues.value(value);
     }
 
     self.submitEvaluacionDeAlumno = function(data, event) {
         var fd = new FormData();
-        fd.append("valor", parseInt(self.valor()));
+        fd.append("value", parseInt(self.value()));
         fd.append("videoclase", parseInt(self.responseValues.videoclase()));
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
@@ -53,7 +53,7 @@ function viewModel() {
                 }
             }
         });
-        return $.ajax('/alumno/evaluar-video/' + self.responseValues.evaluacion() + '/', {
+        return $.ajax('/student/evaluar-video/' + self.responseValues.evaluacion() + '/', {
             data: fd,
             type: "post",
             processData: false,
@@ -65,7 +65,7 @@ function viewModel() {
 
     self.submitRespuestaDeAlumno = function() {
         var fd = new FormData();
-        fd.append("respuesta", self.respuesta());
+        fd.append("answer", self.answer());
         fd.append("videoclase", self.responseValues.videoclase());
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
@@ -74,7 +74,7 @@ function viewModel() {
                 }
             }
         });
-        return $.ajax('/alumno/evaluar-videoclase-form/', {
+        return $.ajax('/student/evaluar-videoclase-form/', {
             data: fd,
             type: "post",
             processData: false,

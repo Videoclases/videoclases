@@ -1,27 +1,27 @@
 /*
- *  ViewModels for assigning grupos to alumnos
+ *  ViewModels for assigning grupos to students
  */
 
-function Alumno(id, apellido, nombre, grupo) {
+function Alumno(id, apellido, name, group) {
     var self = this;
     self.apellido = ko.observable(apellido);
-    self.nombre = ko.observable(nombre);
-    self.grupo = ko.observable(grupo);
+    self.name = ko.observable(name);
+    self.group = ko.observable(group);
     self.id = ko.observable(id);
 }
 
 function AsignarGrupo() {
     var self = this;
     self.hasCurso = ko.observable(false);
-    self.alumnos = ko.observableArray();
+    self.students = ko.observableArray();
     self.cantidadPorGrupo = ko.observable(1);
     self.alumnoActual = ko.observable();
     self.tareaActual = ko.observable();
 
     self.headers = [
         {title:'Apellido',sortKey:'apellido'},
-        {title:'Nombre',sortKey:'nombre'},
-        {title:'# Grupo',sortKey:'grupo'}
+        {title:'Nombre',sortKey:'name'},
+        {title:'# GroupOfStudents',sortKey:'group'}
     ];
 
     self.crearArrayGrupos = function() {
@@ -29,7 +29,7 @@ function AsignarGrupo() {
         var j = 0;
         var grupoActual = 1;
         var cantidad = parseInt(self.cantidadPorGrupo());
-        for (i = 0; i < self.alumnos().length; i++) {
+        for (i = 0; i < self.students().length; i++) {
             if (j < cantidad) {
                 grupos.push(grupoActual);
                 j++;
@@ -44,21 +44,21 @@ function AsignarGrupo() {
 
     self.asignarAleatorio = function() {
         grupos = self.crearArrayGrupos();
-        for (i = 0; i < self.alumnos().length; i++) {
+        for (i = 0; i < self.students().length; i++) {
             if (parseInt(self.cantidadPorGrupo()) == 1) {
-                var grupo = grupos[i];
+                var group = grupos[i];
             } else {
                 var ri = Math.floor(Math.random() * grupos.length);
-                var grupo = grupos.splice(ri, 1);
+                var group = grupos.splice(ri, 1);
             }
-            self.alumnos()[i].grupo(grupo);
+            self.students()[i].group(group);
         }
     }
 
     self.siTodosTienenGrupo = function() {
-        for (var i = 0; i < self.alumnos().length; i++){
-            var alumno = self.alumnos()[i];
-            if (alumno.grupo() == undefined || !alumno.grupo()) {
+        for (var i = 0; i < self.students().length; i++){
+            var student = self.students()[i];
+            if (student.group() == undefined || !student.group()) {
                 return false;
             }
         }
@@ -67,19 +67,19 @@ function AsignarGrupo() {
 
     self.sortTable = function(sortKey) {
         switch(sortKey){
-            case 'nombre':
-                self.alumnos.sort(function(a,b){
-                    return a.nombre() < b.nombre() ? -1 : a.nombre() > b.nombre() ? 1 : a.nombre() == b.nombre() ? 0 : 0;
+            case 'name':
+                self.students.sort(function(a,b){
+                    return a.name() < b.name() ? -1 : a.name() > b.name() ? 1 : a.name() == b.name() ? 0 : 0;
                 });
                 break;
             case 'apellido':
-                self.alumnos.sort(function(a,b){
+                self.students.sort(function(a,b){
                     return a.apellido() < b.apellido() ? -1 : a.apellido() > b.apellido() ? 1 : a.apellido() == b.apellido() ? 0 : 0;
                 });
                 break;
-            case 'grupo':
-                self.alumnos.sort(function(a,b){
-                    return a.grupo() < b.grupo() ? -1 : a.grupo() > b.grupo() ? 1 : a.grupo() == b.grupo() ? 0 : 0;
+            case 'group':
+                self.students.sort(function(a,b){
+                    return a.group() < b.group() ? -1 : a.group() > b.group() ? 1 : a.group() == b.group() ? 0 : 0;
                 });
                 break;
         }
@@ -92,7 +92,7 @@ function AsignarGrupo() {
     self.submitGrupos = function(grupos, url) {
         var fd = new FormData();
         fd.append("grupos", JSON.stringify(grupos));
-        fd.append("tarea", parseInt(self.tareaActual()));
+        fd.append("homework", parseInt(self.tareaActual()));
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

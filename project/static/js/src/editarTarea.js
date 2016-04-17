@@ -13,59 +13,59 @@ function viewModel() {
 
     self.headers = [
         {title:'Apellido',sortKey:'apellido'},
-        {title:'Nombre',sortKey:'nombre'},
-        {title:'# Grupo',sortKey:'grupo'}
+        {title:'Nombre',sortKey:'name'},
+        {title:'# GroupOfStudents',sortKey:'group'}
     ];
 
     self.changeFormErrorsVisible = function(visibility) {
         self.formErrorsVisible(visibility);
     }
 
-    self.curso = {
-        nombre: ko.observable(),
+    self.course = {
+        name: ko.observable(),
         id: ko.observable()
     }
 
     self.tareaDatosIniciales = {
-        curso: ko.observable(),
-        descripcion: ko.observable(),
-        fecha_evaluacion: ko.observable(),
-        fecha_subida: ko.observable(),
-        revisiones: ko.observable(),
-        titulo: ko.observable(),
+        course: ko.observable(),
+        description: ko.observable(),
+        date_evaluation: ko.observable(),
+        date_upload: ko.observable(),
+        revision: ko.observable(),
+        title: ko.observable(),
         video: ko.observable()
     }
 
-    self.tarea = {
-        curso: ko.observable(),
-        descripcion: ko.observable(),
-        fecha_evaluacion: ko.observable(),
-        fecha_subida: ko.observable(),
-        revisiones: ko.observable(),
-        titulo: ko.observable(),
+    self.homework = {
+        course: ko.observable(),
+        description: ko.observable(),
+        date_evaluation: ko.observable(),
+        date_upload: ko.observable(),
+        revision: ko.observable(),
+        title: ko.observable(),
         video: ko.observable()
     }
 
     self.checkFormErrors = function() {
         var errors = false;
         self.formErrors.removeAll();
-        if (!self.tarea.titulo()) {
+        if (!self.homework.title()) {
             errors = true;
-            self.formErrors.push("Debes ingresar título a la tarea");
+            self.formErrors.push("Debes ingresar título a la homework");
         }
-        if (!self.tarea.descripcion()) {
+        if (!self.homework.description()) {
             errors = true;
-            self.formErrors.push("Debes ingresar descripción a la tarea");
+            self.formErrors.push("Debes ingresar descripción a la homework");
         }
-        if (!self.tarea.fecha_subida()) {
+        if (!self.homework.date_upload()) {
             errors = true;
             self.formErrors.push("Debes ingresar fecha de subida");
         }
-        if (!self.tarea.fecha_evaluacion()) {
+        if (!self.homework.date_evaluation()) {
             errors = true;
             self.formErrors.push("Debes ingresar fecha de evaluación");
         } else {
-            if (!self.greaterThan(self.tarea.fecha_evaluacion(), self.tarea.fecha_subida())) {
+            if (!self.greaterThan(self.homework.date_evaluation(), self.homework.date_upload())) {
                 errors = true;
                 self.formErrors.push("La fecha de evaluación debe ser posterior a la fecha de subida");
             }
@@ -75,13 +75,13 @@ function viewModel() {
 
     self.descartarCambiosTarea = function() {
         self.editarTareaBoolean(false);
-        self.tarea.curso(self.tareaDatosIniciales.curso());
-        self.tarea.descripcion(self.tareaDatosIniciales.descripcion());
-        self.tarea.fecha_evaluacion(self.tareaDatosIniciales.fecha_evaluacion());
-        self.tarea.fecha_subida(self.tareaDatosIniciales.fecha_subida());
-        self.tarea.revisiones(self.tareaDatosIniciales.revisiones());
-        self.tarea.titulo(self.tareaDatosIniciales.titulo());
-        self.tarea.video(self.tareaDatosIniciales.video());
+        self.homework.course(self.tareaDatosIniciales.course());
+        self.homework.description(self.tareaDatosIniciales.description());
+        self.homework.date_evaluation(self.tareaDatosIniciales.date_evaluation());
+        self.homework.date_upload(self.tareaDatosIniciales.date_upload());
+        self.homework.revision(self.tareaDatosIniciales.revision());
+        self.homework.title(self.tareaDatosIniciales.title());
+        self.homework.video(self.tareaDatosIniciales.video());
     }
 
     self.editarTarea = function() {
@@ -115,30 +115,30 @@ function viewModel() {
         var mustSubmit = false;
         var hasErrors = self.checkFormErrors();
         if (!hasErrors) {
-            if (self.tarea.titulo().localeCompare(self.tareaDatosIniciales.titulo()) != 0) {
+            if (self.homework.title().localeCompare(self.tareaDatosIniciales.title()) != 0) {
                 mustSubmit = true;
-                fd.append("titulo", self.tarea.titulo());
+                fd.append("title", self.homework.title());
             }
-            if (self.tarea.descripcion().localeCompare(self.tareaDatosIniciales.descripcion()) != 0) {
+            if (self.homework.description().localeCompare(self.tareaDatosIniciales.description()) != 0) {
                 mustSubmit = true;
-                fd.append("descripcion", self.tarea.descripcion());
+                fd.append("description", self.homework.description());
             }
-            if (parseInt(self.tarea.curso()) != parseInt(self.tareaDatosIniciales.curso())) {
+            if (parseInt(self.homework.course()) != parseInt(self.tareaDatosIniciales.course())) {
                 mustSubmit = true;
-                fd.append("curso", parseInt(self.tarea.curso()));
+                fd.append("course", parseInt(self.homework.course()));
             }
-            if (parseInt(self.tarea.revisiones()) != parseInt(self.tareaDatosIniciales.revisiones())) {
+            if (parseInt(self.homework.revision()) != parseInt(self.tareaDatosIniciales.revision())) {
                 mustSubmit = true;
-                fd.append("revisiones", parseInt(self.tarea.revisiones()));
+                fd.append("revision", parseInt(self.homework.revision()));
             }
-            if (self.tarea.titulo().localeCompare(self.tareaDatosIniciales.titulo()) != 0) {
+            if (self.homework.title().localeCompare(self.tareaDatosIniciales.title()) != 0) {
                 mustSubmit = true;
-                fd.append("titulo", self.tarea.titulo());
+                fd.append("title", self.homework.title());
             }
-            if (self.tarea.video()) {
-                if (self.tarea.video().localeCompare(self.tareaDatosIniciales.video()) != 0) {
+            if (self.homework.video()) {
+                if (self.homework.video().localeCompare(self.tareaDatosIniciales.video()) != 0) {
                     mustSubmit = true;
-                    fd.append("video", self.tarea.video());
+                    fd.append("video", self.homework.video());
                 }
             } else {
                 if (self.tareaDatosIniciales.video()) {
@@ -147,19 +147,19 @@ function viewModel() {
                 }
             }
             var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-            if (self.tarea.fecha_subida().localeCompare(self.tareaDatosIniciales.fecha_subida()) != 0) {
+            if (self.homework.date_upload().localeCompare(self.tareaDatosIniciales.date_upload()) != 0) {
                 mustSubmit = true;
-                var subidaArray = reggie.exec(self.tarea.fecha_subida());
+                var subidaArray = reggie.exec(self.homework.date_upload());
                 var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
                     +(+subidaArray[1]);
-                fd.append("fecha_subida", subidaDate);
+                fd.append("date_upload", subidaDate);
             }
-            if (self.tarea.fecha_evaluacion().localeCompare(self.tareaDatosIniciales.fecha_evaluacion()) != 0) {
+            if (self.homework.date_evaluation().localeCompare(self.tareaDatosIniciales.date_evaluation()) != 0) {
                 mustSubmit = true;
-                var evaluacionArray = reggie.exec(self.tarea.fecha_evaluacion());
+                var evaluacionArray = reggie.exec(self.homework.date_evaluation());
                 var evaluacionDate = (+evaluacionArray[3]) + '-' + (+evaluacionArray[2]) + '-'
                     +(+evaluacionArray[1]);
-                fd.append("fecha_evaluacion", evaluacionDate);
+                fd.append("date_evaluation", evaluacionDate);
             }
             if (mustSubmit) {
                 $.ajaxSetup({
@@ -169,17 +169,17 @@ function viewModel() {
                         }
                     }
                 });
-                return $.ajax("/profesor/tarea/" + self.id() + "/", {
+                return $.ajax("/teacher/homework/" + self.id() + "/", {
                     data: fd,
                     type: "post",
                     processData: false,
                     contentType: false,
                     success: function(response){
-                        $("#editar-grupo-form-submit").click();
+                        $("#editar-group-form-submit").click();
                     }
                 });
             } else {
-                $("#editar-grupo-form-submit").click();
+                $("#editar-group-form-submit").click();
             }
         } else {
             self.changeFormErrorsVisible(true);
@@ -191,8 +191,8 @@ function viewModel() {
 
     self.submitForms = function() {
         if (self.editarGrupo.validateGrupos()) {
-            if ($("#editar-tarea-form").valid()) {
-                $("#editar-tarea-form-submit").click();
+            if ($("#editar-homework-form").valid()) {
+                $("#editar-homework-form-submit").click();
             }
         } else {
             alert("Los números de los grupos no son consecutivos. Revisa si hay algún error.");
@@ -202,19 +202,19 @@ function viewModel() {
     self.submitGruposForm = function() {
         self.editarGrupo.tareaActual(self.id());
         var grupos = {};
-        for (var i = 0; i < self.editarGrupo.alumnos().length; i++) {
-            alumno = self.editarGrupo.alumnos()[i];
+        for (var i = 0; i < self.editarGrupo.students().length; i++) {
+            student = self.editarGrupo.students()[i];
             try {
-                grupos[alumno.grupo().toString()].push(alumno.id());
+                grupos[student.group().toString()].push(student.id());
             } catch(err) {
-                grupos[alumno.grupo().toString()] = [alumno.id()];
+                grupos[student.group().toString()] = [student.id()];
             }
         }
-        $.when(self.editarGrupo.submitGrupos(grupos, "/profesor/editar-grupo-form/")).done(
+        $.when(self.editarGrupo.submitGrupos(grupos, "/teacher/editar-group-form/")).done(
             function (result) {
                 if (result.success) {
-                    alert("Tarea editada correctamente.");
-                    window.location = '/profesor/';
+                    alert("Homework editada correctamente.");
+                    window.location = '/teacher/';
                 } else {
                     alert(result.message);
                 }
