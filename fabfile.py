@@ -22,8 +22,8 @@ def _load_data(reboot=False):
     local('python manage.py makemigrations')
     local('python manage.py migrate')
     if reboot:
-        fixtures = ['devgroups', 'devusers', 'devcolegio', 'devcursos', 'devalumnos', 'devprofesores', 
-        'devtareas']
+        fixtures = ['devgroups', 'devusers', 'devschool', 'devcourses', 'devstudents', 'devteachers',
+        'devhomeworks']
         for f in fixtures:
             local('python manage.py loaddata ' + f)
 

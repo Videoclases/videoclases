@@ -51,11 +51,11 @@ function viewModel() {
         self.formErrors.removeAll();
         if (!self.homework.title()) {
             errors = true;
-            self.formErrors.push("Debes ingresar título a la homework");
+            self.formErrors.push("Debes ingresar título a la tarea");
         }
         if (!self.homework.description()) {
             errors = true;
-            self.formErrors.push("Debes ingresar descripción a la homework");
+            self.formErrors.push("Debes ingresar descripción a la tarea");
         }
         if (!self.homework.date_upload()) {
             errors = true;
@@ -213,7 +213,7 @@ function viewModel() {
         $.when(self.editarGrupo.submitGrupos(grupos, "/teacher/editar-group-form/")).done(
             function (result) {
                 if (result.success) {
-                    alert("Homework editada correctamente.");
+                    alert("Tarea editada correctamente.");
                     window.location = '/teacher/';
                 } else {
                     alert(result.message);

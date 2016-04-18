@@ -54,7 +54,7 @@
                     vm.course.id(result.course.id);
                     for (i = 0; i < result.students.length; i++) {
                         var a = result.students[i];
-                        vm.editarGrupo.students.push(new Alumno(parseInt(a.id), a.apellido, a.name, parseInt(a.group), a.videoclase));
+                        vm.editarGrupo.students.push(new Alumno(parseInt(a.id), a.first_name, a.last_name, parseInt(a.group), a.videoclase));
                     }
                     vm.editarGrupo.sortTable('group');
                 }
@@ -91,8 +91,8 @@
                 <div class="row">
                     <div align="center" class="col-md-12">
                         <h6 class="page-head-line"></h6>
-                        <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar homework</button>
-                        <button type="submit" class="btn btn-success" data-bind="visible: editarTareaBoolean">Guardar homework</button>
+                        <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar tarea</button>
+                        <button type="submit" class="btn btn-success" data-bind="visible: editarTareaBoolean">Guardar tarea</button>
                         <button class="btn btn-danger" data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">Descartar cambios</button>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                                 <iframe data-bind="attr: { src: homework.video }" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
                             </div>
                             <div data-bind="if: !homework.video()">
-                                <div align="center"><span>Esta homework no tiene video explicativo</span></div>
+                                <div align="center"><span>Esta tarea no tiene video explicativo</span></div>
                             </div>
                         </div>
                         <div class="row" data-bind="visible: editarTareaBoolean">
@@ -130,7 +130,7 @@
                                 <h4>Descripción</h4>
                                 <texhomework data-bind="value: homework.description" class="form-control" rows="5" readonly></texhomework>
                                 <div class="row">
-                                    <div class="col-md-7">Fecha límite para subir homework</div>
+                                    <div class="col-md-7">Fecha límite para subir tarea</div>
                                     <div class="col-md-5">
                                         <div class="controls input-append date">
                                             <span data-bind="text: homework.date_upload"></span>
@@ -138,7 +138,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-7">Fecha límite para evaluar homework</div>
+                                    <div class="col-md-7">Fecha límite para evaluar tarea</div>
                                     <div class="col-md-5">
                                         <div class="controls input-append date">
                                             <span data-bind="text: homework.date_evaluation"></span>
@@ -160,7 +160,7 @@
                                             data-bind="options: select.courses,
                                             optionsText: 'name',
                                             optionsValue: 'id',
-                                            optionsCaption: '-- escoja un course --',
+                                            optionsCaption: '-- escoja un curso --',
                                             value: homework.course,
                                             valueAllowUnset: false"></select>
                                     </div>
@@ -170,7 +170,7 @@
                                     <div class="col-md-5"><input class="form-control" type="number" name="revision" min="1" max="7" step="1" data-bind="value: homework.revision"></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-7">Fecha límite para subir homework</div>
+                                    <div class="col-md-7">Fecha límite para subir tarea</div>
                                     <div class="col-md-5">
                                         <div class="controls input-append date">
                                            <input class="form-control" id="id_fecha_subida" name="date_upload" readonly="" type="text" data-bind="value: homework.date_upload" />
@@ -188,7 +188,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-7">Fecha límite para evaluar homework</div>
+                                    <div class="col-md-7">Fecha límite para evaluar tarea</div>
                                     <div class="col-md-5">
                                         <div class="controls input-append date">
                                            <input class="form-control" id="id_fecha_evaluacion" name="date_evaluation" readonly="" type="text" data-bind="value: homework.date_evaluation" />
@@ -235,7 +235,7 @@
             </form>
             <div class="row">
                 <div align="center" class="col-md-12">
-                    <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar homework</button>
+                    <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar tarea</button>
                     <button data-bind="click: submitForms, visible: editarTareaBoolean" class="btn btn-success">Guardar Tarea</button>
                     <button class="btn btn-danger" data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">Descartar cambios</button>
                     </div>

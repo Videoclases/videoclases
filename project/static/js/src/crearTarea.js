@@ -96,7 +96,7 @@ function viewModel() {
                 self.course.id(result.course.id);
                 for (i = 0; i < result.students.length; i++) {
                     var a = result.students[i];
-                    self.asignarGrupo.students.push(new Alumno(parseInt(a.id), a.apellido, a.name));
+                    self.asignarGrupo.students.push(new Alumno(parseInt(a.id), a.last_name, a.first_name));
                 }
                 self.asignarGrupo.hasCurso(true);
             }
@@ -121,7 +121,7 @@ function viewModel() {
         $.when(self.asignarGrupo.submitGrupos(grupos, "/teacher/asignar-group-form/")).done(
             function (result) {
                 $(".loader").fadeOut("slow");
-                alert("Homework creada exitosamente.");
+                alert("Tarea creada exitosamente.");
                 window.location = '/teacher/';
             }
         );

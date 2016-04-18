@@ -136,7 +136,7 @@ class CrearCursoSubirArchivoForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(CrearCursoSubirArchivoForm, self).__init__(*args, **kwargs)
         self.fields['year'].label = "Año"
-        self.fields['name'].label = "Nombre de course"
+        self.fields['name'].label = "Nombre de Curso"
         self.fields['file'].label = "Planilla"
 
 class CrearTareaForm(forms.ModelForm):

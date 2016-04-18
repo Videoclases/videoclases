@@ -28,10 +28,10 @@ $(document).ready(function() {
     $('#editar-homework-form').validate({ // initialize the plugin
         messages: {
             title: {
-                required: "Debes ingresar título a la homework"
+                required: "Debes ingresar título a la tarea"
             },
             description: {
-                required: "Debes ingresar descripción a la homework"
+                required: "Debes ingresar descripción a la tarea"
             },
             date_upload: {
                 required: "Debes ingresar fecha de subida"
@@ -72,7 +72,7 @@ $(document).ready(function() {
                 vm.formErrors.push(validator.errorList[i].message);
             }
             if (!vm.asignarGrupo.siTodosTienenGrupo()) {
-                vm.formErrors.push("Debes asignar group a todos los students");
+                vm.formErrors.push("Debes asignar grupo a todos los estudiantes");
             }
             $('html,body').animate({
                 scrollTop: $("#top-form").offset().top},

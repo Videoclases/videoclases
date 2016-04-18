@@ -10,14 +10,14 @@
                 <div class="col-md-2"><h4>Profesor</h4></div>
                 <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
                 <div class="col-md-2 col-md-offset-6">
-                    <button class="btn btn-info">Crear course</button>
+                    <button class="btn btn-info">Crear curso</button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-2"><h4>Colegio</h4></div>
                 <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
                 <div class="col-md-2 col-md-offset-6">
-                    <button onclick="location.href = '{% url 'crear_homework' %}';" class="btn btn-info">Crear homework</button>
+                    <button onclick="location.href = '{% url 'crear_homework' %}';" class="btn btn-info">Crear Tarea</button>
                 </div>
             </div>
             <div class="row">
@@ -27,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h6 class="page-head-line">Crear course</h6>
+                    <h6 class="page-head-line">Crear curso</h6>
                 </div>
             </div>
             {% if messages %}

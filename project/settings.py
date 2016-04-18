@@ -22,7 +22,10 @@ INSTALLED_APPS = (
 
     # project
     'videoclases',
-    'django_extensions'
+
+    #only for develop
+    'django_extensions',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (

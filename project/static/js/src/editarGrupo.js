@@ -2,10 +2,10 @@
  *  ViewModels for editing grupos to students
  */
 
-function Alumno(id, apellido, name, group, videoclase) {
+function Alumno(id, last_name, first_name, group, videoclase) {
     var self = this;
-    self.apellido = ko.observable(apellido);
-    self.name = ko.observable(name);
+    self.last_name = ko.observable(last_name);
+    self.first_name = ko.observable(first_name);
     self.group = ko.observable(group);
     self.id = ko.observable(id);
     self.videoclase = ko.observable(videoclase);
@@ -20,9 +20,9 @@ function EditarGrupo() {
     self.tareaActual = ko.observable();
 
     self.headers = [
-        {title:'Apellido',sortKey:'apellido'},
-        {title:'Nombre',sortKey:'name'},
-        {title:'# GroupOfStudents',sortKey:'group'},
+        {title:'Apellido',sortKey:'last_name'},
+        {title:'Nombre',sortKey:'first_name'},
+        {title:'# Grupo',sortKey:'group'},
         {title:'Subió VideoClase',sortKey:'videoclase'},
     ];
 
@@ -77,14 +77,14 @@ function EditarGrupo() {
 
     self.sortTable = function(sortKey) {
         switch(sortKey){
-            case 'name':
+            case 'first_name':
                 self.students.sort(function(a,b){
-                    return a.name() < b.name() ? -1 : a.name() > b.name() ? 1 : a.name() == b.name() ? 0 : 0;
+                    return a.first_name() < b.first_name() ? -1 : a.first_name() > b.first_name() ? 1 : a.first_name() == b.first_name() ? 0 : 0;
                 });
                 break;
-            case 'apellido':
+            case 'last_name':
                 self.students.sort(function(a,b){
-                    return a.apellido() < b.apellido() ? -1 : a.apellido() > b.apellido() ? 1 : a.apellido() == b.apellido() ? 0 : 0;
+                    return a.last_name() < b.last_name() ? -1 : a.last_name() > b.last_name() ? 1 : a.last_name() == b.last_name() ? 0 : 0;
                 });
                 break;
             case 'group':

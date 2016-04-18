@@ -53,7 +53,7 @@
                 {% else %}
                 <div class="row">
                 <div class="col-xs-12">
-                    Sin courses actuales
+                    Sin cursos actuales
                 </div>
                 </div>
             {% endif %}
@@ -72,7 +72,7 @@
                         {% endif %}
                         <form data-bind="submit: function(){ submitForm({{g.id}}, {{student.id}}, responseValues.group{{g.id}}.notaAlumno{{student.id}}, responseValues.group{{g.id}}.formVisible) }">
                             <div class="row">
-                                <div class="col-md-6"><strong>Evaluación del teacher</strong></div>
+                                <div class="col-md-6"><strong>Evaluación del profesor</strong></div>
                                 <div class="col-md-6"><input data-bind="value:responseValues.group{{g.id}}.notaAlumno{{student.id}}" class="form-control" type="number" name="quantity" min="1" max="7" step="0.1"></div>
                             </div>
                             <div class="row" data-bind="visible: responseValues.group{{g.id}}.formVisible">
@@ -194,7 +194,7 @@
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <strong>Aprendizaje del student:</strong>
+                                                    <strong>Aprendizaje del estudiante:</strong>
                                                 </div>
                                             </div>
                                             {% for a in g.videoclase.integrantes_y_answers %}

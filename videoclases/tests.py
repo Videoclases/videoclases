@@ -822,8 +822,8 @@ class CursoTestCase(TestCase):
         for student in students:
             student_dict = {}
             student_dict['id'] = student.id
-            student_dict['apellido'] = student.user.last_name
-            student_dict['name'] = student.user.first_name
+            student_dict['last_name'] = student.user.last_name
+            student_dict['first_name'] = student.user.first_name
             student_dict['username'] = student.user.username
             student_dict['homeworks_entregadas'] = student.groupofstudents_set.exclude(videoclase__video__isnull=True) \
                                     .exclude(videoclase__video__exact='').count()
@@ -866,8 +866,8 @@ class DescargarCursoTestCase(TestCase):
         for a in students:
             student_dict = {}
             student_dict['id'] = a.id
-            student_dict['apellido'] = a.user.last_name
-            student_dict['name'] = a.user.first_name
+            student_dict['last_name'] = a.user.last_name
+            student_dict['first_name'] = a.user.first_name
             students_array.append(student_dict)
         result_dict['students'] = students_array
         result_dict['course'] = course_dict
@@ -903,8 +903,8 @@ class DescargarGruposTareaTestCase(TestCase):
             for a in g.students.all():
                 student_dict = {}
                 student_dict['id'] = a.id
-                student_dict['apellido'] = a.user.last_name
-                student_dict['name'] = a.user.first_name
+                student_dict['first_name'] = a.user.last_name
+                student_dict['last_name'] = a.user.first_name
                 student_dict['group'] = g.number
                 student_dict['videoclase'] = g.videoclase.video not in [None,'']
                 students_array.append(student_dict)

@@ -29,7 +29,7 @@
 {% block body %}
     <div class="loader" data-bind="visible: loading">
         <div class="loader-text" align="center">
-            <strong>Creando homework, espere un momento</strong>
+            <strong>Creando Tarea, espere un momento</strong>
         </div>
     </div>
     <div class="content-wrapper">
@@ -74,12 +74,12 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" style="line-height:1.3;">
                                 <h4>Título de Tarea</h4>
-                                <input name="title" type="text" class="form-control" maxlength="80" placeholder="Introduzca Título de Tarea" data-bind="value: homework.title"></input>
+                                <input name="title" type="text" class="form-control" maxlength="80" placeholder="Introduzca Título de Tarea" data-bind="value: homework.title"/>
                             </div>
 
                             <div class="panel-body">
                                 <h4>Descripción</h4>
-                                <texhomework name="description" class="form-control" maxlength="400" data-bind="value: homework.description"></texhomework>
+                                <textarea name="description" class="form-control" maxlength="400" data-bind="value: homework.description"></textarea>
                                 <div class="row">
                                     <div class="col-md-7">Curso</div>
                                     <div class="col-md-5">
@@ -87,7 +87,7 @@
                                             data-bind="options: select.courses,
                                             optionsText: 'name',
                                             optionsValue: 'id',
-                                            optionsCaption: '-- escoja un course --',
+                                            optionsCaption: '-- escoja un curso --',
                                             value: homework.course,
                                             valueAllowUnset: false"></select>
                                     </div>
@@ -97,7 +97,7 @@
                                     <div class="col-md-5"><input class="form-control" type="number" name="revision" min="1" max="7" step="1" data-bind="value: homework.revision"></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-7">Fecha límite para subir homework</div>
+                                    <div class="col-md-7">Fecha límite para subir tarea</div>
                                     <div class="col-md-5">
                                         <div class="controls input-append date">
                                            <input class="form-control" id="id_fecha_subida" name="date_upload" readonly="" type="text" data-bind="value: homework.date_upload" />
@@ -115,7 +115,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-7">Fecha límite para evaluar homework</div>
+                                    <div class="col-md-7">Fecha límite para evaluar tarea</div>
                                     <div class="col-md-5">
                                         <div class="controls input-append date">
                                            <input class="form-control" id="id_fecha_evaluacion" name="date_evaluation" readonly="" type="text" data-bind="value: homework.date_evaluation" />
@@ -140,23 +140,23 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h6 class="page-head-line">Designar groups para homework</h6>
+                    <h6 class="page-head-line">Designar grupos para tarea</h6>
                 </div>
             </div>
             <div class="row" data-bind="visible: !asignarGrupo.hasCurso()">
                 <div class="col-md-12" align="center">
-                    Seleccione un course para asignar groups
+                    Seleccione un curso para asignar grupos
                 </div>
             </div>
             <div data-bind="visible: asignarGrupo.hasCurso">
                 <form data-bind="submit: submitGruposForm">
                     <div class="row" data-bind="visible: asignarGrupo.hasCurso">
-                        <div class="col-md-3">Alumnos por group</div>
+                        <div class="col-md-3">Alumnos por grupo</div>
                         <div class="col-md-3">
-                            <input data-bind="value: asignarGrupo.cantidadPorGrupo" type="number" value="1" min="1" step="1" class="form-control"></input>
+                            <input data-bind="value: asignarGrupo.cantidadPorGrupo" type="number" value="1" min="1" step="1" class="form-control"/>
                         </div>
                         <div class="col-md-6">
-                            <button class="btn btn-success" data-bind="click: asignarGrupo.asignarAleatorio">Designar groups aleatoriamente</button>
+                            <button class="btn btn-success" data-bind="click: asignarGrupo.asignarAleatorio">Designar grupos aleatoriamente</button>
                         </div>
                     </div>
                     <div class="row">
@@ -169,8 +169,8 @@
                                 </thead>
                                 <tbody data-bind="foreach: asignarGrupo.students">
                                     <tr>
-                                        <td><span data-bind="text: $data.apellido"></span></td>
-                                        <td><span data-bind="text: $data.name"></span></td>
+                                        <td><span data-bind="text: $data.last_name"></span></td>
+                                        <td><span data-bind="text: $data.first_name"></span></td>
                                         <td><input class="form-control" data-bind="value: $data.group" /></td>
                                     </tr>
                                 </tbody>

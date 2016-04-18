@@ -10,7 +10,7 @@
                 <div class="col-md-2"><h4>Profesor</h4></div>
                 <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
                 <div class="col-md-2 col-md-offset-6">
-                    <button onclick="location.href = '{% url 'editar_course' course.id %}';" class="btn btn-info">Editar course</button>
+                    <button onclick="location.href = '{% url 'editar_course' course.id %}';" class="btn btn-info">Editar Curso</button>
                 </div>
             </div>
             <div class="row">
@@ -47,8 +47,8 @@
                             <tbody>
                                 {% for a in students %}
                                     <tr>
-                                        <td class="table-clickable" onclick="location.href = '{% url 'videoclases_student' a.id %}';"><a>{{ a.apellido }}</a></td>
-                                        <td class="table-clickable" onclick="location.href = '{% url 'videoclases_student' a.id %}';"><a>{{ a.name }}</a></td>
+                                        <td class="table-clickable" onclick="location.href = '{% url 'videoclases_student' a.id %}';"><a>{{ a.last_name }}</a></td>
+                                        <td class="table-clickable" onclick="location.href = '{% url 'videoclases_student' a.id %}';"><a>{{ a.first_name }}</a></td>
                                         <td>{{ a.username }}</td>
                                         <td>{{ a.homeworks_entregadas }}</td>
                                         <td>{{ a.homeworks_pendientes }}</td>

@@ -6,13 +6,13 @@
 {% block extra-head %}
 <script type="text/javascript">
     function deleteAlumno(studentId) {
-        if (confirm("¿Seguro que deseas eliminar este student del course?")) {
+        if (confirm("¿Seguro que deseas eliminar este estudiante del curso?")) {
             var aId = "deleteAlumno" + studentId;
             document.getElementById(aId).click();
         }
     }
     function deleteCurso() {
-        if (confirm("¿Seguro que deseas borrar este course?")) {
+        if (confirm("¿Seguro que deseas borrar este curso?")) {
             $("#formBorrarCursoSubmit").click();
         }
     }
@@ -26,8 +26,12 @@
                 <div class="col-md-2"><h4>Profesor</h4></div>
                 <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
                 <div class="col-md-2 col-md-offset-6">
-                    <button onclick="deleteCurso()" class="btn btn-danger">Borrar course</button>
-                    <form method="post" action="{% url 'borrar_course' course.id %}">{% csrf_token %}<input type="number" name="course" value="{{ course.id }}" style="display:none;" /> <input type="submit" id="formBorrarCursoSubmit" style="display:none;" /></form>
+                    <button onclick="deleteCurso()" class="btn btn-danger">Borrar curso</button>
+                    <form method="post" action="{% url 'borrar_course' course.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="course" value="{{ course.id }}" style="display:none;" />
+                        <input type="submit" id="formBorrarCursoSubmit" style="display:none;" />
+                    </form>
                 </div>
             </div>
             <div class="row">
@@ -57,7 +61,7 @@
                                 <tr>
                                     <th>Apellido</th>
                                     <th>Nombre</th>
-                                    <th>Nombre de user</th>
+                                    <th>Nombre de usuario</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -68,7 +72,7 @@
                                         <td>{{ a.user.first_name }}</td>
                                         <td>{{ a.user.username }}</td>
                                         <td>
-                                            <a href="{% url 'editar_student' course.id a.id %}"><button class="btn btn-info">Editar student</button></a>
+                                            <a href="{% url 'editar_student' course.id a.id %}"><button class="btn btn-info">Editar estudiante</button></a>
                                             <button class="btn btn-danger" onclick="deleteAlumno({{a.id}});">Borrar Alumno</button>
                                             <a id="deleteAlumno{{a.id}}" href="{% url 'borrar_student' course.id a.id %}"></a>
                                         </td>
@@ -77,7 +81,7 @@
                             </tbody>
                         </table>
                     {% else %}
-                        <label>Este course no tiene students asignados</label>
+                        <label>Este curso no tiene estudiantes asignados</label>
                     {% endif %}
                 </div>
             </div>

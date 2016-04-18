@@ -32,7 +32,7 @@ function viewModel() {
 
     self.clickSiguienteVideoclase = function() {
         if (self.answer() == undefined) {
-            alert("Debes seleccionar una answer");
+            alert("Debes seleccionar una respuesta");
             return;
         }
         self.submitRespuestaDeAlumno();

@@ -37,7 +37,7 @@
                 <div class="col-md-2"><h4>Profesor</h4></div>
                 <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
                 <div class="col-md-2 col-md-offset-6">
-                    <button onclick="location.href = '{% url 'homework' homework.id %}';" class="btn btn-info">Ver detalle de homework</button>
+                    <button onclick="location.href = '{% url 'homework' homework.id %}';" class="btn btn-info">Ver detalle de tarea</button>
                 </div>
             </div>
             <div class="row">
@@ -63,7 +63,7 @@
                     </div>
                     <iframe width="100%" height="315" src="{{ g.videoclase.video }}" frameborder="0" allowfullscreen></iframe>
                     {% else %}
-                    <div align="center"><span>Este group no ha subido VideoClase</span></div>
+                    <div align="center"><span>Este grupo no ha subido VideoClase</span></div>
                     {% endif %}
 
                     {% for n in g.notasfinales_set.all %}
