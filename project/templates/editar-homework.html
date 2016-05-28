@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <form id="editar-homework-form" name="editar-homework-form" data-bind="submit: submitEditarTarea">
+            <form id="edit-homework-form" name="edit-homework-form" data-bind="submit: submitEditarTarea">
                 <div class="row">
                     <div align="center" class="col-md-12">
                         <h6 class="page-head-line"></h6>
@@ -222,8 +222,8 @@
                             </thead>
                             <tbody data-bind="foreach: editarGrupo.students">
                                 <tr>
-                                    <td><span data-bind="text: $data.apellido"></span></td>
-                                    <td><span data-bind="text: $data.name"></span></td>
+                                    <td><span data-bind="text: $data.last_name"></span></td>
+                                    <td><span data-bind="text: $data.first_name"></span></td>
                                     <td><input class="form-control" data-bind="value: $data.group" /></td>
                                     <td><span data-bind="text: $root.editarGrupo.getVideoclaseText($data.videoclase())"></span></td>
                                 </tr>

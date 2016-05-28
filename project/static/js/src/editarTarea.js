@@ -26,7 +26,7 @@ function viewModel() {
         id: ko.observable()
     }
 
-    self.tareaDatosIniciales = {
+    self.homeworkDatosIniciales = {
         course: ko.observable(),
         description: ko.observable(),
         date_evaluation: ko.observable(),
