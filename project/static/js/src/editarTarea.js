@@ -12,9 +12,9 @@ function viewModel() {
     self.formErrors = ko.observableArray();
 
     self.headers = [
-        {title:'Apellido',sortKey:'apellido'},
-        {title:'Nombre',sortKey:'name'},
-        {title:'# GroupOfStudents',sortKey:'group'}
+        {title:'Apellido',sortKey:'last_name'},
+        {title:'Nombre',sortKey:'first_name'},
+        {title:'# Grupo',sortKey:'group'},
     ];
 
     self.changeFormErrorsVisible = function(visibility) {
@@ -75,13 +75,13 @@ function viewModel() {
 
     self.descartarCambiosTarea = function() {
         self.editarTareaBoolean(false);
-        self.homework.course(self.tareaDatosIniciales.course());
-        self.homework.description(self.tareaDatosIniciales.description());
-        self.homework.date_evaluation(self.tareaDatosIniciales.date_evaluation());
-        self.homework.date_upload(self.tareaDatosIniciales.date_upload());
-        self.homework.revision(self.tareaDatosIniciales.revision());
-        self.homework.title(self.tareaDatosIniciales.title());
-        self.homework.video(self.tareaDatosIniciales.video());
+        self.homework.course(self.homeworkDatosIniciales.course());
+        self.homework.description(self.homeworkDatosIniciales.description());
+        self.homework.date_evaluation(self.homeworkDatosIniciales.date_evaluation());
+        self.homework.date_upload(self.homeworkDatosIniciales.date_upload());
+        self.homework.revision(self.homeworkDatosIniciales.revision());
+        self.homework.title(self.homeworkDatosIniciales.title());
+        self.homework.video(self.homeworkDatosIniciales.video());
     }
 
     self.editarTarea = function() {
@@ -115,46 +115,46 @@ function viewModel() {
         var mustSubmit = false;
         var hasErrors = self.checkFormErrors();
         if (!hasErrors) {
-            if (self.homework.title().localeCompare(self.tareaDatosIniciales.title()) != 0) {
+            if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) != 0) {
                 mustSubmit = true;
                 fd.append("title", self.homework.title());
             }
-            if (self.homework.description().localeCompare(self.tareaDatosIniciales.description()) != 0) {
+            if (self.homework.description().localeCompare(self.homeworkDatosIniciales.description()) != 0) {
                 mustSubmit = true;
                 fd.append("description", self.homework.description());
             }
-            if (parseInt(self.homework.course()) != parseInt(self.tareaDatosIniciales.course())) {
+            if (parseInt(self.homework.course()) != parseInt(self.homeworkDatosIniciales.course())) {
                 mustSubmit = true;
                 fd.append("course", parseInt(self.homework.course()));
             }
-            if (parseInt(self.homework.revision()) != parseInt(self.tareaDatosIniciales.revision())) {
+            if (parseInt(self.homework.revision()) != parseInt(self.homeworkDatosIniciales.revision())) {
                 mustSubmit = true;
                 fd.append("revision", parseInt(self.homework.revision()));
             }
-            if (self.homework.title().localeCompare(self.tareaDatosIniciales.title()) != 0) {
+            if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) != 0) {
                 mustSubmit = true;
                 fd.append("title", self.homework.title());
             }
             if (self.homework.video()) {
-                if (self.homework.video().localeCompare(self.tareaDatosIniciales.video()) != 0) {
+                if (self.homework.video().localeCompare(self.homeworkDatosIniciales.video()) != 0) {
                     mustSubmit = true;
                     fd.append("video", self.homework.video());
                 }
             } else {
-                if (self.tareaDatosIniciales.video()) {
+                if (self.homeworkDatosIniciales.video()) {
                     mustSubmit = true;
                     fd.append("video", "empty video");
                 }
             }
             var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-            if (self.homework.date_upload().localeCompare(self.tareaDatosIniciales.date_upload()) != 0) {
+            if (self.homework.date_upload().localeCompare(self.homeworkDatosIniciales.date_upload()) != 0) {
                 mustSubmit = true;
                 var subidaArray = reggie.exec(self.homework.date_upload());
                 var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
                     +(+subidaArray[1]);
                 fd.append("date_upload", subidaDate);
             }
-            if (self.homework.date_evaluation().localeCompare(self.tareaDatosIniciales.date_evaluation()) != 0) {
+            if (self.homework.date_evaluation().localeCompare(self.homeworkDatosIniciales.date_evaluation()) != 0) {
                 mustSubmit = true;
                 var evaluacionArray = reggie.exec(self.homework.date_evaluation());
                 var evaluacionDate = (+evaluacionArray[3]) + '-' + (+evaluacionArray[2]) + '-'
@@ -191,8 +191,8 @@ function viewModel() {
 
     self.submitForms = function() {
         if (self.editarGrupo.validateGrupos()) {
-            if ($("#editar-homework-form").valid()) {
-                $("#editar-homework-form-submit").click();
+            if ($("#edit-homework-form").valid()) {
+                $("#edit-homework-form-submit").click();
             }
         } else {
             alert("Los números de los grupos no son consecutivos. Revisa si hay algún error.");
@@ -210,7 +210,7 @@ function viewModel() {
                 grupos[student.group().toString()] = [student.id()];
             }
         }
-        $.when(self.editarGrupo.submitGrupos(grupos, "/teacher/editar-group-form/")).done(
+        $.when(self.editarGrupo.submitGrupos(grupos, "/teacher/edit-group-form/")).done(
             function (result) {
                 if (result.success) {
                     alert("Tarea editada correctamente.");

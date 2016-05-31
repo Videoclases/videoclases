@@ -106,7 +106,7 @@ function EditarGrupo() {
 
     self.submitGrupos = function(grupos, url) {
         var fd = new FormData();
-        fd.append("grupos", JSON.stringify(grupos));
+        fd.append("groups", JSON.stringify(grupos));
         fd.append("homework", parseInt(self.tareaActual()));
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {

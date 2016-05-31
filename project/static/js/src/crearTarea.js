@@ -55,7 +55,7 @@ function viewModel() {
                 }
             }
         });
-        return $.ajax("/teacher/crear-homework-form/", {
+        return $.ajax("/teacher/new-homework-form/", {
             data: fd,
             type: "post",
             processData: false,
