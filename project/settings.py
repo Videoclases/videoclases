@@ -19,6 +19,7 @@ INSTALLED_APPS = (
 
     # external
     'datetimewidget',
+    'crispy_forms',
 
     # project
     'videoclases',

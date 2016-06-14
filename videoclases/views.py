@@ -25,7 +25,7 @@ from django.views.generic.edit import FormView, UpdateView
 from pyexcel_ods import get_data as ods_get_data
 from pyexcel_xls import get_data as xls_get_data
 from pyexcel_xlsx import get_data as xlsx_get_data
-from videoclases.forms import *
+from videoclases.forms.forms import *
 from videoclases.models.boolean_parameters import BooleanParameters
 from videoclases.models.groupofstudents import GroupOfStudents
 from videoclases.models.school import School
