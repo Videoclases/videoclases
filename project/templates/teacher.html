@@ -17,17 +17,31 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-2"><h4>Profesor</h4></div>
-                <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
-                <div class="col-md-2 col-md-offset-6">
-                    <button onclick="location.href = '{% url 'crear_course' %}';" class="btn btn-info">Crear curso</button>
+                <div class="col-md-6">
+                    <div class="col-xs-12">
+                        <div class="col-md-6"><h4>Profesor</h4></div>
+                        <div class="col-md-6"><h5>{{ user.get_full_name }}</h5></div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="col-md-6"><h4>Colegio</h4></div>
+                        <div class="col-md-6"><h5>{{ user.teacher.school.name }}</h5></div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"><h4>Colegio</h4></div>
-                <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
-                <div class="col-md-2 col-md-offset-6">
-                    <button onclick="location.href = '{% url 'crear_homework' %}';" class="btn btn-info">Crear tarea</button>
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <button onclick="location.href = '{% url 'crear_course' %}';" class="btn btn-info">Crear curso
+                        </button>
+                    </div>
+                    <div class="col-md-4 ">
+                        <button onclick="location.href = '{% url 'crear_homework' %}';" class="btn btn-info">Crear
+                            tarea
+                        </button>
+                    </div>
+                    <div class="col-md-4 ">
+                        <button onclick="location.href = '{% url 'new_conceptual_test' %}';" class="btn btn-info">Crear
+                            Test Conceptual
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="row">

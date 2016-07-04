@@ -7,3 +7,5 @@ from videoclases.models.pedagogical_questions.question import Question
 class PedagogicalQuestions(models.Model):
     homework = models.OneToOneField(Homework)
     questions = models.ManyToManyField(Question, related_name='pedagogical_questions')
+    delta_time = models.DurationField()
+    description = models.TextField(blank=True, null=True)

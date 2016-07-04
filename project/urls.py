@@ -28,6 +28,9 @@ urlpatterns = patterns('',
     url(r'^teacher/new-course/', vv.CrearCursoFormView.as_view(), name='crear_course'),
     url(r'^teacher/new-homework/', vv.CrearTareaView.as_view(), name='crear_homework'),
     url(r'^teacher/new-homework-form/', vv.CrearTareaFormView.as_view(), name='crear_homework_form'),
+    url(r'^teacher/new-conceptual-test/', vv.ConceptualTestsView.as_view(), name='new_conceptual_test'),
+    url(r'^teacher/new-test-conceptual-form/', vv.ConceptualTestsFormView.as_view(), name='new_conceptual_test_form'),
+    url(r'^teacher/download-homeworks/(?P<course_id>\d+)/$', vv.download_homeworks, name='download_homeworks'),
     url(r'^teacher/course/(?P<course_id>\d+)/$', vv.CursoView.as_view(), name='course'),
     url(r'^teacher/descargar-course/(?P<course_id>\d+)/$', vv.descargar_course, name='descargar_course'),
     url(r'^teacher/descargar-groups-homework/(?P<homework_id>\d+)/$', vv.descargar_groups_homework, name='descargar_groups_homework'),
@@ -43,3 +46,4 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
 )
+
