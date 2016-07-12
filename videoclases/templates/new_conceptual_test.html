@@ -81,11 +81,13 @@
                         </div>
                     </div>
                     <div class="col-xs-12">
-                        <div data-bind="text: ko.toJSON($root)"></div>
+{#                        <div data-bind="text: ko.toJSON($root)"></div>#}
                         <br>
                         <h2>Test Conceptual</h2>
+                        <h4>Título</h4>
+                        <input name="title" class="form-control" data-bind="value: title">
                         <h4>Descripción (opcional)</h4>
-                        <input class="form-control" data-bind="value: description">
+                        <textarea class="form-control" data-bind="value: description"></textarea>
                         <br>
                         <h4>Duración del Test</h4>
                         <strong>NOTA:</strong> El tiempo elegido se aplicará antes y después de la tarea
@@ -108,10 +110,10 @@
                                 Pregunta:
                                 <input name="question" class="form-control question required" data-bind="value: title"/>
                                 Alternativas:
-                                <div data-bind="foreach: { data: choices, as: 'c' }" class="form-group col-xs-12">
+                                <div data-bind="foreach: { data: choices, as: 'c' }" class="form-group col-xs-12 ">
                                     <div class="row">
                                     <div class="col-xs-1">
-                                        <span data-bind="text: $index"></span>
+                                        <span  data-bind="text: $root.indexLetter($index())"></span>
                                     </div>
                                     <div class="col-xs-9 margin-bottom">
                                         <input name="alternative"  class="form-control alternative required " data-bind="value: c.value"/>

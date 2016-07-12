@@ -22,7 +22,7 @@ function viewModel() {
     self.hours = ko.observable(0);
     self.min = ko.observable(0);
     self.homeworks = ko.observableArray();
-
+    self.title = ko.observable();
     self.onSelectChangeValue = function(value) {
         $.when($.ajax("/teacher/download-homeworks/" + value + "/")).done(
             function (result) {
@@ -40,13 +40,16 @@ function viewModel() {
     self.courses.subscribe(function () {
         self.onSelectChangeValue(self.courses());
     });
+    self.indexLetter = function(index) {
+    return String.fromCharCode(97 + index);
+  }
 
     self.description = ko.observable();
 
     var Question = function() {
         var self = this;
         self.title = ko.observable("");
-        self.choices = ko.observableArray(ko.utils.arrayMap(["", ""], function(item) {
+        self.choices = ko.observableArray(ko.utils.arrayMap(["", "","","no se"], function(item) {
             return { value: ko.observable(item) };
         }));
         self.removeChoice = function(child) {
@@ -84,6 +87,7 @@ function viewModel() {
         var min = total_min - hours*60;
         fd.append("delta_time", hours+":"+min+":00");
         fd.append("homework", self.homework());
+        fd.append("title", self.title());
         fd.append("questions", ko.toJSON(self.questions()));
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
@@ -98,17 +102,9 @@ function viewModel() {
             processData: false,
             contentType: false,
             success: function(response){
-                console.log(response);
-                debugger;
-                if (response.success) {
-                    self;
-                } else {
+                if (!response.success) {
                     $(".loader").fadeOut("slow");
-                    self.formErrors.removeAll();
-                    self.changeFormErrorsVisible(true);
-                    for (var i = 0; i < response.errors.length; i++) {
-                        self.formErrors.push(response.errors[i]);
-                    }
+                    self.formErrors.push("Formulario no válido");
                     $('html,body').animate({
                         scrollTop: $("#top-form-head-line").offset().top},
                         'slow');
@@ -182,6 +178,9 @@ $(document).ready(function() {
             alternative:{
                 required: "Debes escribir en todas las alternativas",
                 minlength:"Las alternativas deben tener al menos 2 carácteres"
+            },
+            title:{
+                maxlength:"Título demasiado largo"
             }
         },
         rules: {
@@ -189,9 +188,6 @@ $(document).ready(function() {
                 required: true
             },
             homework: {
-                required: true
-            },
-            course: {
                 required: true
             },
             days: {
@@ -216,6 +212,10 @@ $(document).ready(function() {
             alternative:{
                 required: true,
                 minlength:2
+            },
+            title:{
+                required: true,
+                maxlength: 255
             }
         },
         submitHandler: function (form) {

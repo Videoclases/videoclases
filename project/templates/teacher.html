@@ -66,10 +66,11 @@
                             <th>Curso</th>
                             <th>Profesor</th>
                             <th>Tareas</th>
-                            <th>Estado de tarea</th>
-                            <th>VideoClases subidas</th>
-                            <th>Fecha de entrega</th>
-                            <th>Fecha de evaluación</th>
+                            <th>Estado de<br> tarea</th>
+                            <th>Test Conceptual </th>
+                            <th>VideoClases<br> subidas</th>
+                            <th>Fecha de<br> entrega</th>
+                            <th>Fecha de<br> evaluación</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -80,6 +81,7 @@
                                 <td>{{ t.teacher.user.get_full_name }}</td>
                                 <td class="table-clickable" onclick="location.href = '{% url 'videoclases_homework' t.id %}';"><a>{{ t.title }}</a></td>
                                 <td>{{ t.get_estado_nombre }}</td>
+                                <td>{{ t.pedagogicalquestions|truncatechars:15|default:'No posee test aún'}}</td>
                                 <td>{{ t.get_uploaded_videoclases }} / {{ t.groups.count }}</td>
                                 <td>{{ t.date_upload|date:'d-m-Y' }}</td>
                                 <td>{{ t.date_evaluation|date:'d-m-Y' }}</td>
