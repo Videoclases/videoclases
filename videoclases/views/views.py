@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 
-import codecs
 import json
 import os
 import random
@@ -11,32 +10,26 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
-from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.validators import URLValidator
-from django.db.models import Count, Q
 from django.db import transaction
+from django.db.models import Count, Q
 from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.utils import timezone
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView, UpdateView
 from pyexcel_ods import get_data as ods_get_data
 from pyexcel_xls import get_data as xls_get_data
 from pyexcel_xlsx import get_data as xlsx_get_data
+
 from videoclases.forms.forms import *
-from videoclases.forms.pedagogical_questions_form import PedagogicalQuestionsForm
 from videoclases.models.boolean_parameters import BooleanParameters
-from videoclases.models.groupofstudents import GroupOfStudents
-from videoclases.models.pedagogical_questions.alternative import Alternative
-from videoclases.models.pedagogical_questions.question import Question
-from videoclases.models.school import School
-from videoclases.models.student import Student
-from videoclases.models.teacher import Teacher
-from videoclases.models.student_responses import StudentResponses
-from videoclases.models.student_evaluations import StudentEvaluations
 from videoclases.models.final_scores import FinalScores
+from videoclases.models.groupofstudents import GroupOfStudents
+from videoclases.models.student import Student
+from videoclases.models.student_evaluations import StudentEvaluations
+from videoclases.models.student_responses import StudentResponses
 from videoclases.models.video_clase import VideoClase
 
 SHOW_CORRECT_ANSWER = 'Mostrar alternativa correcta'
@@ -1008,69 +1001,3 @@ class LoginError(View):
         return HttpResponse(status=401)
 
 
-class ConceptualTestsView(TemplateView):
-    template_name = 'new_conceptual_test.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ConceptualTestsView, self).get_context_data(**kwargs)
-        form = CrearTareaForm()
-        context['crear_homework_form'] = form
-        context['courses'] = self.request.user.teacher.courses.all()
-        return context
-
-    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
-    def dispatch(self, *args, **kwargs):
-        return super(ConceptualTestsView, self).dispatch(*args, **kwargs)
-
-
-class ConceptualTestsFormView(FormView):
-    template_name = 'blank.html'
-    form_class = PedagogicalQuestionsForm
-
-    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
-    def dispatch(self, *args, **kwargs):
-        return super(ConceptualTestsFormView, self).dispatch(*args, **kwargs)
-
-    def form_valid(self, form, *args, **kwargs):
-        questions_data = self.request.POST.get('questions', None)
-        import json
-        questions_data = json.loads(questions_data)
-        list_questions = []
-        for question in questions_data:
-            pedagogical_question = Question()
-            pedagogical_question.question = question['title']
-            list_alternatives = []
-            for alternative in question['choices']:
-                a = Alternative()
-                a.response = alternative['value']
-                a.save()
-                list_alternatives.append(a)
-            pedagogical_question.save()
-            pedagogical_question.alternatives.add(*list_alternatives)
-            pedagogical_question.save()
-            list_questions.append(pedagogical_question)
-        instance = form.save()
-        instance.questions.add(*list_questions)
-        instance.save()
-        result_dict = {}
-        result_dict['success'] = True
-        return JsonResponse(result_dict)
-
-
-@user_passes_test(in_teachers_group, login_url='/')
-def download_homeworks(request, course_id):
-    result_dict = {}
-    course = Course.objects.get(id=course_id)
-    homeworks = course.course_homework.all()
-    homeworks_array = []
-    for a in homeworks:
-        homework_dict = {}
-        homework_dict['id'] = a.id
-        homework_dict['name'] = a.title
-        try:
-            homework_dict['has_pq'] = a.pedagogicalquestions is not None
-        except Exception:
-            homework_dict['has_pq'] = False
-        homeworks_array.append(homework_dict)
-    result_dict['homeworks'] = homeworks_array
-    return JsonResponse(result_dict)

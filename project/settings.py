@@ -70,7 +70,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 LANGUAGE_CODE = 'es-CL'
 TIME_ZONE = 'America/Santiago'
 USE_I18N = True
-USE_L10N = True
+USE_L10N = False
 USE_TZ = True
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()

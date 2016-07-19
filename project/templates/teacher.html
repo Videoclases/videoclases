@@ -81,7 +81,11 @@
                                 <td>{{ t.teacher.user.get_full_name }}</td>
                                 <td class="table-clickable" onclick="location.href = '{% url 'videoclases_homework' t.id %}';"><a>{{ t.title }}</a></td>
                                 <td>{{ t.get_estado_nombre }}</td>
-                                <td>{{ t.pedagogicalquestions|truncatechars:15|default:'No posee test aún'}}</td>
+                                {% if t.pedagogicalquestions %}
+                                <td  class="table-clickable" onclick="location.href = '{% url 'pedagogical_questions' t.pedagogicalquestions.id %}';">
+                                    <a>{{ t.pedagogicalquestions|truncatechars:15|default:'No posee test aún'}}</a></td>
+                                    {% else %}<td>No posee test aún</td>
+                                {% endif %}
                                 <td>{{ t.get_uploaded_videoclases }} / {{ t.groups.count }}</td>
                                 <td>{{ t.date_upload|date:'d-m-Y' }}</td>
                                 <td>{{ t.date_evaluation|date:'d-m-Y' }}</td>

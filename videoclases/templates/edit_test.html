@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-
 {% block teacher-active %}class="menu-top-active"{% endblock %}
 
 {% block extra-head %}
@@ -19,9 +18,36 @@
                 {% endfor %}
             ];
         }
+        var original_homework = {{ pedagogicalquestions.homework.id }};
     </script>
     <script src="{% static "js/libs/jquery.validate.min.js" %}"></script>
-    <script src="{% static "js/src/createConceptualTest.js" %}"></script>
+    <script src="{% static "js/src/editConceptualTest.js" %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            ko.applyBindings(vm);
+            $('#id_course').find('option[value={{ pedagogicalquestions.homework.course.id }}]').prop('selected', true);
+            {% for homework in homeworks %}
+                vm.homeworks.push({'name': "{{ homework.title }}", 'id': "{{ homework.id }}"});
+            {% endfor %}
+            $('#id_homework').find('option[value={{ pedagogicalquestions.homework.id }}]').prop('selected', true);
+            vm.title("{{ pedagogicalquestions.title }}");
+            vm.description("{{ pedagogicalquestions.description|default:''}}");
+            vm.days({{ days }});
+            vm.hours({{ hours }});
+            vm.min({{ min }});
+            {% for question in pedagogicalquestions.questions.all %}
+                vm.questions.push(
+                        new Question(
+                                "{{ question }}",
+                                [
+                                    '{{ question.alternatives.all|join:"','" }}'
+                                ]
+                        )
+                )
+            {% endfor %}
+
+        });
+    </script>
 {% endblock %}
 
 {% block body %}
@@ -38,6 +64,13 @@
                 <div class="col-md-12">
                     <h6 class="page-head-line"></h6>
                 </div>
+            </div>
+
+            <div class="col-xs-12 text-center">
+                <button onclick="location.href = '{% url 'download_pedagogical_questions' pedagogicalquestions.id %}';"
+                        class="btn btn-info">Descargar Excel Original
+                </button>
+                <br><br>
             </div>
             <div class="row" data-bind="visible: formErrorsVisible">
                 <div class="col-xs-12">
@@ -98,7 +131,8 @@
                             </div>
                             <div class="col-xs-4">
                                 <label>horas:</label>
-                                <input name="hours" type="number" class="form-control" data-bind="numeric, value: hours">
+                                <input name="hours" type="number" class="form-control"
+                                       data-bind="numeric, value: hours">
                             </div>
                             <div class="col-xs-4">
                                 <label>minutos:</label>
@@ -139,7 +173,7 @@
                             <button data-bind="click: addQuestion" class="btn btn-default">Agregar otra pregunta
                             </button>
                             <button id="crear-homework-form-submit" type="submit" class="btn btn-info"
-                                    data-bind="click: submitForms">Crear Test Conceptual
+                                    data-bind="click: submitForms">Guardar Cambios
                             </button>
                         </div>
                     </div>
@@ -147,6 +181,5 @@
             </div>
 
         </div>
-    </div>
     </div>
 {% endblock %}
