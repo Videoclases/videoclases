@@ -99,22 +99,29 @@ function viewModel() {
                 }
             }
         });
-        return $.ajax("/teacher/new-test-conceptual-form/", {
+        return $.ajax("/teacher/pedagogical-questions/"+ pq+"/", {
             data: fd,
             type: "post",
             processData: false,
             contentType: false,
             success: function(response){
+                vm.formErrors.removeAll();
                 if (!response.success) {
                     $(".loader").fadeOut("slow");
                     self.formErrors.push("Formulario no válido");
-                    $('html,body').animate({
-                        scrollTop: $("#top-form-head-line").offset().top},
-                        'slow');
-                        }
+                }
+                else{
+                    self.formErrors.push("Test actualizado exitosamente");
+                }
+                vm.changeFormErrorsVisible(true);
+
+                $('html,body').animate({
+                    scrollTop: $("#top-form-head-line").offset().top},
+                    'slow');
+
             }
         });
-    }
+    };
 
     self.check_time = function (add_animation) {
         if((self.days() + self.hours()+ self.min()) > 0)  {
@@ -141,7 +148,6 @@ function viewModel() {
           }
         });});
         if ($("#crear-homework-form").valid() && self.check_time(true)) {
-            self.loading(true);
             $(".loader").fadeIn("slow");
             self.submitCrearTareaForm();
         }

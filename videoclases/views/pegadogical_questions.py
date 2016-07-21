@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
 from django.http.response import HttpResponse
@@ -62,6 +63,9 @@ class ConceptualTestsFormView(FormView):
         result_dict['success'] = True
         return JsonResponse(result_dict)
 
+    def form_invalid(self, form):
+        return JsonResponse(form.errors)
+
 
 @user_passes_test(in_teachers_group, login_url='/')
 def download_homeworks(request, course_id):
@@ -96,10 +100,18 @@ class DownloadPedagogicalQuestionAsExcel(DetailView):
         response.write(wb.getvalue())
         return response
 
+    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(DownloadPedagogicalQuestionAsExcel, self).dispatch(*args, **kwargs)
+
 
 class PedagogicalQuestionEditView(DetailView):
     model = PedagogicalQuestions
     template_name = 'edit_test.html'
+
+    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(PedagogicalQuestionEditView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(PedagogicalQuestionEditView, self).get_context_data(**kwargs)
@@ -114,3 +126,39 @@ class PedagogicalQuestionEditView(DetailView):
         context['courses'] = self.request.user.teacher.courses.all()
         context['homeworks'] = pq.homework.course.course_homework.all()
         return context
+
+    def post(self, request, *args, **kwargs):
+        import json
+        instance = self.get_object()
+        form = PedagogicalQuestionsForm(request.POST, instance=instance)
+        if form.is_valid():
+            questions_data = request.POST.get('questions', None)
+            questions_data = json.loads(questions_data)
+            list_questions = []
+            for question in questions_data:
+                pedagogical_question = Question()
+                pedagogical_question.question = question['title']
+                list_alternatives = []
+                for alternative in question['choices']:
+                    a = Alternative()
+                    a.response = alternative['value']
+                    a.save()
+                    list_alternatives.append(a)
+                pedagogical_question.save()
+                pedagogical_question.alternatives.add(*list_alternatives)
+                pedagogical_question.save()
+                list_questions.append(pedagogical_question)
+
+            questions = instance.questions.all()
+            for q in questions:
+                q.alternatives.all().delete()
+            questions.delete()
+            instance = form.save()
+            instance.questions.add(*list_questions)
+            instance.save()
+            result_dict = dict()
+            result_dict['success'] = True
+        else:
+            result_dict = {'errors':form.errors}
+        return JsonResponse(result_dict)
+

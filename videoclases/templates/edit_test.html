@@ -19,6 +19,7 @@
             ];
         }
         var original_homework = {{ pedagogicalquestions.homework.id }};
+        var pq = "{{ pedagogicalquestions.id }}";
     </script>
     <script src="{% static "js/libs/jquery.validate.min.js" %}"></script>
     <script src="{% static "js/src/editConceptualTest.js" %}"></script>
@@ -29,6 +30,7 @@
             {% for homework in homeworks %}
                 vm.homeworks.push({'name': "{{ homework.title }}", 'id': "{{ homework.id }}"});
             {% endfor %}
+            vm.homework("{{ pedagogicalquestions.homework.id }}");
             $('#id_homework').find('option[value={{ pedagogicalquestions.homework.id }}]').prop('selected', true);
             vm.title("{{ pedagogicalquestions.title }}");
             vm.description("{{ pedagogicalquestions.description|default:''}}");
@@ -114,7 +116,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12">
-                        {#                        <div data-bind="text: ko.toJSON($root)"></div>#}
+                                                <div data-bind="text: ko.toJSON($root)"></div>
                         <br>
                         <h2>Test Conceptual</h2>
                         <h4>Título</h4>

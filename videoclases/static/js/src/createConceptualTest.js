@@ -102,16 +102,21 @@ function viewModel() {
             processData: false,
             contentType: false,
             success: function(response){
+                vm.formErrors.removeAll();
                 if (!response.success) {
-                    $(".loader").fadeOut("slow");
                     self.formErrors.push("Formulario no válido");
-                    $('html,body').animate({
-                        scrollTop: $("#top-form-head-line").offset().top},
-                        'slow');
-                        }
+                }
+                else{
+                    self.formErrors.push("Test creado exitosamente");
+                }
+                vm.changeFormErrorsVisible(true);
+
+                $('html,body').animate({
+                    scrollTop: $("#top-form-head-line").offset().top},
+                    'slow');
             }
         });
-    }
+    };
 
     self.check_time = function (add_animation) {
         if((self.days() + self.hours()+ self.min()) > 0)  {
