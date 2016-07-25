@@ -2,13 +2,9 @@
 {% load staticfiles %}
 
 {% block body %}
-    <div class="content-wrapper">
-        <div class="container">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" class="btn btn-success" value="Seleccionar" />
-            </form>
-        </div>
-    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-success" value="Seleccionar"/>
+    </form>
 {% endblock %}

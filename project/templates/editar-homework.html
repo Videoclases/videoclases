@@ -64,216 +64,214 @@
 {% endblock %}
 
 {% block body %}
-    <div class="content-wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2"><h4>Profesor</h4></div>
-                <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
+    <div class="row">
+        <div class="col-md-2"><h4>Profesor</h4></div>
+        <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><h4>Colegio</h4></div>
+        <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
+        <div class="col-md-2 col-md-offset-6">
+            <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+        </div>
+    </div>
+    <div id="top-form" class="row" data-bind="visible: formErrorsVisible">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-bind="click: function() {changeFormErrorsVisible(false)}"
+                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div align="center">
+                <!-- ko foreach: formErrors -->
+                <span data-bind="text: $data"></span><br/>
+                <!-- /ko -->
             </div>
-            <div class="row">
-                <div class="col-md-2"><h4>Colegio</h4></div>
-                <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
-                <div class="col-md-2 col-md-offset-6">
-                    <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+        </div>
+    </div>
+    <form id="edit-homework-form" name="edit-homework-form" data-bind="submit: submitEditarTarea">
+        <div class="row">
+            <h6 class="page-head-line"></h6>
+            <div align="center" class="col-md-12">
+                <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">
+                    Editar tarea
+                </button>
+                <button type="submit" class="btn btn-success" data-bind="visible: editarTareaBoolean">Guardar
+                    tarea
+                </button>
+                <button class="btn btn-danger"
+                        data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">Descartar cambios
+                </button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div align="center"><label>Video explicativo</label></div>
                 </div>
-            </div>
-            <div id="top-form" class="row" data-bind="visible: formErrorsVisible">
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-bind="click: function() {changeFormErrorsVisible(false)}"
-                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div align="center">
-                        <!-- ko foreach: formErrors -->
-                        <span data-bind="text: $data"></span><br/>
-                        <!-- /ko -->
+                <div class="row" data-bind="visible: !editarTareaBoolean()">
+                    <div data-bind="if: homework.video">
+                        <iframe data-bind="attr: { src: homework.video }" width="100%" height="315"
+                                frameborder="0"
+                                allowfullscreen></iframe>
+                    </div>
+                    <div data-bind="if: !homework.video()">
+                        <div align="center"><span>Esta tarea no tiene video explicativo</span></div>
+                    </div>
+                </div>
+                <div class="row" data-bind="visible: editarTareaBoolean">
+                    <div class="col-md-8 col-md-offset-2">
+                        <input id="id_video" name="video" type="text" class="form-control"
+                               placeholder="Copiar link de video en Youtube" data-bind="value: homework.video"/>
                     </div>
                 </div>
             </div>
-            <form id="edit-homework-form" name="edit-homework-form" data-bind="submit: submitEditarTarea">
-                <div class="row">
-                    <h6 class="page-head-line"></h6>
-                    <div align="center" class="col-md-12">
-                        <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">
-                            Editar tarea
-                        </button>
-                        <button type="submit" class="btn btn-success" data-bind="visible: editarTareaBoolean">Guardar
-                            tarea
-                        </button>
-                        <button class="btn btn-danger"
-                                data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">Descartar cambios
-                        </button>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="line-height:1.3;"
+                         data-bind="visible: !editarTareaBoolean()">
+                        <h4>Título de Tarea</h4>
+                        <span data-bind="text: homework.title"></span>
                     </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-6">
+                    <div class="panel-heading" style="line-height:1.3;" data-bind="visible: editarTareaBoolean">
+                        <h4>Título de Tarea</h4>
+                        <input name="title" type="text" class="form-control"
+                               placeholder="Introduzca Título de Tarea"
+                               data-bind="value: homework.title"/>
+                    </div>
+                    <div class="panel-body" data-bind="visible: !editarTareaBoolean()">
+                        <h4>Descripción</h4>
+                        <texhomework data-bind="value: homework.description" class="form-control" rows="5"
+                                     readonly></texhomework>
                         <div class="row">
-                            <div align="center"><label>Video explicativo</label></div>
-                        </div>
-                        <div class="row" data-bind="visible: !editarTareaBoolean()">
-                            <div data-bind="if: homework.video">
-                                <iframe data-bind="attr: { src: homework.video }" width="100%" height="315"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </div>
-                            <div data-bind="if: !homework.video()">
-                                <div align="center"><span>Esta tarea no tiene video explicativo</span></div>
+                            <div class="col-md-7">Fecha límite para subir tarea</div>
+                            <div class="col-md-5">
+                                <div class="controls input-append date">
+                                    <span data-bind="text: homework.date_upload"></span>
+                                </div>
                             </div>
                         </div>
-                        <div class="row" data-bind="visible: editarTareaBoolean">
-                            <div class="col-md-8 col-md-offset-2">
-                                <input id="id_video" name="video" type="text" class="form-control"
-                                       placeholder="Copiar link de video en Youtube" data-bind="value: homework.video"/>
+                        <div class="row">
+                            <div class="col-md-7">Fecha límite para evaluar tarea</div>
+                            <div class="col-md-5">
+                                <div class="controls input-append date">
+                                    <span data-bind="text: homework.date_evaluation"></span>
+                                </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7"><h4>VideoClases recibidas</h4></div>
+                            <div class="col-md-5">{{ videoclases_recibidas }}</div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" style="line-height:1.3;"
-                                 data-bind="visible: !editarTareaBoolean()">
-                                <h4>Título de Tarea</h4>
-                                <span data-bind="text: homework.title"></span>
-                            </div>
-                            <div class="panel-heading" style="line-height:1.3;" data-bind="visible: editarTareaBoolean">
-                                <h4>Título de Tarea</h4>
-                                <input name="title" type="text" class="form-control"
-                                       placeholder="Introduzca Título de Tarea"
-                                       data-bind="value: homework.title"/>
-                            </div>
-                            <div class="panel-body" data-bind="visible: !editarTareaBoolean()">
-                                <h4>Descripción</h4>
-                                <texhomework data-bind="value: homework.description" class="form-control" rows="5"
-                                             readonly> </texhomework>
-                                <div class="row">
-                                    <div class="col-md-7">Fecha límite para subir tarea</div>
-                                    <div class="col-md-5">
-                                        <div class="controls input-append date">
-                                            <span data-bind="text: homework.date_upload"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-7">Fecha límite para evaluar tarea</div>
-                                    <div class="col-md-5">
-                                        <div class="controls input-append date">
-                                            <span data-bind="text: homework.date_evaluation"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-7"><h4>VideoClases recibidas</h4></div>
-                                    <div class="col-md-5">{{ videoclases_recibidas }}</div>
-                                </div>
-                            </div>
-                            <div class="panel-body" data-bind="visible: editarTareaBoolean">
-                                <h4>Descripción</h4>
-                                <texhomework name="description" class="form-control"
-                                             data-bind="value: homework.description"> </texhomework>
-                                <div class="row">
-                                    <div class="col-md-7">Curso</div>
-                                    <div class="col-md-5">
-                                        <select name="course" class="form-control" id="id_course"
-                                                data-bind="options: select.courses,
+                    <div class="panel-body" data-bind="visible: editarTareaBoolean">
+                        <h4>Descripción</h4>
+                        <texhomework name="description" class="form-control"
+                                     data-bind="value: homework.description"></texhomework>
+                        <div class="row">
+                            <div class="col-md-7">Curso</div>
+                            <div class="col-md-5">
+                                <select name="course" class="form-control" id="id_course"
+                                        data-bind="options: select.courses,
                                             optionsText: 'name',
                                             optionsValue: 'id',
                                             optionsCaption: '-- escoja un curso --',
                                             value: homework.course,
                                             valueAllowUnset: false"></select>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">Revisiones mínimas</div>
+                            <div class="col-md-5"><input class="form-control" type="number" name="revision"
+                                                         min="1"
+                                                         max="7" step="1" data-bind="value: homework.revision">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">Fecha límite para subir tarea</div>
+                            <div class="col-md-5">
+                                <div class="controls input-append date">
+                                    <input class="form-control" id="id_fecha_subida" name="date_upload"
+                                           readonly=""
+                                           type="text" data-bind="value: homework.date_upload"/>
+                                    <span class="add-on"><i class="icon-remove"></i></span>
+                                    <span class="add-on"><i class="icon-th"></i></span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-7">Revisiones mínimas</div>
-                                    <div class="col-md-5"><input class="form-control" type="number" name="revision"
-                                                                 min="1"
-                                                                 max="7" step="1" data-bind="value: homework.revision">
-                                    </div>
+                                <script type="text/javascript">
+                                    $("#id_fecha_subida").datetimepicker({
+                                        minView: 2,
+                                        format: 'dd/mm/yyyy',
+                                        weekStart: 1,
+                                        autoclose: true,
+                                        todayHighlight: true,
+                                        startView: 2
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">Fecha límite para evaluar tarea</div>
+                            <div class="col-md-5">
+                                <div class="controls input-append date">
+                                    <input class="form-control" id="id_fecha_evaluacion" name="date_evaluation"
+                                           readonly="" type="text" data-bind="value: homework.date_evaluation"/>
+                                    <span class="add-on"><i class="icon-remove"></i></span>
+                                    <span class="add-on"><i class="icon-th"></i></span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-7">Fecha límite para subir tarea</div>
-                                    <div class="col-md-5">
-                                        <div class="controls input-append date">
-                                            <input class="form-control" id="id_fecha_subida" name="date_upload"
-                                                   readonly=""
-                                                   type="text" data-bind="value: homework.date_upload"/>
-                                            <span class="add-on"><i class="icon-remove"></i></span>
-                                            <span class="add-on"><i class="icon-th"></i></span>
-                                        </div>
-                                        <script type="text/javascript">
-                                            $("#id_fecha_subida").datetimepicker({
-                                                minView: 2,
-                                                format: 'dd/mm/yyyy',
-                                                weekStart: 1,
-                                                autoclose: true,
-                                                todayHighlight: true,
-                                                startView: 2
-                                            });
-                                        </script>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-7">Fecha límite para evaluar tarea</div>
-                                    <div class="col-md-5">
-                                        <div class="controls input-append date">
-                                            <input class="form-control" id="id_fecha_evaluacion" name="date_evaluation"
-                                                   readonly="" type="text" data-bind="value: homework.date_evaluation"/>
-                                            <span class="add-on"><i class="icon-remove"></i></span>
-                                            <span class="add-on"><i class="icon-th"></i></span>
-                                        </div>
-                                        <script type="text/javascript">
-                                            $("#id_fecha_evaluacion").datetimepicker({
-                                                minView: 2,
-                                                format: 'dd/mm/yyyy',
-                                                weekStart: 1,
-                                                autoclose: true,
-                                                todayHighlight: true,
-                                                startView: 2
-                                            });
-                                        </script>
-                                    </div>
-                                </div>
+                                <script type="text/javascript">
+                                    $("#id_fecha_evaluacion").datetimepicker({
+                                        minView: 2,
+                                        format: 'dd/mm/yyyy',
+                                        weekStart: 1,
+                                        autoclose: true,
+                                        todayHighlight: true,
+                                        startView: 2
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
                 </div>
-                <input id="edit-homework-form-submit" type="submit" value="Submit" style="display: none;">
-            </form>
-            <form data-bind="submit: submitGruposForm">
-                <div class="row">
-                    <div class="table-responsive col-md-12">
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                            <tr data-bind="foreach: editarGrupo.headers">
-                                <th data-bind="click: $parent.editarGrupo.sort, text: title"></th>
-                            </tr>
-                            </thead>
-                            <tbody data-bind="foreach: editarGrupo.students">
-                            <tr>
-                                <td><span data-bind="text: $data.last_name"></span></td>
-                                <td><span data-bind="text: $data.first_name"></span></td>
-                                <td><div class="col-xs-12"><input class="form-control" data-bind="value: $data.group"/></div></td>
-                                <td><span
-                                        data-bind="text: $root.editarGrupo.getVideoclaseText($data.videoclase())"></span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <input id="editar-group-form-submit" type="submit" value="Submit" style="display: none;"/>
-            </form>
-            <div class="row">
-                <div align="center" class="col-md-12">
-                    <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar
-                        tarea
-                    </button>
-                    <button data-bind="click: submitForms, visible: editarTareaBoolean" class="btn btn-success">Guardar
-                        Tarea
-                    </button>
-                    <button class="btn btn-danger"
-                            data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">
-                        Descartar cambios
-                    </button>
-                </div>
             </div>
+        </div>
+        <input id="edit-homework-form-submit" type="submit" value="Submit" style="display: none;">
+    </form>
+    <form data-bind="submit: submitGruposForm">
+        <div class="row">
+            <div class="table-responsive col-md-12">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr data-bind="foreach: editarGrupo.headers">
+                        <th data-bind="click: $parent.editarGrupo.sort, text: title"></th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach: editarGrupo.students">
+                    <tr>
+                        <td><span data-bind="text: $data.last_name"></span></td>
+                        <td><span data-bind="text: $data.first_name"></span></td>
+                        <td>
+                            <div class="col-xs-12"><input class="form-control" data-bind="value: $data.group"/></div>
+                        </td>
+                        <td><span
+                                data-bind="text: $root.editarGrupo.getVideoclaseText($data.videoclase())"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <input id="editar-group-form-submit" type="submit" value="Submit" style="display: none;"/>
+    </form>
+    <div class="row">
+        <div align="center" class="col-md-12">
+            <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">Editar
+                tarea
+            </button>
+            <button data-bind="click: submitForms, visible: editarTareaBoolean" class="btn btn-success">Guardar
+                Tarea
+            </button>
+            <button class="btn btn-danger"
+                    data-bind="click: descartarCambiosTarea, visible: editarTareaBoolean">
+                Descartar cambios
+            </button>
         </div>
     </div>
 {% endblock %}

@@ -63,3 +63,7 @@ input {
 .margin-bottom {
     margin-top: -10px;
 }
+
+.spaced {
+    padding: 10px !important;
+}

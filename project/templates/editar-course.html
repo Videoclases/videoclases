@@ -4,91 +4,80 @@
 {% block teacher-active %}class="menu-top-active"{% endblock %}
 
 {% block extra-head %}
-<script type="text/javascript">
-    function deleteAlumno(studentId) {
-        if (confirm("¿Seguro que deseas eliminar este estudiante del curso?")) {
-            var aId = "deleteAlumno" + studentId;
-            document.getElementById(aId).click();
+    <script type="text/javascript">
+        function deleteAlumno(studentId) {
+            if (confirm("¿Seguro que deseas eliminar este estudiante del curso?")) {
+                var aId = "deleteAlumno" + studentId;
+                document.getElementById(aId).click();
+            }
         }
-    }
-    function deleteCurso() {
-        if (confirm("¿Seguro que deseas borrar este curso?")) {
-            $("#formBorrarCursoSubmit").click();
+        function deleteCurso() {
+            if (confirm("¿Seguro que deseas borrar este curso?")) {
+                $("#formBorrarCursoSubmit").click();
+            }
         }
-    }
-</script>
+    </script>
 {% endblock %}
 
 {% block body %}
-    <div class="content-wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2"><h4>Profesor</h4></div>
-                <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
-                <div class="col-md-2 col-md-offset-6">
-                    <button onclick="deleteCurso()" class="btn btn-danger">Borrar curso</button>
-                    <form method="post" action="{% url 'borrar_course' course.id %}">
-                        {% csrf_token %}
-                        <input type="number" name="course" value="{{ course.id }}" style="display:none;" />
-                        <input type="submit" id="formBorrarCursoSubmit" style="display:none;" />
-                    </form>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"><h4>Colegio</h4></div>
-                <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h6 class="page-head-line"></h6>
-                </div>
-            </div>
-            {% if messages %}
-            <div class="row">
-                <div class="alert alert-info alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    {% for message in messages %}
-                    <div align="center">{{ message }}</div>
+    <div class="row">
+        <div class="col-md-2"><h4>Profesor</h4></div>
+        <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
+        <div class="col-md-2 col-md-offset-6">
+            <button onclick="deleteCurso()" class="btn btn-danger">Borrar curso</button>
+            <form method="post" action="{% url 'borrar_course' course.id %}">
+                {% csrf_token %}
+                <input type="number" name="course" value="{{ course.id }}" style="display:none;"/>
+                <input type="submit" id="formBorrarCursoSubmit" style="display:none;"/>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><h4>Colegio</h4></div>
+        <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h6 class="page-head-line"></h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive col-md-12">
+            {% if course.students.all %}
+                <table id="example" class="cell-border" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Apellido</th>
+                        <th>Nombre</th>
+                        <th>Nombre de usuario</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for a in course.students.all %}
+                        <tr>
+                            <td>{{ a.user.last_name }}</td>
+                            <td>{{ a.user.first_name }}</td>
+                            <td>{{ a.user.username }}</td>
+                            <td>
+                                <a href="{% url 'editar_student' course.id a.id %}">
+                                    <button class="btn btn-info">Editar estudiante</button>
+                                </a>
+                                <button class="btn btn-danger" onclick="deleteAlumno({{ a.id }});">Borrar Alumno
+                                </button>
+                                <a id="deleteAlumno{{ a.id }}" href="{% url 'borrar_student' course.id a.id %}"></a>
+                            </td>
+                        </tr>
                     {% endfor %}
-                </div>
-            </div>
+                    </tbody>
+                </table>
+            {% else %}
+                <label>Este curso no tiene estudiantes asignados</label>
             {% endif %}
-            <div class="row">
-                <div class="table-responsive col-md-12">
-                    {% if course.students.all %}
-                        <table id="example" class="cell-border" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Apellido</th>
-                                    <th>Nombre</th>
-                                    <th>Nombre de usuario</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for a in course.students.all %}
-                                    <tr>
-                                        <td>{{ a.user.last_name }}</td>
-                                        <td>{{ a.user.first_name }}</td>
-                                        <td>{{ a.user.username }}</td>
-                                        <td>
-                                            <a href="{% url 'editar_student' course.id a.id %}"><button class="btn btn-info">Editar estudiante</button></a>
-                                            <button class="btn btn-danger" onclick="deleteAlumno({{a.id}});">Borrar Alumno</button>
-                                            <a id="deleteAlumno{{a.id}}" href="{% url 'borrar_student' course.id a.id %}"></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <label>Este curso no tiene estudiantes asignados</label>
-                    {% endif %}
-                </div>
-            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block extra-script %}
-{% include 'aux/student-table-translation-es.html' %}
+    {% include 'aux/student-table-translation-es.html' %}
 {% endblock %}

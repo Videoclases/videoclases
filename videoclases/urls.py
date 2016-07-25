@@ -69,8 +69,11 @@ urlpatterns = [
         vv.CrearTareaFormView.as_view(),
         name='crear_homework_form'),
 
-    url(r'^teacher/new-conceptual-test/',
+    url(r'^teacher/new-conceptual-test/create/$',
         pq.ConceptualTestsView.as_view(),
+        name='new_conceptual_test_create'),
+    url(r'^teacher/new-conceptual-test/$',
+        pq.PedagogicalQuestionCreateView.as_view(),
         name='new_conceptual_test'),
     url(r'^teacher/new-test-conceptual-form/',
         pq.ConceptualTestsFormView.as_view(),

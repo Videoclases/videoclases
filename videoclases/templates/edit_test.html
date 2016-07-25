@@ -53,8 +53,6 @@
 {% endblock %}
 
 {% block body %}
-    <div class="content-wrapper">
-        <div class="container">
             <div class="row">
                 <div class="col-md-2"><h4>Colegio</h4></div>
                 <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
@@ -116,7 +114,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12">
-                                                <div data-bind="text: ko.toJSON($root)"></div>
+{#                                                <div data-bind="text: ko.toJSON($root)"></div>#}
                         <br>
                         <h2>Test Conceptual</h2>
                         <h4>Título</h4>
@@ -181,7 +179,4 @@
                     </div>
                 </form>
             </div>
-
-        </div>
-    </div>
 {% endblock %}

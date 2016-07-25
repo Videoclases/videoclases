@@ -18,6 +18,7 @@
     <link href="{% static "assets/css/font-awesome.css" %}" rel="stylesheet">
     <!-- CUSTOM STYLE  -->
     <link href="{% static "assets/css/style.css" %}" rel="stylesheet">
+    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
     <link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet">
     <!-- CORE SCRIPTS -->
     <script src="{% static "assets/js/jquery-1.11.1.js" %}"></script>
@@ -108,8 +109,28 @@
     </section>
 <!-- MENU SECTION END-->
 
+    <div class="content-wrapper">
+<div class="container">
+        {% if messages %}
+    <div class="row">
+    <div class="col-xs-12">
+    <div class="row">
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {% for message in messages %}
+            <div align="center">{{ message }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+</div>
+        {% endif %}
     {% block body %}
     {% endblock %}
+    </div>
+
+    </div>
+
 
 
     <footer>

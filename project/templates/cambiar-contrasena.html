@@ -3,30 +3,43 @@
 {% load videoclases_tags %}
 
 {% block body %}
-    <div class="content-wrapper">
-        <div class="container">
-            {% if form.errors %}
-            <div class="row">
-                <div class="alert alert-info alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <div align="center">{{ error }}</div>
-                        {% endfor %}
+    {% if form.errors %}
+        <div class="row">
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <div align="center">{{ error }}</div>
                     {% endfor %}
-                </div>
+                {% endfor %}
             </div>
-            {% endif %}
-            <form method="post">
-                {% csrf_token %}
-                {% ifusergroup Alumnos %}
-                <tr><th><label for="{{form.email.id_for_label}}">{{form.email.label}}:</label></th><td><input id="{{form.email.id_for_label}}" name="{{form.email.name}}" type="email" value="{{form.email.value|default_if_none:""}}" /></td></tr>
-                {% endifusergroup %}
-                <tr><th><label for="{{form.old_password.id_for_label}}">{{form.old_password.label}}:</label></th><td><input id="{{form.old_password.id_for_label}}" name="{{form.old_password.name}}" type="password" /></td></tr>
-                <tr><th><label for="{{form.new_password1.id_for_label}}">{{form.new_password1.label}}:</label></th><td><input id="{{form.new_password1.id_for_label}}" name="{{form.new_password1.name}}" type="password" /></td></tr>
-                <tr><th><label for="{{form.new_password2.id_for_label}}">{{form.new_password2.label}}:</label></th><td><input id="{{form.new_password2.id_for_label}}" name="{{form.new_password2.name}}" type="password" /></td></tr>
-                <input type="submit" class="btn btn-success" value="Cambiar" />
-            </form>
         </div>
-    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {% ifusergroup Alumnos %}
+            <tr>
+                <th><label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label></th>
+                <td><input id="{{ form.email.id_for_label }}" name="{{ form.email.name }}" type="email"
+                           value="{{ form.email.value|default_if_none:""}}"/></td>
+            </tr>
+        {% endifusergroup %}
+        <tr>
+            <th><label for="{{ form.old_password.id_for_label }}">{{ form.old_password.label }}:</label></th>
+            <td><input id="{{ form.old_password.id_for_label }}" name="{{ form.old_password.name }}" type="password"/>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="{{ form.new_password1.id_for_label }}">{{ form.new_password1.label }}:</label></th>
+            <td><input id="{{ form.new_password1.id_for_label }}" name="{{ form.new_password1.name }}" type="password"/>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="{{ form.new_password2.id_for_label }}">{{ form.new_password2.label }}:</label></th>
+            <td><input id="{{ form.new_password2.id_for_label }}" name="{{ form.new_password2.name }}" type="password"/>
+            </td>
+        </tr>
+        <input type="submit" class="btn btn-success" value="Cambiar"/>
+    </form>
 {% endblock %}
