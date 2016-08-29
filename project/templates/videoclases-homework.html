@@ -32,33 +32,33 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-md-2"><h4>Profesor</h4></div>
-        <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
-        <div class="col-md-2 col-md-offset-6">
+        <div class="col-xs-2"><h4>Profesor</h4></div>
+        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
+        <div class="col-xs-2 col-xs-offset-6">
             <button onclick="location.href = '{% url 'homework' homework.id %}';" class="btn btn-info">Ver detalle de
                 tarea
             </button>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2"><h4>Colegio</h4></div>
-        <div class="col-md-2"><h5>{{ homework.course.school.name }}</h5></div>
-        <div class="col-md-2 col-md-offset-6">
+        <div class="col-xs-2"><h4>Colegio</h4></div>
+        <div class="col-xs-2"><h5>{{ homework.course.school.name }}</h5></div>
+        <div class="col-xs-2 col-xs-offset-6">
             <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <h6 class="page-head-line">Curso {{ homework.course.name }} - Tarea {{ homework.title }}
                 - {{ groups.count }} Grupos</h6>
         </div>
     </div>
     {% for g in groups %}
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-xs-6">
                 {% if g.videoclase.video %}
                     <div class="row">
-                        <div class="col-md-12" align="center">
+                        <div class="col-xs-12" align="center">
                             <span>VideoClase subida el {{ g.videoclase.upload_students|date:'d-m-Y' }}
                         </div>
                     </div>
@@ -71,21 +71,21 @@
                 {% for n in g.notasfinales_set.all %}
                     <form data-bind="submit: function(){ submitForm({{ g.id }}, {{ n.student.id }}, responseValues.group{{ g.id }}.notaAlumno{{ n.student.id }}, responseValues.group{{ g.id }}.student{{ n.student.id }}FormVisible) }">
                         <div class="row">
-                            <div class="col-md-6"><strong>Nota de {{ n.student.user.get_full_name }}</strong></div>
-                            <div class="col-md-6"><input
+                            <div class="col-xs-6"><strong>Nota de {{ n.student.user.get_full_name }}</strong></div>
+                            <div class="col-xs-6"><input
                                     data-bind="value:responseValues.group{{ g.id }}.notaAlumno{{ n.student.id }}"
                                     class="form-control" type="number" name="quantity" min="1" max="7" step="0.1"></div>
                         </div>
                         <div class="row"
                              data-bind="visible: responseValues.group{{ g.id }}.student{{ n.student.id }}FormVisible">
-                            <div class="col-md-12" align="center">
+                            <div class="col-xs-12" align="center">
                                 <button type="submit" class="btn btn-success btn-sm">Guardar Nota</button>
                             </div>
                         </div>
                     </form>
                 {% endfor %}
             </div>
-            <div class="col-md-6">
+            <div class="col-xs-6">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="line-height:1.3;">
                         {{ homework.title }}<br/>
@@ -99,22 +99,22 @@
                         {% endfor %}
                     </div>
                     <div class="panel-body">
-                        <div class="col-md-12">
+                        <div class="col-xs-12">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-xs-12">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-xs-12">
                                             <strong>Evaluación de espectadores:</strong>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-xs-4">
                                             Me gusta: {{ g.videoclase.cantidad_me_gusta }}
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-xs-4">
                                             Sin voto: {{ g.videoclase.cantidad_neutro }}
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-xs-4">
                                             No me gusta: {{ g.videoclase.cantidad_no_me_gusta }}
                                         </div>
                                     </div>
@@ -137,17 +137,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-xs-12">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-xs-12">
                                             <strong>Aprendizaje de espectadores:</strong>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-xs-6">
                                             Correctas: {{ g.videoclase.cantidad_correctas }}
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-xs-6">
                                             Incorrectas: {{ g.videoclase.cantidad_incorrectas }}
                                         </div>
                                     </div>
@@ -166,20 +166,20 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-xs-12">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-xs-12">
                                             <strong>Evaluaciones de integrantes a otras VideoClases:</strong>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-xs-4">
                                             Me gusta: {{ g.videoclase.integrantes_cantidad_me_gusta }}
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-xs-4">
                                             Sin voto: {{ g.videoclase.integrantes_cantidad_neutro }}
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-xs-4">
                                             No me gusta: {{ g.videoclase.integrantes_cantidad_no_me_gusta }}
                                         </div>
                                     </div>
@@ -202,21 +202,21 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-xs-12">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-xs-12">
                                             <strong>Aprendizaje de integrantes:</strong>
                                         </div>
                                     </div>
                                     {% for a in g.videoclase.integrantes_y_answers %}
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-xs-4">
                                                 {{ a.name }}
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-xs-4">
                                                 Correctas: {{ a.cantidad_correctas }}
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-xs-4">
                                                 Incorrectas: {{ a.cantidad_incorrectas }}
                                             </div>
                                         </div>
@@ -243,7 +243,7 @@
         {% if forloop.last %}
         {% else %}
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <h6 class="page-head-line"></h6>
                 </div>
             </div>

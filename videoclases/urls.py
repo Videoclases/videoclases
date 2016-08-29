@@ -8,6 +8,11 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', vv.IndexView.as_view(), name='index'),
+
+    url(r'^student/evaluate-conceptual-test-form/(?P<pk>\d+)/$',
+        pq.ResponsePedagogicalQuestion.as_view(),
+        name='evaluate_pedagogical_questions'),
+
     url(r'^student/send-videoclase/(?P<homework_id>\d+)/$',
         vv.EnviarVideoclaseView.as_view(),
         name='enviar_videoclase'),
@@ -84,9 +89,13 @@ urlpatterns = [
     url(r'^teacher/download-pedagogical-questions/(?P<pk>\d+)/$',
         pq.DownloadPedagogicalQuestionAsExcel.as_view(),
         name='download_pedagogical_questions'),
+    url(r'^teacher/download-pedagogical-questions-answers/(?P<pk>\d+)/$',
+        pq.DownloadPedagogicalQuestionAnswersAsExcel.as_view(),
+        name='download_pedagogical_questions_answers'),
     url(r'^teacher/pedagogical-questions/(?P<pk>\d+)/$',
         pq.PedagogicalQuestionEditView.as_view(),
         name='pedagogical_questions'),
+
 
     url(r'^teacher/course/(?P<course_id>\d+)/$',
         vv.CursoView.as_view(),

@@ -27,6 +27,8 @@ from videoclases.forms.forms import *
 from videoclases.models.boolean_parameters import BooleanParameters
 from videoclases.models.final_scores import FinalScores
 from videoclases.models.groupofstudents import GroupOfStudents
+from videoclases.models.pedagogical_questions.pedagogical_questions import PedagogicalQuestions
+from videoclases.models.pedagogical_questions.pedagogical_questions_answers import PedagogicalQuestionsAnswers
 from videoclases.models.student import Student
 from videoclases.models.student_evaluations import StudentEvaluations
 from videoclases.models.student_responses import StudentResponses
@@ -59,6 +61,11 @@ class AlumnoView(TemplateView):
             group.videoclases_evaluadas = StudentEvaluations.objects \
                 .filter(author=student) \
                 .filter(videoclase__group__homework=group.homework).count()
+            try:
+                group.pq_answer = PedagogicalQuestionsAnswers.objects.get(student=student,test=group.homework.pedagogicalquestions, state=group.homework.pedagogicalquestions.get_state())
+            except:
+                group.pq_answer = None
+
         context['groups'] = groups
         return context
 

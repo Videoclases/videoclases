@@ -8,14 +8,18 @@ from django.template.defaultfilters import slugify
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, DetailView
 
+from videoclases.forms.evaluate_pegadogical_questions_form import EvaluatePedagogicalQuestionsForm
 from videoclases.forms.forms import CrearTareaForm
 from videoclases.forms.pedagogical_questions_form import PedagogicalQuestionsForm
 from videoclases.forms.upload_pedagogical_questions_form import UploadPedagogicalQuestionsForm
 from videoclases.models.course import Course
+from videoclases.models.homework import Homework
 from videoclases.models.pedagogical_questions.alternative import Alternative
 from videoclases.models.pedagogical_questions.pedagogical_questions import PedagogicalQuestions
+from videoclases.models.pedagogical_questions.pedagogical_questions_answers import PedagogicalQuestionsAnswers
 from videoclases.models.pedagogical_questions.question import Question
-from videoclases.views.views import in_teachers_group
+from videoclases.models.pedagogical_questions.response import Response
+from videoclases.views.views import in_teachers_group, in_students_group
 import pyexcel as pe
 import datetime
 
@@ -110,6 +114,28 @@ class DownloadPedagogicalQuestionAsExcel(DetailView):
         return super(DownloadPedagogicalQuestionAsExcel, self).dispatch(*args, **kwargs)
 
 
+class DownloadPedagogicalQuestionAnswersAsExcel(DetailView):
+    model = PedagogicalQuestions
+    template_name = 'blank.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        pq = self.get_object()
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = \
+            'attachment; filename=%s-respuestas.xls' % slugify(pq.title)
+
+        wb = pq.export_answer_as_xls()
+        if wb:
+            response.write(wb.getvalue())
+            return response
+        messages.error(self.request,u"Test sin respuestas")
+        return HttpResponseRedirect(reverse('teacher'))
+
+    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(DownloadPedagogicalQuestionAnswersAsExcel, self).dispatch(*args, **kwargs)
+
+
 class PedagogicalQuestionEditView(DetailView):
 
     model = PedagogicalQuestions
@@ -155,10 +181,7 @@ class PedagogicalQuestionEditView(DetailView):
                 pedagogical_question.save()
                 list_questions.append(pedagogical_question)
 
-            questions = instance.questions.all()
-            for q in questions:
-                q.alternatives.all().delete()
-            questions.delete()
+            instance.questions.clear()
             instance = form.save()
             instance.questions.add(*list_questions)
             instance.save()
@@ -248,3 +271,52 @@ class PedagogicalQuestionCreateView(FormView):
 
         messages.success(self.request, "Test creado correctamente")
         return HttpResponseRedirect(reverse('teacher'))
+
+
+class ResponsePedagogicalQuestion(DetailView):
+    template_name = 'response_conceptual_test.html'
+    model = Homework
+
+    @method_decorator(user_passes_test(in_students_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(ResponsePedagogicalQuestion, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ResponsePedagogicalQuestion, self).get_context_data()
+        context = self.create_context(context)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        student = self.request.user.student
+        pq = self.get_object().pedagogicalquestions
+        form = EvaluatePedagogicalQuestionsForm(student, pq, request.POST)
+        if form.is_valid() and pq.get_state() != 4:
+            data = form.cleaned_data
+            responses = []
+            pq_answer, create = PedagogicalQuestionsAnswers.objects.get_or_create(student=student,test=pq, state= pq.get_state())
+            if not create:
+                messages.error(request, "Ya respondiste el test de esta etapa")
+                return HttpResponseRedirect(reverse('student'))
+            questions = Question.objects.filter(id__in=[int(q) for q in data.keys() ])
+            for i, alternative in enumerate(data.values()):
+                response = Response()
+                response.question = questions[i]
+                response.answer = alternative
+                response.save()
+                responses.append(response)
+            pq_answer.save()
+            pq_answer.response.add(*responses)
+            pq_answer.save()
+            messages.error(request, "Gracias por responder el test")
+            return HttpResponseRedirect(reverse('student'))
+        else:
+            context = self.create_context()
+            context['form'] = form
+            return self.render_to_response(context)
+
+    def create_context(self,context={}):
+        student = self.request.user.student
+        pq = self.get_object().pedagogicalquestions
+        context['form'] = EvaluatePedagogicalQuestionsForm(student, pq)
+        context['pq'] = pq
+        return context

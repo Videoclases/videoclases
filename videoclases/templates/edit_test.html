@@ -54,14 +54,14 @@
 
 {% block body %}
             <div class="row">
-                <div class="col-md-2"><h4>Colegio</h4></div>
-                <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
-                <div class="col-md-2 col-md-offset-6">
+                <div class="col-xs-2"><h4>Colegio</h4></div>
+                <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
+                <div class="col-xs-2 col-xs-offset-6">
                     <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
                 </div>
             </div>
             <div class="row" id="top-form-head-line">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <h6 class="page-head-line"></h6>
                 </div>
             </div>
@@ -70,6 +70,12 @@
                 <button onclick="location.href = '{% url 'download_pedagogical_questions' pedagogicalquestions.id %}';"
                         class="btn btn-info">Descargar Excel Original
                 </button>
+                {% if pedagogicalquestions.pedagogicalquestionsanswers_set.all %}
+                <button onclick="location.href = '{% url 'download_pedagogical_questions_answers' pedagogicalquestions.id %}';"
+                        class="btn btn-danger">Descargar Excel Respuestas
+                </button>
+                {% endif %}
+
                 <br><br>
             </div>
             <div class="row" data-bind="visible: formErrorsVisible">
@@ -89,8 +95,8 @@
             <div class="row">
                 <form id="crear-homework-form">
                     <div class="col-xs-12">
-                        <div class="col-md-2">Curso</div>
-                        <div class="col-md-5">
+                        <div class="col-xs-2">Curso</div>
+                        <div class="col-xs-5">
                             <select name="course" class="form-control" id="id_course"
                                     data-bind="options: select.courses,
                         optionsText: 'name',
@@ -102,8 +108,8 @@
                     </div>
                     <div class="col-xs-12">
                         <br>
-                        <div class="col-md-2">Tarea</div>
-                        <div class="col-md-5">
+                        <div class="col-xs-2">Tarea</div>
+                        <div class="col-xs-5">
                             <select name="homework" class="form-control" id="id_homework"
                                     data-bind="options: homeworks,
                         optionsText: 'name',

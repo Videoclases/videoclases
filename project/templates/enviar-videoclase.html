@@ -13,27 +13,16 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-md-2 col-md-offset-10">
+        <div class="col-xs-2 col-xs-offset-10">
             <button onclick="location.href = '{% url 'student' %}';" class="btn btn-info">Volver</button>
         </div>
     </div>
     <div class="row">
-        <div id="top-form-head-line" class="col-md-12">
+        <div id="top-form-head-line" class="col-xs-12">
             <h6 class="page-head-line">{{ user.student.course_actual.school.name }}
                 - {{ user.student.course_actual.name }} - {{ user.get_full_name }}</h6>
         </div>
     </div>
-    {% if messages %}
-        <div class="row">
-            <div class="alert alert-info alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                {% for message in messages %}
-                    <div align="center">{{ message }}</div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
     <div class="row" data-bind="visible: formErrorsVisible">
         <div class="alert alert-danger alert-dismissible" role="alert">
             <button type="button" class="close" data-bind="click: function() {changeFormErrorsVisible(false)}"
@@ -46,7 +35,7 @@
         </div>
     </div>
     <div class="row">
-        <div align="center" class="col-md-6">
+        <div align="center" class="col-xs-6">
             Explicación del teacher
             {% if videoclase.group.homework.video %}
                 <iframe width="100%" height="315" src="{{ videoclase.group.homework.video }}" frameborder="0"
@@ -55,7 +44,7 @@
                 <div align="center"><span>Esta tarea no tiene video explicativo</span></div>
             {% endif %}
         </div>
-        <div class="col-md-6">
+        <div class="col-xs-6">
             <div class="panel panel-default">
                 <div class="panel-heading" style="line-height:1.3;">
                     <h4>{{ videoclase.group.homework.title }} -
@@ -77,37 +66,37 @@
                     {% csrf_token %}
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-4">Link de VideoClase</div>
-                            <div class="col-md-8">
+                            <div class="col-xs-4">Link de VideoClase</div>
+                            <div class="col-xs-8">
                                 <input name="{{ form.video.name }}" id="videoLink" type="text" class="form-control"
                                        maxlength="100" placeholder="Copiar link de video en Youtube"
                                        value="{{ form.initial.video }}"/>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">Pregunta</div>
-                            <div class="col-md-8">
+                            <div class="col-xs-4">Pregunta</div>
+                            <div class="col-xs-8">
                                 <input name="{{ form.question.name }}" class="form-control" maxlength="100" type="text"
                                        value="{{ form.initial.question }}"/>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">Alternativa correcta</div>
-                            <div class="col-md-8">
+                            <div class="col-xs-4">Alternativa correcta</div>
+                            <div class="col-xs-8">
                                 <input name="{{ form.correct_alternative.name }}" class="form-control" maxlength="100"
                                        type="text" value="{{ form.initial.correct_alternative }}"/>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">Alternativa 2</div>
-                            <div class="col-md-8">
+                            <div class="col-xs-4">Alternativa 2</div>
+                            <div class="col-xs-8">
                                 <input name="{{ form.alternative_2.name }}" class="form-control" maxlength="100"
                                        type="text" value="{{ form.initial.alternative_2 }}"/>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">Alternativa 3</div>
-                            <div class="col-md-8">
+                            <div class="col-xs-4">Alternativa 3</div>
+                            <div class="col-xs-8">
                                 <input name="{{ form.alternative_3.name }}" class="form-control" maxlength="100"
                                        type="text" value="{{ form.initial.alternative_3 }}"/>
                             </div>

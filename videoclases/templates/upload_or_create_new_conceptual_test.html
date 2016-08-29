@@ -41,34 +41,34 @@
 
 {% block body %}
             <div class="row">
-                <div class="col-md-2"><h4>Profesor</h4></div>
-                <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
-                <div class="col-md-2 col-md-offset-6">
+                <div class="col-xs-2"><h4>Profesor</h4></div>
+                <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
+                <div class="col-xs-2 col-xs-offset-6">
                     <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2"><h4>Colegio</h4></div>
-                <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
+                <div class="col-xs-2"><h4>Colegio</h4></div>
+                <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <h6 class="page-head-line"></h6>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <h6 class="page-head-line">1.- Crear Test usando el sitio web</h6>
                 </div>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <p>Puedes usar el sitio para llenar un formulario con las preguntas que quieras poner en el test.</p>
                     <a href="{% url 'new_conceptual_test_create' %}"><button class="btn btn-primary center-block">Ir al Formulario</button></a>
                 </div>
-                <div class="col-md-12 margin-top">
+                <div class="col-xs-12 margin-top">
                         <h6 class="page-head-line ">2.- Subir Test desde Archivo Excel</h6>
                     <p>Puedes crear un archivo xls o llenar el template disponible para crear tu test y subirlo a todos tus cursos</p>
                     </div>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <div class="col-xs-12">
                         <img src="{% static "img/example_test.png" %}" class="center-block spaced" />
 

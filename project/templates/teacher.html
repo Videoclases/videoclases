@@ -15,17 +15,17 @@
 
 {% block body %}
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-xs-6">
                     <div class="col-xs-12">
-                        <div class="col-md-6"><h4>Profesor</h4></div>
-                        <div class="col-md-6"><h5>{{ user.get_full_name }}</h5></div>
+                        <div class="col-xs-6"><h4>Profesor</h4></div>
+                        <div class="col-xs-6"><h5>{{ user.get_full_name }}</h5></div>
                     </div>
                     <div class="col-xs-12">
-                        <div class="col-md-6"><h4>Colegio</h4></div>
-                        <div class="col-md-6"><h5>{{ user.teacher.school.name }}</h5></div>
+                        <div class="col-xs-6"><h4>Colegio</h4></div>
+                        <div class="col-xs-6"><h5>{{ user.teacher.school.name }}</h5></div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-xs-6">
                     <div class="col-xs-4">
                         <button onclick="location.href = '{% url 'crear_course' %}';" class="btn btn-info">Crear curso
                         </button>
@@ -43,11 +43,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <h6 class="page-head-line"></h6>
                 </div>
             </div>
-            <div class="row table-responsive col-md-12">
+            <div class="row table-responsive col-xs-12">
                 <table id="example" class="cell-border" cellspacing="0" width="100%">
                     <thead>
                         <tr>

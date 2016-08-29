@@ -33,18 +33,18 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2"><h4>Profesor</h4></div>
-        <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
+        <div class="col-xs-2"><h4>Profesor</h4></div>
+        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
     </div>
     <div class="row">
-        <div class="col-md-2"><h4>Colegio</h4></div>
-        <div class="col-md-2"><h5>{{ user.teacher.school.name }}</h5></div>
-        <div class="col-md-2 col-md-offset-6">
+        <div class="col-xs-2"><h4>Colegio</h4></div>
+        <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
+        <div class="col-xs-2 col-xs-offset-6">
             <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
         </div>
     </div>
     <div class="row" id="top-form-head-line">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <h6 class="page-head-line"></h6>
         </div>
     </div>
@@ -61,16 +61,16 @@
     </div>
     <div class="row">
         <form id="crear-homework-form" data-bind="submit: submitCrearTareaForm">
-            <div align="center" class="col-md-6">
+            <div align="center" class="col-xs-6">
                 <div class="form-group">
                     <label for="id_video">Subir video explicativo (opcional)</label>
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-xs-8 col-xs-offset-2">
                         <input id="id_video" name="video" type="text" class="form-control" maxlength="100"
                                placeholder="Copiar link de video en Youtube" data-bind="value: homework.video"/>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-xs-6">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="line-height:1.3;">
                         <h4>Título de Tarea</h4>
@@ -83,8 +83,8 @@
                         <textarea name="description" class="form-control" maxlength="400"
                                   data-bind="value: homework.description"></textarea>
                         <div class="row">
-                            <div class="col-md-7">Curso</div>
-                            <div class="col-md-5">
+                            <div class="col-xs-7">Curso</div>
+                            <div class="col-xs-5">
                                 <select name="course" class="form-control" id="id_course"
                                         data-bind="options: select.courses,
                                             optionsText: 'name',
@@ -95,13 +95,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-7">Revisiones mínimas</div>
-                            <div class="col-md-5"><input class="form-control" type="number" name="revision" min="1"
+                            <div class="col-xs-7">Revisiones mínimas</div>
+                            <div class="col-xs-5"><input class="form-control" type="number" name="revision" min="1"
                                                          max="7" step="1" data-bind="value: homework.revision"></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-7">Fecha límite para subir tarea</div>
-                            <div class="col-md-5">
+                            <div class="col-xs-7">Fecha límite para subir tarea</div>
+                            <div class="col-xs-5">
                                 <div class="controls input-append date">
                                     <input class="form-control" id="id_fecha_subida" name="date_upload" readonly=""
                                            type="text" data-bind="value: homework.date_upload"/>
@@ -121,8 +121,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-7">Fecha límite para evaluar tarea</div>
-                            <div class="col-md-5">
+                            <div class="col-xs-7">Fecha límite para evaluar tarea</div>
+                            <div class="col-xs-5">
                                 <div class="controls input-append date">
                                     <input class="form-control" id="id_fecha_evaluacion" name="date_evaluation"
                                            readonly="" type="text" data-bind="value: homework.date_evaluation"/>
@@ -148,31 +148,31 @@
         </form>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <h6 class="page-head-line">Designar grupos para tarea</h6>
         </div>
     </div>
     <div class="row" data-bind="visible: !asignarGrupo.hasCurso()">
-        <div class="col-md-12" align="center">
+        <div class="col-xs-12" align="center">
             Seleccione un curso para asignar grupos
         </div>
     </div>
     <div data-bind="visible: asignarGrupo.hasCurso">
         <form data-bind="submit: submitGruposForm">
             <div class="row" data-bind="visible: asignarGrupo.hasCurso">
-                <div class="col-md-3">Alumnos por grupo</div>
-                <div class="col-md-3">
+                <div class="col-xs-3">Alumnos por grupo</div>
+                <div class="col-xs-3">
                     <input data-bind="value: asignarGrupo.cantidadPorGrupo" type="number" value="1" min="1" step="1"
                            class="form-control"/>
                 </div>
-                <div class="col-md-6">
+                <div class="col-xs-6">
                     <button class="btn btn-success" data-bind="click: asignarGrupo.asignarAleatorio">Designar grupos
                         aleatoriamente
                     </button>
                 </div>
             </div>
             <div class="row">
-                <div class="table-responsive col-md-12">
+                <div class="table-responsive col-xs-12">
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr data-bind="foreach: asignarGrupo.headers">
@@ -192,7 +192,7 @@
             <input id="asignar-group-form-submit" type="submit" value="Submit" style="display: none;"/>
         </form>
         <div class="row">
-            <div class="col-md-12" align="center">
+            <div class="col-xs-12" align="center">
                 <button data-bind="click: submitForms" class="btn btn-lg btn-success">Crear Tarea</button>
             </div>
         </div>

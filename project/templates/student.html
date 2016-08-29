@@ -5,43 +5,34 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-md-2"><h4>Alumno</h4></div>
-        <div class="col-md-2"><h5>{{ user.get_full_name }}</h5></div>
+        <div class="col-xs-2"><h4>Alumno</h4></div>
+        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
     </div>
     <div class="row">
-        <div class="col-md-2"><h4>Colegio y Curso</h4></div>
-        <div class="col-md-2"><h5>{{ user.student.course_actual.school.name }}
+        <div class="col-xs-2"><h4>Colegio y Curso</h4></div>
+        <div class="col-xs-2"><h5>{{ user.student.course_actual.school.name }}
             - {{ user.student.course_actual.name }}</h5></div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <h6 class="page-head-line"></h6>
         </div>
     </div>
-    {% if messages %}
-        <div class="row">
-            <div class="alert alert-info alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                {% for message in messages %}
-                    <div align="center">{{ message }}</div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <h6 class="page-head-line">Tareas</h6>
         </div>
     </div>
     <div class="row">
-        <div class="table-responsive col-md-12">
+        <div class="table-responsive col-xs-12">
             <table id="example" class="cell-border" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>Tarea</th>
-                    <th>Respuestas Correctas en otras VideoClases</th>
-                    <th>Respuestas Correctas de otros en su VideoClase</th>
+                    <th>Respuestas Correctas <br>
+                        en otras VideoClases</th>
+                    <th>Respuestas Correctas <br>
+                        de otros en su VideoClase</th>
                     <th>Nota</th>
                     <th>VideoClases vistas</th>
                     <th></th>
@@ -65,7 +56,11 @@
                         </td>
                         <td>{% if group.nota_final > 0 %}{{ group.nota_final }}{% endif %}</td>
                         <td>{{ group.videoclases_evaluadas }}</td>
-                        {% if group.homework.get_estado == 1 %}
+                        {% if not group.pq_answer and group.homework.pedagogicalquestions and group.homework.pedagogicalquestions.get_state != 4 %}
+                            <td>
+                                <button onclick="location.href = '{% url 'evaluate_pedagogical_questions' group.homework.id %}';" class="btn btn-info">Contestar Test</button>
+                            </td>
+                        {% elif group.homework.get_estado == 1 %}
                             {% if group.videoclase.upload_students %}
                                 <td>
                                     <button onclick="location.href = '{% url 'enviar_videoclase' group.homework.id %}';"

@@ -45,28 +45,28 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-2 col-md-offset-10">
+                <div class="col-xs-2 col-xs-offset-10">
                     <button onclick="location.href = '{% url 'student' %}';" class="btn btn-info">Volver</button>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <h6 class="page-head-line">{{ user.student.course_actual.school.name }} - {{ user.student.course_actual.name }} - {{ group.homework.title }}</h6>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-xs-6">
                     <iframe width="100%" height="315" src="{{ group.videoclase.video }}" frameborder="0" allowfullscreen></iframe>
                     <form data-bind="event: {'submit': submitEvaluacionDeAlumno}">
-                        <div class="col-md-6" align="right">
+                        <div class="col-xs-6" align="right">
                             <input id="meGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbUp }, click: evaluar(1)" />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <input id="noMeGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbDown }, click: evaluar(-1)" />
                         </div>
                     </form>
                 </div>
-                <div class="col-md-6">
+                <div class="col-xs-6">
                     <div class="panel panel-default">
                         <div class="panel-heading" style="line-height:1.3;">
                             Integrantes:<br/>
@@ -81,12 +81,12 @@
 
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-12"><h4>{{ group.videoclase.question }}</h4></div>
+                                <div class="col-xs-12"><h4>{{ group.videoclase.question }}</h4></div>
                             </div>
                             <form id="answerForm" method="post">
                                 {% csrf_token %}
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
                                         <select name="answer" class="form-control" id="id_answer"
                                             data-bind="options: responseValues.alternativas,
                                             optionsCaption: '-- escoja una alternativa --',
@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12" align="center">
+                <div class="col-xs-12" align="center">
                     <button data-bind="click: clickSiguienteVideoclase" class="btn btn-lg btn-success">Siguiente VideoClase</button>
                 </div>
             </div>
