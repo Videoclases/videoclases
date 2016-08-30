@@ -5,19 +5,15 @@
 {% block perfil-active %}class="menu-top-active"{% endblock %}
 
 {% block body %}
-<div class="content-wrapper">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">Nombre</div>
-            <div class="col-md-6">{{ user.get_full_name }}</div>
-        </div>
-        <div class="row">
-            <a href="{% url 'change_password' %}">Cambiar contraseña</a>
-            {% ifusergroup Profesores %}
+    <div class="row">
+        <div class="col-xs-6">Nombre</div>
+        <div class="col-xs-6">{{ user.get_full_name }}</div>
+    </div>
+    <div class="row">
+        <a href="{% url 'change_password' %}">Cambiar contraseña</a>
+        {% ifusergroup Profesores %}
             <br/>
             <a href="{% url 'change_student_password_select_course' %}">Cambiar contraseña de un estudiante</a>
-            {% endifusergroup %}
-        </div>
+        {% endifusergroup %}
     </div>
-</div>
 {% endblock %}

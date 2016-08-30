@@ -2,25 +2,21 @@
 {% load staticfiles %}
 
 {% block body %}
-    <div class="content-wrapper">
-        <div class="container">
-            {% if form.errors %}
-            <div class="row">
-                <div class="alert alert-info alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <div align="center">{{ error }}</div>
-                        {% endfor %}
+    {% if form.errors %}
+        <div class="row">
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <div align="center">{{ error }}</div>
                     {% endfor %}
-                </div>
+                {% endfor %}
             </div>
-            {% endif %}
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" class="btn btn-success" value="Seleccionar" />
-            </form>
         </div>
-    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-success" value="Seleccionar"/>
+    </form>
 {% endblock %}

@@ -19,6 +19,7 @@ INSTALLED_APPS = (
 
     # external
     'datetimewidget',
+    'crispy_forms',
 
     # project
     'videoclases',
@@ -69,7 +70,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 LANGUAGE_CODE = 'es-CL'
 TIME_ZONE = 'America/Santiago'
 USE_I18N = True
-USE_L10N = True
+USE_L10N = False
 USE_TZ = True
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
@@ -101,3 +102,5 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 LOGIN_REDIRECT_URL = '/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

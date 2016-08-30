@@ -23,11 +23,11 @@ function EditarGrupo() {
         {title:'Apellido',sortKey:'last_name'},
         {title:'Nombre',sortKey:'first_name'},
         {title:'# Grupo',sortKey:'group'},
-        {title:'Subió VideoClase',sortKey:'videoclase'},
+        {title:'Subió VideoClase',sortKey:'videoclase'}
     ];
 
     self.crearArrayGrupos = function() {
-        var grupos = []
+        var grupos = [];
         var j = 0;
         var grupoActual = 1;
         var cantidad = parseInt(self.cantidadPorGrupo());
@@ -42,20 +42,21 @@ function EditarGrupo() {
             }
         }
         return grupos;
-    }
+    };
 
     self.asignarAleatorio = function() {
         grupos = self.crearArrayGrupos();
         for (i = 0; i < self.students().length; i++) {
+            var group;
             if (parseInt(self.cantidadPorGrupo()) == 1) {
-                var group = grupos[i];
+                group = grupos[i];
             } else {
                 var ri = Math.floor(Math.random() * grupos.length);
-                var group = grupos.splice(ri, 1);
+                group = grupos.splice(ri, 1);
             }
             self.students()[i].group(group);
         }
-    }
+    };
 
     self.getVideoclaseText = function(hasVideoclase) {
         if (hasVideoclase) {
@@ -63,7 +64,7 @@ function EditarGrupo() {
         } else {
             return 'No';
         }
-    }
+    };
 
     self.siTodosTienenGrupo = function() {
         for (var i = 0; i < self.students().length; i++){
@@ -73,7 +74,7 @@ function EditarGrupo() {
             }
         }
         return true;
-    }
+    };
 
     self.sortTable = function(sortKey) {
         switch(sortKey){
@@ -98,7 +99,7 @@ function EditarGrupo() {
                 });
                 break;
         }
-    }
+    };
 
     self.sort = function(header,event) {
         self.sortTable(header.sortKey);
@@ -119,14 +120,15 @@ function EditarGrupo() {
             data: fd,
             type: "post",
             processData: false,
-            contentType: false,
+            contentType: false
         });
-    }
+    };
 
     self.validateGrupos = function() {
         var valid = true;
-        var grupoNumbers = []
-        for (var i = 0; i < self.students().length; i++) {
+        var grupoNumbers = [];
+        var i;
+        for (i = 0; i < self.students().length; i++) {
             var group = parseInt(self.students()[i].group());
             if ($.inArray(group, grupoNumbers) == -1) {
                 grupoNumbers.push(group)
@@ -135,7 +137,7 @@ function EditarGrupo() {
         grupoNumbers = grupoNumbers.sort(function (a, b) { 
             return a - b;
         });
-        for (var i = 0; i < grupoNumbers.length; i++) {
+        for (i = 0; i < grupoNumbers.length; i++) {
             if (grupoNumbers[i] != i + 1)
                 valid = false;
         }

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block teacher-active %}class="menu-top-active"{% endblock %}
+
+{% block extra-head %}
+    {{ form.media }}
+    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
+    <script type="text/javascript">
+        function Select() {
+            var self = this;
+            self.courses = [
+                {% for c in courses %}
+                    {% if forloop.last %}
+                        {name: '{{ c.name }}', id: {{ c.id }}}
+                    {% else %}
+                        {name: '{{ c.name }}', id: {{ c.id }}},
+                    {% endif %}
+                {% endfor %}
+            ];
+        }
+    </script>
+    <script src="{% static "js/libs/jquery.validate.min.js" %}"></script>
+    <script src="{% static "js/src/createConceptualTest.js" %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="loader" data-bind="visible: loading">
+        <div class="loader-text" align="center">
+            <strong>Creando Test, espere un momento</strong>
+        </div>
+    </div>
+            <div class="row">
+                <div class="col-xs-2"><h4>Colegio</h4></div>
+                <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
+                <div class="col-xs-2 col-xs-offset-6">
+                    <button onclick="location.href = '{% url 'new_conceptual_test' %}';" class="btn btn-info">Volver</button>
+                </div>
+            </div>
+            <div class="row" id="top-form-head-line">
+                <div class="col-xs-12">
+                    <h6 class="page-head-line"></h6>
+                </div>
+            </div>
+            <div class="row" data-bind="visible: formErrorsVisible">
+                <div class="col-xs-12">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close"
+                                data-bind="click: function() {changeFormErrorsVisible(false)}" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <div align="center">
+                            <!-- ko foreach: formErrors -->
+                            <span data-bind="text: $data"></span><br>
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <form id="crear-homework-form">
+                    <div class="col-xs-12">
+                        <div class="col-xs-2">Curso</div>
+                        <div class="col-xs-5">
+                            <select name="course" class="form-control" id="id_course"
+                                    data-bind="options: select.courses,
+                        optionsText: 'name',
+                        optionsValue: 'id',
+                        optionsCaption: '-- escoja un curso --',
+                        value: courses,
+                        valueAllowUnset: false"></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <br>
+                        <div class="col-xs-2">Tarea</div>
+                        <div class="col-xs-5">
+                            <select name="homework" class="form-control" id="id_homework"
+                                    data-bind="options: homeworks,
+                        optionsText: 'name',
+                        optionsValue: 'id',
+                        value: homework,
+                        optionsCaption: '-- escoja una tarea --',
+                        valueAllowUnset: false"></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        {#                        <div data-bind="text: ko.toJSON($root)"></div>#}
+                        <br>
+                        <h2>Test Conceptual</h2>
+                        <h4>Título</h4>
+                        <input name="title" class="form-control" data-bind="value: title">
+                        <h4>Descripción (opcional)</h4>
+                        <textarea class="form-control" data-bind="value: description"></textarea>
+                        <br>
+                        <h4>Duración del Test</h4>
+                        <strong>NOTA:</strong> El tiempo elegido se aplicará antes y después de la tarea
+                        <div class="col-xs-12  form-inline">
+                            <div class="col-xs-4">
+                                <label>Dias:</label>
+                                <input name="days" type="number" class="form-control" data-bind="numeric, value: days">
+                            </div>
+                            <div class="col-xs-4">
+                                <label>horas:</label>
+                                <input name="hours" type="number" class="form-control" data-bind="numeric, value: hours">
+                            </div>
+                            <div class="col-xs-4">
+                                <label>minutos:</label>
+                                <input name="min" type="number" class="form-control" data-bind="numeric, value: min">
+                            </div>
+                        </div>
+                        <div data-bind="foreach: questions">
+                            <div class="col-xs-12">
+                                Pregunta <span data-bind="text: ($index() + 1)"></span>:
+                                <input name="question" class="form-control question required" data-bind="value: title"/>
+                                Alternativas:
+                                <div data-bind="foreach: { data: choices, as: 'c' }" class="form-group col-xs-12 ">
+                                    <div class="row">
+                                        <div class="col-xs-1">
+                                            <span data-bind="text: $root.indexLetter($index())"></span>
+                                        </div>
+                                        <div class="col-xs-9 margin-bottom">
+                                            <input name="alternative" class="form-control alternative required "
+                                                   data-bind="value: c.value"/>
+                                        </div>
+                                        <div class="col-xs-2 ">
+                                            <button data-bind="click: $parent.removeChoice" class="btn btn-danger">
+                                                Borrar
+                                                alternativa
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <button data-bind="click: addChoice" class="btn btn-default">Agregar alternativa
+                                    </button>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <br>
+                            <button data-bind="click: addQuestion" class="btn btn-default">Agregar otra pregunta
+                            </button>
+                            <button id="crear-homework-form-submit" type="submit" class="btn btn-info"
+                                    data-bind="click: submitForms">Crear Test Conceptual
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+{% endblock %}

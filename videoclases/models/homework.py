@@ -16,7 +16,7 @@ class Homework(models.Model):
     )
 
     teacher = models.ForeignKey(Teacher)
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, related_name='course_homework')
     title = models.CharField(max_length=80)
     description = models.TextField(validators=[MaxLengthValidator(400)])
     video = models.CharField(max_length=100, blank=True, null=True)

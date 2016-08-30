@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block videoclases-active %}class="menu-top-active"{% endblock %}
+
+{% block extra-head %}
+    {{ form.media }}
+    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
+    <script src="{% static "js/libs/jquery.validate.min.js" %}"></script>
+    <script src="{% static "js/src/enviarVideoclase.js" %}"></script>
+    <script src="{% static "js/src/enviarVideoclaseDocumentReady.js" %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div id="top-form-head-line" class="col-xs-10">
+            <h6 class="page-head-line">{{ user.student.course_actual.school.name }}
+                - {{ user.student.course_actual.name }} - {{ user.get_full_name }}</h6>
+        </div>
+        <div class="col-xs-2 ">
+            <button onclick="location.href = '{% url 'student' %}';" class="btn btn-info">Volver</button>
+        </div>
+    </div>
+    <div class="row">
+        <h1>{{ pq.title }}</h1>
+        {% if pq.description %}
+            <h3>{{ pq.description }}</h3>
+        {% endif %}
+        <div class="col-xs-12">
+            {% crispy form %}
+        </div>
+    </div>
+
+{% endblock %}
