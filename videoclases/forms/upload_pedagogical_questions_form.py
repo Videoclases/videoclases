@@ -14,7 +14,7 @@ class UploadPedagogicalQuestionsForm(forms.Form):
     homework = forms.ModelChoiceField(
         queryset=Homework.objects.all(), label="Tarea"
     )
-    file = forms.FileField()
+    file = forms.FileField(label="Archivo Excel")
 
     def clean_file(self):
         data = self.cleaned_data['file']
@@ -44,8 +44,8 @@ class UploadPedagogicalQuestionsForm(forms.Form):
         helper.layout.append(
             FormActions(
                 Submit('submit', u'Subir Archivo'),
-                HTML("""<a
-                        href=""
+                HTML("""{% load staticfiles %}<a
+                        href="{% static "templates/template_test.xls" %}"
                         class="btn btn-default">Descargar Plantilla</a>""")
             )
         )
