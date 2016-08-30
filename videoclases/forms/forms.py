@@ -98,7 +98,7 @@ class AlumnoChoiceField(forms.models.ModelChoiceField):
 
 class ChangeStudentPasswordForm(forms.Form):
     error_messages = {
-        'invalid_choice': 'Debes seleccionar un student.',
+        'invalid_choice': 'Debes seleccionar un estudiante.',
         'password_mismatch': 'Las contraseñas no coinciden.',
     }
     student = AlumnoChoiceField(queryset=Student.objects.all(), error_messages=error_messages)

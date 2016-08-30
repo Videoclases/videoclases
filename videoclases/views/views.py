@@ -115,13 +115,13 @@ class BorrarAlumnoView(TemplateView):
         student = Student.objects.get(id=self.kwargs['student_id'])
         course = Course.objects.get(id=self.kwargs['course_id'])
         if student not in course.students.all():
-            messages.info(self.request, 'El student no corresponde a este course.')
+            messages.info(self.request, 'El alumno no corresponde a este course.')
             return HttpResponseRedirect(reverse('teacher'))
         if course not in self.request.user.teacher.courses.all():
             messages.info(self.request, 'No tienes permisos para esta acción')
             return HttpResponseRedirect(reverse('teacher'))
         course.students.remove(student)
-        messages.info(self.request, 'El student fue borrado del course exitosamente.')
+        messages.info(self.request, 'El alumno fue borrado del course exitosamente.')
         return HttpResponseRedirect(reverse('editar_course', kwargs={'course_id': course.id}))
 
     def get_success_url(self, *args, **kwargs):
@@ -159,7 +159,7 @@ class BorrarTareaFormView(FormView):
     def form_valid(self, form, *args, **kwargs):
         homework = Homework.objects.get(id=form.cleaned_data['homework'])
         homework.delete()
-        messages.info(self.request, 'La homework se ha eliminado exitosamente')
+        messages.info(self.request, 'La tarea se ha eliminado exitosamente')
         return super(BorrarTareaFormView, self).form_valid(form, *args, **kwargs)
 
 
@@ -229,6 +229,7 @@ class ChangeStudentPasswordView(FormView):
         form = form_class(**self.get_form_kwargs())
         course = Course.objects.get(id=self.kwargs['course_id'])
         form.fields['student'].queryset = course.students.all()
+        form.fields['student'].label = 'Alumno'
         return form
 
     def get_success_url(self):
@@ -253,6 +254,7 @@ class ChangeStudentPasswordSelectCursoView(FormView):
     def get_form(self, form_class):
         form = form_class(**self.get_form_kwargs())
         form.fields['course'].queryset = self.request.user.teacher.courses.all()
+        form.fields['course'].label = 'Curso'
         return form
 
     def get_success_url(self):
@@ -304,7 +306,7 @@ class CrearCursoFormView(FormView):
             complete &= student_array[3] not in [None, '']
             if not complete:
                 os.remove(path)
-                messages.info(self.request, 'El archivo no tiene toda la información de un student.')
+                messages.info(self.request, 'El archivo no tiene toda la información de un alumno.')
                 return HttpResponseRedirect(reverse('crear_course'))
         # Create Course
         course, created = Course.objects.get_or_create(school=self.request.user.teacher.school,
@@ -333,10 +335,10 @@ class CrearCursoFormView(FormView):
                         a.save()
         else:
             os.remove(path)
-            messages.info(self.request, 'Ya existe un course con ese name en este año.')
+            messages.info(self.request, 'Ya existe un curso con ese nombre en este año.')
             return HttpResponseRedirect(reverse('crear_course'))
         os.remove(path)
-        messages.info(self.request, 'El course se ha creado exitosamente')
+        messages.info(self.request, 'El curso se ha creado exitosamente')
         return HttpResponseRedirect(reverse('teacher'))
 
 
@@ -473,7 +475,7 @@ class EditarAlumnoView(FormView):
         student.user.first_name = form.cleaned_data['first_name']
         student.user.last_name = form.cleaned_data['last_name']
         student.user.save()
-        messages.info(self.request, 'El student ha sido editado exitosamente.')
+        messages.info(self.request, 'El alumno ha sido editado exitosamente.')
         return super(EditarAlumnoView, self).form_valid(form, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -576,7 +578,7 @@ class EditarGrupoFormView(FormView):
             original_groups = GroupOfStudents.objects.filter(homework=homework)
             # check if all students from the original groups have a group in submitted data
             if not self.all_students_have_group(groups, original_groups):
-                message = 'Datos incompletos, todos los students deben tener group.'
+                message = 'Datos incompletos, todos los alumnos deben tener grupo.'
                 raise ValueError
             # check groups from submitted info
             for number in groups:
@@ -595,7 +597,7 @@ class EditarGrupoFormView(FormView):
                     can_edit, exception = self.can_edit_group(group, list_submitted_students,
                                                               list_contains_at_least_one_original)
                     if exception == 'raise':
-                        message = 'No se pueden cambiar todos los students de un group ' + \
+                        message = 'No se pueden cambiar todos los alumnos de un group ' + \
                                   'que ya ha enviado videoclase: group número ' + str(group.number)
                         raise ValueError
                     elif can_edit:
