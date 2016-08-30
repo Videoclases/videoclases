@@ -24,8 +24,8 @@ INSTALLED_APPS = (
     'videoclases',
 
     #only for develop
-    'django_extensions',
-    'debug_toolbar',
+    #'django_extensions',
+    #'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
