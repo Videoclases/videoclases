@@ -299,6 +299,8 @@ class CrearCursoFormView(FormView):
         key, sheet = data.popitem()
         for i in range(1, len(sheet)):
             student_array = sheet[i]
+            if len(student_array) == 0:
+                continue
             complete = True
             complete &= student_array[0] not in [None, '']
             complete &= student_array[1] not in [None, '']
