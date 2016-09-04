@@ -319,6 +319,8 @@ class CrearCursoFormView(FormView):
             # Create users and students
             for i in range(1, len(sheet)):
                 student_array = sheet[i]
+                if len(student_array) == 0:
+                    continue
                 apellidos = unicode(student_array[0])
                 name = unicode(student_array[1])
                 username = unicode(student_array[2])
