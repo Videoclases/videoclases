@@ -63,7 +63,6 @@ function viewModel() {
             }else {
              self.choices.remove(child);
             }
-
         };
         self.addChoice = function () {
             self.choices.push({ value: ko.observable("") });
@@ -107,13 +106,16 @@ function viewModel() {
                     self.formErrors.push("Formulario no válido");
                 }
                 else{
-                    self.formErrors.push("Test creado exitosamente");
+
+                    alert("Test creado exitosamente.");
+                    window.location = '/teacher/';
                 }
                 vm.changeFormErrorsVisible(true);
 
                 $('html,body').animate({
                     scrollTop: $("#top-form-head-line").offset().top},
                     'slow');
+                self.loading(false);
             }
         });
     };
