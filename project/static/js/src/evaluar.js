@@ -15,6 +15,14 @@ function viewModel() {
     self.url = ko.observable(window.location.pathname);
     self.value = ko.computed(function() { return self.responseValues.value(); });
     self.answer = ko.observable();
+
+    self.format = ko.observable();
+    self.copyright = ko.observable();
+    self.theme = ko.observable();
+    self.pedagogical = ko.observable();
+    self.rythm = ko.observable();
+    self.originality = ko.observable();
+
     self.thumbUp = ko.computed(function() { 
         if (parseInt(self.value()) == 1) {
             return self.responseValues.thumbUpGreen(); 
@@ -35,6 +43,14 @@ function viewModel() {
             alert("Debes seleccionar una respuesta");
             return;
         }
+        if(self.format() == undefined || self.copyright() == undefined
+        || self.theme() == undefined || self.pedagogical() == undefined
+        || self.pedagogical() == undefined || self.rythm() == undefined
+        || self.originality() == undefined){
+            alert("Debes completar la evaluación de los criterios");
+            return;
+        }
+        self.submitEvaluacionDeAlumno();
         self.submitRespuestaDeAlumno();
     }
 
@@ -45,6 +61,14 @@ function viewModel() {
     self.submitEvaluacionDeAlumno = function(data, event) {
         var fd = new FormData();
         fd.append("value", parseInt(self.value()));
+
+        fd.append("format", parseFloat(self.format()));
+        fd.append("copyright", parseFloat(self.copyright()));
+        fd.append("theme", parseFloat(self.theme()));
+        fd.append("pedagogical", parseFloat(self.pedagogical()));
+        fd.append("rythm", parseFloat(self.rythm()));
+        fd.append("originality", parseFloat(self.originality()));
+
         fd.append("videoclase", parseInt(self.responseValues.videoclase()));
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {

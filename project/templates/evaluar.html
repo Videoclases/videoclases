@@ -15,8 +15,25 @@
                         '{{ a }}',
                     {% endif %}
                 {% endfor %}
-            ]
+            ];
             self.value = ko.observable({{evaluacion.value}});
+
+            self.format = ko.observable({{evaluacion.format}});
+            self.copyright = ko.observable({{evaluacion.copyright}});
+            self.theme = ko.observable({{evaluacion.theme}});
+            self.pedagogical = ko.observable({{evaluacion.pedagogical}});
+            self.rythm = ko.observable({{evaluacion.rythm}});
+            self.originality = ko.observable({{evaluacion.originality}});
+
+            self.score_choices = [
+                {% for a in evaluacion.scores %}
+                    {% if forloop.last %}
+                         {'name':'{{ a.0 }}', 'value': {{ a.1 }} }
+                    {% else %}
+                        {'name':'{{ a.0 }}', 'value': {{ a.1 }} } ,
+                    {% endif %}
+                {% endfor %}
+            ];
             self.videoclase = ko.observable({{group.videoclase.id}});
             self.evaluacion = ko.observable({{evaluacion.pk}});
             self.thumbUpGray = ko.observable('{% static "img/thumb-up-gray.png" %}');
@@ -80,13 +97,14 @@
                         </div>
 
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-xs-12"><h4>{{ group.videoclase.question }}</h4></div>
-                            </div>
                             <form id="answerForm" method="post">
                                 {% csrf_token %}
+                                <h3>Pregunta pedagógica</h3>
+
                                 <div class="row">
                                     <div class="col-xs-12">
+                                        <label ><h4>{{ group.videoclase.question }}</h4></label>
+
                                         <select name="answer" class="form-control" id="id_answer"
                                             data-bind="options: responseValues.alternativas,
                                             optionsCaption: '-- escoja una alternativa --',
@@ -95,6 +113,65 @@
                                     </div>
                                 </div>
                                 <input type="hidden" name="videoclase" value="{{ group.videoclase.id }}" />
+                                <h3>Evaluación Video</h3>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                        <label >Formato video (Introducción, desarrollo, conclusión)</label>
+                                        <select name="format" class="form-control" id="id_format"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                            optionsCaption: '-- escoja una alternativa --',
+                                            value: format,
+                                            valueAllowUnset: false"></select>
+                                            </div>
+
+                                        <div class="form-group">
+                                        <label class="form-group">Respeto en el uso de licencias (derechos de autor)</label>
+
+                                        <select name="copyright" class="form-control" id="id_copyright"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                            optionsCaption: '-- escoja una alternativa --',
+                                            value: copyright,
+                                            valueAllowUnset: false"></select>
+                                            </div>
+
+                                        <div class="form-group">
+                                        <label class="form-group">Tema enseñado corresponde con el objetivo pedagógico</label>
+                                        <select name="theme" class="form-control" id="id_theme"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                            optionsCaption: '-- escoja una alternativa --',
+                                            value: theme,
+                                            valueAllowUnset: false"></select>
+                                            </div>
+
+                                        <div class="form-group">
+                                        <label class="form-group">El video es pedagógico</label>
+                                        <select name="pedagogical" class="form-control" id="id_pedagogical"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                            optionsCaption: '-- escoja una alternativa --',
+                                            value: pedagogical,
+                                            valueAllowUnset: false"></select>
+                                            </div>
+
+                                        <div class="form-group">
+                                        <label class="form-group">Ritmo adecuado (uso de sonido, texto, velocidad de explicación,etc.)</label>
+                                        <select name="rythm" class="form-control" id="id_rythm"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                            optionsCaption: '-- escoja una alternativa --',
+                                            value: rythm,
+                                            valueAllowUnset: false"></select>
+                                            </div>
+
+                                        <div class="form-group">
+                                        <label class="form-group">EL video es original </label>
+                                        <select name="originality" class="form-control" id="id_originality"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                            optionsCaption: '-- escoja una alternativa --',
+                                            value: originality,
+                                            valueAllowUnset: false"></select>
+                                            </div>
+                                    </div>
+                                </div>
                                 <button style="display:none" id="#answerButton" type="submit"></button>
                             </form>
                         </div>

@@ -215,7 +215,8 @@ class EvaluacionesDeAlumnosForm(forms.ModelForm):
 
     class Meta:
         model = StudentEvaluations
-        fields = ['value', 'videoclase']
+        fields = '__all__'
+        exclude = ['author']
 
 class RespuestasDeAlumnosForm(forms.ModelForm):
 

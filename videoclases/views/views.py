@@ -763,9 +763,15 @@ class EvaluacionesDeAlumnosFormView(UpdateView):
         self.object = form.save(commit=False)
         self.object.author = self.request.user.student
         self.object.save()
+        import ipdb
+        ipdb.set_trace()
         result_dict = {}
         result_dict['value'] = form.cleaned_data['value']
         return JsonResponse(result_dict)
+
+    def form_invalid(self, form):
+        import ipdb
+        ipdb.set_trace()
 
 
 class EvaluarVideoclaseView(FormView):
