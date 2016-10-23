@@ -13,7 +13,8 @@ from django.templatetags.static import static
 from django.test import TestCase
 from django.utils import timezone
 from io import BytesIO
-from videoclases.forms import *
+from videoclases.forms.forms import *
+from videoclases.models.course import Course
 from videoclases.models.groupofstudents import GroupOfStudents
 from videoclases.models.final_scores import FinalScores
 from videoclases.models.homework import Homework
@@ -22,6 +23,7 @@ from videoclases.models.video_clase import VideoClase
 from videoclases.models.final_scores import FinalScores
 from videoclases.models.student_evaluations import StudentEvaluations
 from videoclases.models.student_responses import StudentResponses
+from videoclases.models.course import Course
 from videoclases.views import *
 import datetime
 
@@ -106,7 +108,7 @@ class BorrarAlumnoTestCase(TestCase):
         self.assertRedirects(response, reverse('teacher'))
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'El student no corresponde a este course.')
+        self.assertEqual(str(messages[0]), 'El alumno no corresponde a este curso.')
 
     def test_teacher_not_assigned_to_course(self):
         self.client.login(username='profe', password='profe')
@@ -130,7 +132,7 @@ class BorrarAlumnoTestCase(TestCase):
         self.assertRedirects(response, reverse('editar_course', kwargs={'course_id':course.id}))
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'El student fue borrado del course exitosamente.')
+        self.assertEqual(str(messages[0]), 'El alumno fue borrado del course exitosamente.')
 
 class BorrarCursoTestCase(TestCase):
     fixtures = todos_los_fixtures
@@ -201,7 +203,7 @@ class BorrarCursoTestCase(TestCase):
         self.assertRedirects(response, reverse('teacher'))
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'El course se ha eliminado exitosamente')
+        self.assertEqual(str(messages[0]), 'El curso se ha eliminado exitosamente')
 
         # assert valid deletion of object
         course_qs = Course.objects.filter(id=course_id)
@@ -254,7 +256,7 @@ class BorrarTareaTestCase(TestCase):
         self.assertRedirects(response, reverse('teacher'))
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'La homework se ha eliminado exitosamente')
+        self.assertEqual(str(messages[0]), 'La tarea se ha eliminado exitosamente')
 
         # assert valid deletion of object
         homework_qs = Homework.objects.filter(id=homework_id)
@@ -542,7 +544,7 @@ class ChangeStudentPasswordTestCase(TestCase):
         response = self.client.post(reverse('change_student_password', kwargs={'course_id':course.id}),
                                     form_data, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'student', u'Debes seleccionar un student.')
+        self.assertFormError(response, 'form', 'student', u'Debes seleccionar un alumno.')
 
         # assert did not change password
         new_user = User.objects.get(username='student2')
@@ -627,7 +629,7 @@ class CrearCursoTestCase(TestCase):
         self.assertRedirects(response, reverse('teacher'))
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'El course se ha creado exitosamente')
+        self.assertEqual(str(messages[0]), 'El curso se ha creado exitosamente')
 
         # assert valid creation of object
         course = Course.objects.filter(name='Nombre', year=this_year, school=user.teacher.school)
@@ -681,7 +683,7 @@ class CrearCursoTestCase(TestCase):
         self.assertRedirects(response, reverse('crear_course'))
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'El archivo no tiene toda la información de un student.')
+        self.assertEqual(str(messages[0]), 'El archivo no tiene toda la información de un alumno.')
 
     def test_crear_course_form_incomplete_ods(self):
         self.crear_course_form_incomplete(
@@ -970,7 +972,7 @@ class EditarAlumnoTestCase(TestCase):
         self.assertRedirects(response, reverse('editar_course', kwargs={'course_id': course.id}))
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'El student ha sido editado exitosamente.')
+        self.assertEqual(str(messages[0]), 'El alumno ha sido editado exitosamente.')
 
         # assert valid edition of object
         new_student = Student.objects.get(id=student_id)
@@ -1004,7 +1006,7 @@ class EditarAlumnoTestCase(TestCase):
         self.assertRedirects(response, reverse('editar_course', kwargs={'course_id': course.id}))
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'El student ha sido editado exitosamente.')
+        self.assertEqual(str(messages[0]), 'El alumno ha sido editado exitosamente.')
 
         # assert valid edition of object
         new_student = Student.objects.get(id=student_id)
@@ -1183,7 +1185,7 @@ class EditarGrupoTestCase(TestCase):
         # assert correct response
         resp_json = json.loads(response.content)
         self.assertFalse(resp_json['success'])
-        self.assertEqual(resp_json['message'], u'Datos incompletos, todos los students deben tener group.')
+        self.assertEqual(resp_json['message'], u'Datos incompletos, todos los alumnos deben tener grupo.')
 
     def test_editar_group_incomplete_data_with_rare_group_numbers(self):
         self.client.login(username='profe', password='profe')
@@ -1437,6 +1439,7 @@ class EvaluarVideoclaseTestCase(TestCase):
                       .exclude(videoclase__video__exact='') \
                       .annotate(revision=Count('videoclase__answers')) \
                       .order_by('revision','?')
+
         response_group = response.context['group']
         self.assertIn(response_group, groups)
         self.assertTrue(groups[0].revision <= groups.reverse()[0].revision)
@@ -1468,6 +1471,12 @@ class EvaluarVideoclaseTestCase(TestCase):
         value = 1 if evaluacion_original.value < 1 else 0
         form_data = {}
         form_data['value'] = value
+        form_data['format'] = value
+        form_data['copyright'] = value
+        form_data['theme'] = value
+        form_data['pedagogical'] = value
+        form_data['rythm'] = value
+        form_data['originality'] = value
         form_data['videoclase'] = 36
         form = EvaluacionesDeAlumnosForm(form_data)
 
@@ -1569,7 +1578,7 @@ class ProfesorTestCase(TestCase):
         current_year = timezone.now().year
         homeworks = Homework.objects.filter(course__teacher=user.teacher) \
                                          .filter(course__year=current_year)
-        courses_sin_homework = Course.objects.filter(homework=None).filter(teacher=user.teacher)
+        courses_sin_homework = Course.objects.filter(course_homework=None).filter(teacher=user.teacher)
         self.assertEqual(list(response.context['homeworks']), list(homeworks))
         self.assertEqual(list(response.context['courses_sin_homework']), list(courses_sin_homework))
 
