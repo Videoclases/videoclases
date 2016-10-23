@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load videoclases_tags %}
+{% load crispy_forms_tags %}
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
@@ -59,17 +60,23 @@
                                 <br /><a href="{% url 'logout' %}">Cerrar sesión</a>
                             </div>
                         {% else %}
-                            <form class="form-inline" action="{% url 'login' %}" method="post" id="login-form">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <input class="input-sm" id="id_username" maxlength="100" name="username" type="text" placeholder="Nombre de usuario" />
+                               {% crispy form %}
+                            <a style="color: white;"  data-toggle="modal" data-target="#forgot_password" href="#">Olvidé mi clave</a>
+                            <div class="modal fade" id="forgot_password" tabindex="-1" role="dialog" aria-labelledby="forgot_passwordLabel" style="color:black">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="gridSystemModalLabel">Recuperar contraseña</h4>
+                                      </div>
+                                      <div class="modal-body" >
+                                    <span>Pidele a tu profesor que cambie tu contraseña, en caso de ser un profesor contacta a
+                                        <a href="mailto:software@teachingislearning.cl">software@teachingislearning.cl</a>
+                                        </span>
+                                  </div>
                                 </div>
-                                <div class="form-group">
-                                    <input class="input-sm" id="id_password" name="password" type="password" placeholder="Contraseña"/>
-                                </div>
-                                <button type="submit" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-user"></span> Ingresar</button>
-                            </form>
-                            <a style="color: white;" href="">Olvidé mi clave</a>
+                              </div>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
