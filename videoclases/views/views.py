@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.forms import AuthenticationForm
+from videoclases.forms.authentication_form import CustomAutheticationForm
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.validators import URLValidator
@@ -865,7 +865,7 @@ class EvaluarVideoclaseFormView(FormView):
 
 class IndexView(FormView):
     template_name = 'index.html'
-    form_class = AuthenticationForm
+    form_class = CustomAutheticationForm
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
