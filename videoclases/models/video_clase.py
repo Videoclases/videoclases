@@ -94,8 +94,8 @@ class VideoClase(models.Model):
         return self.answers.filter(videoclase=self, answer=self.correct_alternative).count()
 
     def cantidad_incorrectas(self):
-        return self.answers.filter(videoclase=self, answer__in=[self.alternative_2,
-                                                                      self.alternative_3]).count()
+        answer = self.answers.filter(videoclase=self)
+        return answer.count() - answer.filter(answer=self.correct_alternative).count()
 
     def integrantes_y_answers(self):
         from videoclases.models.student_responses import StudentResponses
@@ -137,6 +137,20 @@ class VideoClase(models.Model):
         return_dict['incorrectas'] = incorrectas
         return return_dict
 
+    def get_multiple_criteria_score(self):
+        from videoclases.models.student_evaluations import StudentEvaluations
+        from django.db.models import Avg
+        evaluations = StudentEvaluations.objects.filter(videoclase=self)
+        result = evaluations.aggregate(format=Avg('format'),
+                                     copyright=Avg('copyright'),
+                                     theme=Avg('theme'),
+                                     pedagogical=Avg('pedagogical'),
+                                     rythm=Avg('rythm'),
+                                     originality=Avg('originality')
+                                     )
+        result['total'] = sum(result.values()) + 1
+        return result
+
     @staticmethod
     def process_youtube_default_link(link):
         if 'youtu.be/' in link:
@@ -158,5 +172,5 @@ class VideoClase(models.Model):
         super(VideoClase, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return 'Course: ' + self.group.homework.course.name + '. Homework: ' + \
-        self.group.homework.title + '. GroupOfStudents: ' + str(self.group.number)
+        return 'Curso: ' + self.group.homework.course.name + '. Tarea: ' + \
+        self.group.homework.title + '. Grupo de Estudiantes: ' + str(self.group.number)

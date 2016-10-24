@@ -115,7 +115,7 @@ class BorrarAlumnoView(TemplateView):
         student = Student.objects.get(id=self.kwargs['student_id'])
         course = Course.objects.get(id=self.kwargs['course_id'])
         if student not in course.students.all():
-            messages.info(self.request, 'El alumno no corresponde a este course.')
+            messages.info(self.request, 'El alumno no corresponde a este curso.')
             return HttpResponseRedirect(reverse('teacher'))
         if course not in self.request.user.teacher.courses.all():
             messages.info(self.request, 'No tienes permisos para esta acción')
@@ -143,7 +143,7 @@ class BorrarCursoFormView(FormView):
             messages.info(self.request, 'No tienes permisos para esta acción')
             return HttpResponseRedirect(reverse('teacher'))
         course.delete()
-        messages.info(self.request, 'El course se ha eliminado exitosamente')
+        messages.info(self.request, 'El curso se ha eliminado exitosamente')
         return super(BorrarCursoFormView, self).form_valid(form, *args, **kwargs)
 
 
@@ -301,11 +301,13 @@ class CrearCursoFormView(FormView):
             student_array = sheet[i]
             if len(student_array) == 0:
                 continue
-            complete = True
-            complete &= student_array[0] not in [None, '']
-            complete &= student_array[1] not in [None, '']
-            complete &= student_array[2] not in [None, '']
-            complete &= student_array[3] not in [None, '']
+            complete = False
+            if len(student_array) > 3:
+                complete = True
+                complete &= student_array[0] not in [None, '']
+                complete &= student_array[1] not in [None, '']
+                complete &= student_array[2] not in [None, '']
+                complete &= student_array[3] not in [None, '']
             if not complete:
                 os.remove(path)
                 messages.info(self.request, 'El archivo no tiene toda la información de un alumno.')
@@ -777,7 +779,7 @@ class EvaluarVideoclaseView(FormView):
         homework = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
         group = get_object_or_404(GroupOfStudents, students=self.request.user.student, homework=homework)
         if homework.get_estado() != 2:
-            messages.info(self.request, u'Esta homework no está en período de evaluación.')
+            messages.info(self.request, u'Esta tarea no está en período de evaluación.')
             return HttpResponseRedirect(reverse('student'))
         context = self.get_context_data(*args, **kwargs)
         if context['redirect']:
