@@ -148,8 +148,11 @@ class VideoClase(models.Model):
                                      rythm=Avg('rythm'),
                                      originality=Avg('originality')
                                      )
-        result['total'] = sum(result.values()) + 1
-        return result
+	try:
+	        result['total'] = sum(result.values()) + 1
+        except TypeError:
+		result['total'] = ''
+	return result
 
     @staticmethod
     def process_youtube_default_link(link):
