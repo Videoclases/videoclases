@@ -11,8 +11,8 @@
     <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <![endif]-->
-    <title>{% block title %}VideoClases{% endblock %}</title>
-    <link rel="shortcut icon" type="image/png" href="{% static "img/favicon.png" %}"/>
+    <title>{% block title %}Teaching is Learning{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static "img/logoTIL_burned.png" %}"/>
     <!-- BOOTSTRAP CORE STYLE  -->
     <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
     <!-- FONT AWESOME ICONS  -->
@@ -46,8 +46,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    <img src="{% static "img/logo.png" %}" />
+                <a href="{% url 'index' %}">
+                    <img src="{% static "img/logoTIL_full.png" %}" />
                 </a>
             </div>
             <div class="left-div">
@@ -144,7 +144,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    ¿Quiere usar VideoClases en su colegio?
+                    ¿Quiere usar la methodologia TiL en su colegio?
                     <button class="btn btn-success btn-sm">
                         <span class="glyphicon glyphicon-pencil"> <a href="mailto:contacto@teachingislearning.cl">contacto@teachingislearning.cl</a></span>
                     </button>
