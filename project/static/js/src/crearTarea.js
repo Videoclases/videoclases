@@ -27,7 +27,8 @@ function viewModel() {
         title: ko.observable(""),
         video: ko.observable(""),
         date_upload: ko.observable(""),
-        date_evaluation: ko.observable("")
+        date_evaluation: ko.observable(""),
+        homework_to_evaluate: ko.observable()
     }
 
     self.asignarGrupo = new AsignarGrupo();
@@ -39,6 +40,7 @@ function viewModel() {
         fd.append("revision", parseInt(self.homework.revision()));
         fd.append("title", self.homework.title());
         fd.append("video", self.homework.video());
+        fd.append("homework_to_evaluate", self.homework.homework_to_evaluate());
         var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
         var subidaArray = reggie.exec(self.homework.date_upload());
         var evaluacionArray = reggie.exec(self.homework.date_evaluation());

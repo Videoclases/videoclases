@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.template.defaultfilters import slugify
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 from django.views.generic import TemplateView, FormView, DetailView
 
 from videoclases.forms.evaluate_pegadogical_questions_form import EvaluatePedagogicalQuestionsForm
@@ -29,9 +30,7 @@ class ConceptualTestsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ConceptualTestsView, self).get_context_data(**kwargs)
-        form = CrearTareaForm()
-        context['crear_homework_form'] = form
-        context['courses'] = self.request.user.teacher.courses.all()
+        context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
         return context
 
     @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
@@ -155,7 +154,7 @@ class PedagogicalQuestionEditView(DetailView):
         context['days'] = days
         context['hours'] = hours
         context['min'] = min
-        context['courses'] = self.request.user.teacher.courses.all()
+        context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
         context['homeworks'] = pq.homework.course.course_homework.all()
         return context
 
@@ -202,7 +201,7 @@ class PedagogicalQuestionCreateView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super(PedagogicalQuestionCreateView, self).get_context_data()
-        context['courses'] = self.request.user.teacher.courses.all()
+        context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
         context['form'] = self.get_form()
         context['kwargs'] = self.get_form_kwargs()
         return context

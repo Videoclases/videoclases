@@ -103,8 +103,11 @@ class VideoClase(models.Model):
         students_array = []
         for a in students:
             student_dict = {}
+            homework = self.group.homework
+            if homework.homework_to_evaluate is not None:
+                homework = homework.homework_to_evaluate
             answers = StudentResponses.objects.filter(
-                            videoclase__group__homework=self.group.homework,
+                            videoclase__group__homework=homework,
                             student=a)
             correctas = 0
             for r in answers:
@@ -148,11 +151,11 @@ class VideoClase(models.Model):
                                      rythm=Avg('rythm'),
                                      originality=Avg('originality')
                                      )
-	try:
-	        result['total'] = sum(result.values()) + 1
+        try:
+            result['total'] = sum(result.values()) + 1
         except TypeError:
-		result['total'] = ''
-	return result
+            result['total'] = ''
+        return result
 
     @staticmethod
     def process_youtube_default_link(link):

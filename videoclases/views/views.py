@@ -58,9 +58,12 @@ class AlumnoView(TemplateView):
         groups = GroupOfStudents.objects.filter(students=student)
         for group in groups:
             group.nota_final = FinalScores.objects.get(student=student, group=group).ponderar_notas()
+            homework =group.homework
+            if homework.homework_to_evaluate is not None:
+                homework = homework.homework_to_evaluate
             group.videoclases_evaluadas = StudentEvaluations.objects \
                 .filter(author=student) \
-                .filter(videoclase__group__homework=group.homework).count()
+                .filter(videoclase__group__homework=homework).count()
             try:
                 group.pq_answer = PedagogicalQuestionsAnswers.objects.get(student=student,test=group.homework.pedagogicalquestions, state=group.homework.pedagogicalquestions.get_state())
             except:
@@ -355,7 +358,8 @@ class CrearTareaView(TemplateView):
         context = super(CrearTareaView, self).get_context_data(**kwargs)
         form = CrearTareaForm()
         context['crear_homework_form'] = form
-        context['courses'] = self.request.user.teacher.courses.all()
+        context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
+        context['homeworks'] = Homework.objects.filter(course__in=context['courses'])
         return context
 
     @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
@@ -670,7 +674,7 @@ class EditarTareaView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(EditarTareaView, self).get_context_data(**kwargs)
         homework = Homework.objects.get(id=self.kwargs['homework_id'])
-        context['courses'] = self.request.user.teacher.courses.all()
+        context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
         context['homework'] = homework
         context['videoclases_recibidas'] = GroupOfStudents.objects.filter(homework=homework) \
             .exclude(videoclase__video__isnull=True) \
@@ -776,8 +780,12 @@ class EvaluarVideoclaseView(FormView):
 
     @method_decorator(user_passes_test(in_students_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
-        homework = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
-        group = get_object_or_404(GroupOfStudents, students=self.request.user.student, homework=homework)
+        homework_base = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
+        homework = homework_base
+        if homework_base.homework_to_evaluate is not None:
+            homework = homework_base.homework_to_evaluate
+
+        # group = get_object_or_404(GroupOfStudents, students=self.request.user.student, homework=homework)
         if homework.get_estado() != 2:
             messages.info(self.request, u'Esta tarea no está en período de evaluación.')
             return HttpResponseRedirect(reverse('student'))
@@ -794,13 +802,21 @@ class EvaluarVideoclaseView(FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(EvaluarVideoclaseView, self).get_context_data(**kwargs)
-        homework = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
+        homework_base = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
+        homework = homework_base
+        groups = GroupOfStudents.objects.filter(homework=homework)
         student = self.request.user.student
-        group_student = get_object_or_404(GroupOfStudents, students=student, homework=homework)
-        groups = GroupOfStudents.objects.filter(homework=homework).exclude(id=group_student.id) \
+        if homework_base.homework_to_evaluate is not None:
+            homework = homework_base.homework_to_evaluate
+            groups = GroupOfStudents.objects.filter(homework=homework)
+        else:
+            group_student = get_object_or_404(GroupOfStudents, students=student, homework=homework)
+            groups = groups.exclude(id=group_student.id)
+
+        groups = groups \
             .exclude(videoclase__video__isnull=True) \
             .exclude(videoclase__video__exact='') \
-            .exclude(videoclase__answers__student=student) \
+            .exclude(videoclase__answers__student=student)\
             .annotate(revision=Count('videoclase__answers')) \
             .order_by('revision', '?')
         group = groups[0] if groups.exists() else None

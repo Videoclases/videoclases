@@ -745,7 +745,7 @@ class CrearTareaTestCase(TestCase):
         self.client.login(username='profe', password='profe')
         response = self.client.get(reverse('crear_homework'))
         user = User.objects.get(username='profe')
-        courses = user.teacher.courses.all()
+        courses = user.teacher.courses.filter(year=timezone.now().year)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.context['courses']), list(courses))
 
@@ -1279,7 +1279,7 @@ class EditarTareaTestCase(TestCase):
         user = User.objects.get(username='profe')
         videoclases_recibidas = GroupOfStudents.objects.filter(homework=homework).exclude(videoclase__video__isnull=True) \
                                 .exclude(videoclase__video__exact='').count()
-        courses = user.teacher.courses.all()
+        # courses = user.teacher.courses.all()
         self.assertEqual(response.context['videoclases_recibidas'], videoclases_recibidas)
         self.assertEqual(response.context['homework'], homework)
 

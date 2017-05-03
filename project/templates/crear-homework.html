@@ -17,7 +17,17 @@
                         {name: '{{ c.name }}', id: {{ c.id }}},
                     {% endif %}
                 {% endfor %}
+            ];
+            self.homework_to_evaluate = [
+                {% for c in homeworks %}
+                    {% if forloop.last %}
+                        {name: '{{ c }}', id: {{ c.id }}}
+                    {% else %}
+                        {name: '{{ c }}', id: {{ c.id }}},
+                    {% endif %}
+                {% endfor %}
             ]
+
         }
     </script>
     <script src="{% static "js/src/asignarGrupo.js" %}"></script>
@@ -139,6 +149,17 @@
                                         startView: 2
                                     });
                                 </script>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-7">Tarea a evaluar</div>
+                            <div class="col-xs-5">
+                                <select name="course" class="form-control" id="id_homework_to_evaluate"
+                                        data-bind="options: select.homework_to_evaluate,
+                                            optionsText: 'name',
+                                            optionsValue: 'id',
+                                            optionsCaption: '-- escoja para evaluar otra tarea--',
+                                            value: homework.homework_to_evaluate"></select>
                             </div>
                         </div>
                     </div>

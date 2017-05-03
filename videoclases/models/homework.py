@@ -23,6 +23,7 @@ class Homework(models.Model):
     date_upload = models.DateField()
     date_evaluation = models.DateField()
     revision = models.IntegerField(default=3)
+    homework_to_evaluate = models.ForeignKey('Homework', blank=True, null=True)
 
     def __unicode__(self):
         return 'Course: ' + self.course.name + ' ' + str(self.course.year) + ' ' + \

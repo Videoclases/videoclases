@@ -33,7 +33,8 @@ function viewModel() {
         date_upload: ko.observable(),
         revision: ko.observable(),
         title: ko.observable(),
-        video: ko.observable()
+        video: ko.observable(),
+        homework_to_evaluate: ko.observable()
     }
 
     self.homework = {
@@ -43,7 +44,8 @@ function viewModel() {
         date_upload: ko.observable(),
         revision: ko.observable(),
         title: ko.observable(),
-        video: ko.observable()
+        video: ko.observable(),
+        homework_to_evaluate: ko.observable()
     }
 
     self.checkFormErrors = function() {
@@ -82,6 +84,7 @@ function viewModel() {
         self.homework.revision(self.homeworkDatosIniciales.revision());
         self.homework.title(self.homeworkDatosIniciales.title());
         self.homework.video(self.homeworkDatosIniciales.video());
+        self.homework.homework_to_evaluate(self.homeworkDatosIniciales.homework_to_evaluate());
     }
 
     self.editarTarea = function() {

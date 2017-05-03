@@ -143,7 +143,7 @@ class CrearTareaForm(forms.ModelForm):
     class Meta:
         model = Homework
         fields = ['video', 'title', 'description', 'course', 'revision',
-                  'date_upload', 'date_evaluation']
+                  'date_upload', 'date_evaluation','homework_to_evaluate']
         dateOptions = {
             'weekStart': 1,
             'todayHighlight': True,
