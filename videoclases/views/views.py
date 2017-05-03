@@ -277,7 +277,7 @@ class CrearCursoFormView(FormView):
     def form_valid(self, form, *args, **kwargs):
         # (self, file, field_name, name, content_type, size, charset, content_type_extra=None)
         f = form.cleaned_data['file']
-
+	f.name = f.name.encode('ascii', 'ignore').decode('ascii')
         path = settings.MEDIA_ROOT + '/' + f.name
 
         def save_file(f, path):
