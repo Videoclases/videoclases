@@ -1,0 +1,502 @@
+[
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 16,
+        "student": 2
+    },
+    "model": "videoclases.finalscores",
+    "pk": 78
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 17,
+        "student": 1
+    },
+    "model": "videoclases.finalscores",
+    "pk": 79
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 20,
+        "student": 10
+    },
+    "model": "videoclases.finalscores",
+    "pk": 80
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 21,
+        "student": 11
+    },
+    "model": "videoclases.finalscores",
+    "pk": 81
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 27,
+        "student": 4
+    },
+    "model": "videoclases.finalscores",
+    "pk": 82
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 28,
+        "student": 3
+    },
+    "model": "videoclases.finalscores",
+    "pk": 83
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 31,
+        "student": 16
+    },
+    "model": "videoclases.finalscores",
+    "pk": 84
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 32,
+        "student": 22
+    },
+    "model": "videoclases.finalscores",
+    "pk": 85
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 33,
+        "student": 23
+    },
+    "model": "videoclases.finalscores",
+    "pk": 86
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 34,
+        "student": 24
+    },
+    "model": "videoclases.finalscores",
+    "pk": 87
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 35,
+        "student": 25
+    },
+    "model": "videoclases.finalscores",
+    "pk": 88
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 36,
+        "student": 26
+    },
+    "model": "videoclases.finalscores",
+    "pk": 89
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 37,
+        "student": 27
+    },
+    "model": "videoclases.finalscores",
+    "pk": 90
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 38,
+        "student": 28
+    },
+    "model": "videoclases.finalscores",
+    "pk": 91
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 39,
+        "student": 29
+    },
+    "model": "videoclases.finalscores",
+    "pk": 92
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 40,
+        "student": 30
+    },
+    "model": "videoclases.finalscores",
+    "pk": 93
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 41,
+        "student": 18
+    },
+    "model": "videoclases.finalscores",
+    "pk": 94
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 42,
+        "student": 19
+    },
+    "model": "videoclases.finalscores",
+    "pk": 95
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 43,
+        "student": 17
+    },
+    "model": "videoclases.finalscores",
+    "pk": 96
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 44,
+        "student": 20
+    },
+    "model": "videoclases.finalscores",
+    "pk": 97
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 45,
+        "student": 21
+    },
+    "model": "videoclases.finalscores",
+    "pk": 98
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 46,
+        "student": 1
+    },
+    "model": "videoclases.finalscores",
+    "pk": 99
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 46,
+        "student": 7
+    },
+    "model": "videoclases.finalscores",
+    "pk": 100
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 47,
+        "student": 3
+    },
+    "model": "videoclases.finalscores",
+    "pk": 101
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 47,
+        "student": 14
+    },
+    "model": "videoclases.finalscores",
+    "pk": 102
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 48,
+        "student": 8
+    },
+    "model": "videoclases.finalscores",
+    "pk": 103
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 49,
+        "student": 6
+    },
+    "model": "videoclases.finalscores",
+    "pk": 104
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 49,
+        "student": 9
+    },
+    "model": "videoclases.finalscores",
+    "pk": 105
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 50,
+        "student": 2
+    },
+    "model": "videoclases.finalscores",
+    "pk": 106
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 50,
+        "student": 10
+    },
+    "model": "videoclases.finalscores",
+    "pk": 107
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 51,
+        "student": 4
+    },
+    "model": "videoclases.finalscores",
+    "pk": 108
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 51,
+        "student": 11
+    },
+    "model": "videoclases.finalscores",
+    "pk": 109
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 52,
+        "student": 12
+    },
+    "model": "videoclases.finalscores",
+    "pk": 110
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 52,
+        "student": 13
+    },
+    "model": "videoclases.finalscores",
+    "pk": 111
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 53,
+        "student": 15
+    },
+    "model": "videoclases.finalscores",
+    "pk": 112
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 72,
+        "student": 4
+    },
+    "model": "videoclases.finalscores",
+    "pk": 134
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 72,
+        "student": 10
+    },
+    "model": "videoclases.finalscores",
+    "pk": 135
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 72,
+        "student": 11
+    },
+    "model": "videoclases.finalscores",
+    "pk": 136
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 72,
+        "student": 13
+    },
+    "model": "videoclases.finalscores",
+    "pk": 137
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 72,
+        "student": 14
+    },
+    "model": "videoclases.finalscores",
+    "pk": 138
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 73,
+        "student": 2
+    },
+    "model": "videoclases.finalscores",
+    "pk": 139
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 73,
+        "student": 5
+    },
+    "model": "videoclases.finalscores",
+    "pk": 140
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 73,
+        "student": 7
+    },
+    "model": "videoclases.finalscores",
+    "pk": 141
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 73,
+        "student": 8
+    },
+    "model": "videoclases.finalscores",
+    "pk": 142
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 73,
+        "student": 12
+    },
+    "model": "videoclases.finalscores",
+    "pk": 143
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 74,
+        "student": 1
+    },
+    "model": "videoclases.finalscores",
+    "pk": 144
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 74,
+        "student": 3
+    },
+    "model": "videoclases.finalscores",
+    "pk": 145
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 74,
+        "student": 6
+    },
+    "model": "videoclases.finalscores",
+    "pk": 146
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 74,
+        "student": 9
+    },
+    "model": "videoclases.finalscores",
+    "pk": 147
+},
+{
+    "fields": {
+        "teacher_score": 0.0,
+        "class_score": 0.0,
+        "group": 74,
+        "student": 15
+    },
+    "model": "videoclases.finalscores",
+    "pk": 148
+}
+]

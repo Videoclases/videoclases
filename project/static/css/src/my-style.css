@@ -55,3 +55,15 @@ input {
     z-index: 9999;
     background: url('../../img/box-with-x.png') 50% 50% no-repeat rgb(249,249,249);
 }
+
+.margin-top {
+    margin-top: 10px;
+}
+
+.margin-bottom {
+    margin-top: -10px;
+}
+
+.spaced {
+    padding: 10px !important;
+}

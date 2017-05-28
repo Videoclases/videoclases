@@ -27,39 +27,39 @@ $(document).ready(function() {
             return false;
         },
         'Debe ser posterior a fecha de subida.');
-    $('#crear-tarea-form').validate({ // initialize the plugin
+    $('#crear-homework-form').validate({ // initialize the plugin
         messages: {
-            titulo: {
+            title: {
                 required: "Debes ingresar título a la tarea"
             },
-            descripcion: {
+            description: {
                 required: "Debes ingresar descripción a la tarea"
             },
-            fecha_subida: {
+            date_upload: {
                 required: "Debes ingresar fecha de subida"
             },
-            fecha_evaluacion: {
+            date_evaluation: {
                 required: "Debes ingresar fecha de evaluación",
                 greaterThan: "La fecha de evaluación debe ser posterior a la fecha de subida"
             }
         },
         rules: {
-            titulo: {
+            title: {
                 required: true
             },
-            descripcion: {
+            description: {
                 required: true
             },
-            curso: {
+            course: {
                 required: true
             },
-            revisiones: {
+            revision: {
                 required: true
             },
-            fecha_subida: {
+            date_upload: {
                 required: true
             },
-            fecha_evaluacion: {
+            date_evaluation: {
                 required: true,
                 greaterThan: '#id_fecha_subida'
             }
@@ -74,7 +74,7 @@ $(document).ready(function() {
                 vm.formErrors.push(validator.errorList[i].message);
             }
             if (!vm.asignarGrupo.siTodosTienenGrupo()) {
-                vm.formErrors.push("Debes asignar grupo a todos los alumnos");
+                vm.formErrors.push("Debes asignar grupo a todos los estudiantes");
             }
             $('html,body').animate({
                 scrollTop: $("#top-form-head-line").offset().top},

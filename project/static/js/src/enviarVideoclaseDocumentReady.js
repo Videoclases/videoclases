@@ -6,16 +6,16 @@ $(document).ready(function() {
             video: {
                 required: "Debes ingresar el link del video"
             },
-            pregunta: {
+            question: {
                 required: "Debes ingresar una pregunta"
             },
-            alternativa_correcta: {
+            correct_alternative: {
                 required: "Debes ingresar la respuesta correcta"
             },
-            alternativa_2: {
+            alternative_2: {
                 required: "Debes ingresar respuesta incorrecta en Alternativa 2",
             },
-            alternativa_3: {
+            alternative_3: {
                 required: "Debes ingresar respuesta incorrecta en Alternativa 3",
             }
         },
@@ -23,16 +23,16 @@ $(document).ready(function() {
             video: {
                 required: true
             },
-            pregunta: {
+            question: {
                 required: true
             },
-            alternativa_correcta: {
+            correct_alternative: {
                 required: true
             },
-            alternativa_2: {
+            alternative_2: {
                 required: true
             },
-            alternativa_3: {
+            alternative_3: {
                 required: true
             }
         },

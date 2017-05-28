@@ -1,0 +1,449 @@
+[
+{
+    "fields": {
+        "students": [
+            2
+        ],
+        "homework": 1,
+        "number": 2
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 16
+},
+{
+    "fields": {
+        "students": [
+            1
+        ],
+        "homework": 1,
+        "number": 1
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 17
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 8
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 18
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 9
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 19
+},
+{
+    "fields": {
+        "students": [
+            10
+        ],
+        "homework": 1,
+        "number": 10
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 20
+},
+{
+    "fields": {
+        "students": [
+            11
+        ],
+        "homework": 1,
+        "number": 11
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 21
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 12
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 22
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 13
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 23
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 14
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 24
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 15
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 25
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 7
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 26
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 4
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 27
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 3
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 28
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 6
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 29
+},
+{
+    "fields": {
+        "students": [],
+        "homework": 1,
+        "number": 5
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 30
+},
+{
+    "fields": {
+        "students": [
+            16
+        ],
+        "homework": 9,
+        "number": 1
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 31
+},
+{
+    "fields": {
+        "students": [
+            22
+        ],
+        "homework": 9,
+        "number": 7
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 32
+},
+{
+    "fields": {
+        "students": [
+            23
+        ],
+        "homework": 9,
+        "number": 8
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 33
+},
+{
+    "fields": {
+        "students": [
+            24
+        ],
+        "homework": 9,
+        "number": 9
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 34
+},
+{
+    "fields": {
+        "students": [
+            25
+        ],
+        "homework": 9,
+        "number": 10
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 35
+},
+{
+    "fields": {
+        "students": [
+            26
+        ],
+        "homework": 9,
+        "number": 11
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 36
+},
+{
+    "fields": {
+        "students": [
+            27
+        ],
+        "homework": 9,
+        "number": 12
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 37
+},
+{
+    "fields": {
+        "students": [
+            28
+        ],
+        "homework": 9,
+        "number": 13
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 38
+},
+{
+    "fields": {
+        "students": [
+            29
+        ],
+        "homework": 9,
+        "number": 14
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 39
+},
+{
+    "fields": {
+        "students": [
+            30
+        ],
+        "homework": 9,
+        "number": 15
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 40
+},
+{
+    "fields": {
+        "students": [
+            18
+        ],
+        "homework": 9,
+        "number": 3
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 41
+},
+{
+    "fields": {
+        "students": [
+            19
+        ],
+        "homework": 9,
+        "number": 4
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 42
+},
+{
+    "fields": {
+        "students": [
+            17
+        ],
+        "homework": 9,
+        "number": 2
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 43
+},
+{
+    "fields": {
+        "students": [
+            20
+        ],
+        "homework": 9,
+        "number": 5
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 44
+},
+{
+    "fields": {
+        "students": [
+            21
+        ],
+        "homework": 9,
+        "number": 6
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 45
+},
+{
+    "fields": {
+        "students": [
+            1,
+            7
+        ],
+        "homework": 10,
+        "number": 1
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 46
+},
+{
+    "fields": {
+        "students": [
+            3,
+            14
+        ],
+        "homework": 10,
+        "number": 7
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 47
+},
+{
+    "fields": {
+        "students": [
+            8
+        ],
+        "homework": 10,
+        "number": 5
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 48
+},
+{
+    "fields": {
+        "students": [
+            6,
+            9
+        ],
+        "homework": 10,
+        "number": 4
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 49
+},
+{
+    "fields": {
+        "students": [
+            2,
+            10
+        ],
+        "homework": 10,
+        "number": 2
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 50
+},
+{
+    "fields": {
+        "students": [
+            4,
+            11
+        ],
+        "homework": 10,
+        "number": 6
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 51
+},
+{
+    "fields": {
+        "students": [
+            12,
+            13
+        ],
+        "homework": 10,
+        "number": 3
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 52
+},
+{
+    "fields": {
+        "students": [
+            15
+        ],
+        "homework": 10,
+        "number": 8
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 53
+},
+{
+    "fields": {
+        "students": [
+            4,
+            10,
+            11,
+            13,
+            14
+        ],
+        "homework": 16,
+        "number": 2
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 72
+},
+{
+    "fields": {
+        "students": [
+            2,
+            5,
+            7,
+            8,
+            12
+        ],
+        "homework": 16,
+        "number": 1
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 73
+},
+{
+    "fields": {
+        "students": [
+            1,
+            3,
+            6,
+            9,
+            15
+        ],
+        "homework": 16,
+        "number": 3
+    },
+    "model": "videoclases.groupofstudents",
+    "pk": 74
+}
+]

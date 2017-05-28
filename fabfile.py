@@ -1,5 +1,6 @@
 from fabric.contrib import django as ddd
 import django
+
 ddd.project("project")
 django.setup()
 
@@ -12,7 +13,6 @@ from django.utils import timezone
 from fabric.api import env, require, run, sudo, cd, local, get
 
 from project.fabfile_secret import *
-from videoclases.models import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 file_name = 'videoclases/project/settings_secret.py'
@@ -22,8 +22,8 @@ def _load_data(reboot=False):
     local('python manage.py makemigrations')
     local('python manage.py migrate')
     if reboot:
-        fixtures = ['devgroups', 'devusers', 'devcolegio', 'devcursos', 'devalumnos', 'devprofesores', 
-        'devtareas']
+        fixtures = ['devgroups', 'devusers', 'devschool', 'devcourses', 'devstudents', 'devteachers',
+        'devhomeworks']
         for f in fixtures:
             local('python manage.py loaddata ' + f)
 
@@ -129,6 +129,11 @@ def reboot():
 def _create_teacher():
     print '---------------------------------------'
     print 'Now you will be asked for the necessary data to create a Professor.'
+
+    from videoclases.models.course import Course
+    from videoclases.models.teacher import Teacher
+    from videoclases.models.school import School
+
     username = raw_input('Insert username: ')
     password = getpass.getpass('Insert password: ')
     password2 = getpass.getpass('Confirm password: ')
@@ -138,19 +143,19 @@ def _create_teacher():
         password2 = getpass.getpass('Confirm password: ')
     first_name = raw_input('Insert first name: ')
     last_name = raw_input('Insert last name: ')
-    colegio = raw_input('Insert school name: ')
-    curso = raw_input('Insert course name: ')
+    school = raw_input('Insert school name: ')
+    course = raw_input('Insert course name: ')
     user = User.objects.create_user(username=username, password=password)
     user.first_name = first_name
     user.last_name = last_name
     user.save()
-    Colegio.objects.create(nombre=colegio).save()
-    co = Colegio.objects.get(nombre=colegio)
-    Curso.objects.create(nombre=curso, colegio=co, anho=timezone.now().year).save()
-    cu = Curso.objects.get(nombre=curso, colegio=co, anho=timezone.now().year)
-    Profesor.objects.create(usuario=user, colegio=co)
-    p = Profesor.objects.get(usuario=user, colegio=co)
-    p.cursos.add(cu)
+    School.objects.create(name=school).save()
+    co = School.objects.get(name=school)
+    Course.objects.create(name=course, school=co, year=timezone.now().year).save()
+    cu = Course.objects.get(name=course, school=co, year=timezone.now().year)
+    Teacher.objects.create(user=user, school=co)
+    p = Teacher.objects.get(user=user, school=co)
+    p.courses.add(cu)
     p.save()
 
 def install():

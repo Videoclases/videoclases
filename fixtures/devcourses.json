@@ -1,0 +1,38 @@
+[
+    {
+        "fields": {
+            "name": "1\u00b0A",
+            "school": 1,
+            "year": 2016
+        }, 
+        "model": "videoclases.course",
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "1\u00b0B",
+            "school": 1,
+            "year": 2016
+        }, 
+        "model": "videoclases.course",
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "name": "2\u00b0A",
+            "school": 1,
+            "year": 2016
+        }, 
+        "model": "videoclases.course",
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "name": "2\u00b0B",
+            "school": 1,
+            "year": 2016
+        }, 
+        "model": "videoclases.course",
+        "pk": 4
+    }
+]

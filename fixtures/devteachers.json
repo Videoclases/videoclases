@@ -1,0 +1,15 @@
+[
+{
+    "fields": {
+        "courses": [
+            1,
+            2,
+            3
+        ],
+        "school": 1,
+        "user": 2
+    },
+    "model": "videoclases.teacher",
+    "pk": 1
+}
+]

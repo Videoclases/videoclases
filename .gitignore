@@ -22,6 +22,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+.idea/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -56,9 +57,12 @@ docs/_build/
 # PyBuilder
 target/
 
+
 # Added
 db.sqlite3
 project/site_media/static/*
 project/site_media/media/*
 project/fabfile_secret.py
 project/settings_secret.py
+.vs/
+*.json

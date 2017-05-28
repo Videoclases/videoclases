@@ -1,0 +1,9 @@
+[
+{
+    "fields": {
+        "name": "Instituto Nacional"
+    },
+    "model": "videoclases.school",
+    "pk": 1
+}
+]

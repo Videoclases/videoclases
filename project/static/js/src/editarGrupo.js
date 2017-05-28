@@ -1,12 +1,12 @@
 /*
- *  ViewModels for editing grupos to alumnos
+ *  ViewModels for editing grupos to students
  */
 
-function Alumno(id, apellido, nombre, grupo, videoclase) {
+function Alumno(id, last_name, first_name, group, videoclase) {
     var self = this;
-    self.apellido = ko.observable(apellido);
-    self.nombre = ko.observable(nombre);
-    self.grupo = ko.observable(grupo);
+    self.last_name = ko.observable(last_name);
+    self.first_name = ko.observable(first_name);
+    self.group = ko.observable(group);
     self.id = ko.observable(id);
     self.videoclase = ko.observable(videoclase);
 }
@@ -14,24 +14,24 @@ function Alumno(id, apellido, nombre, grupo, videoclase) {
 function EditarGrupo() {
     var self = this;
     self.hasCurso = ko.observable(false);
-    self.alumnos = ko.observableArray();
+    self.students = ko.observableArray();
     self.cantidadPorGrupo = ko.observable(1);
     self.alumnoActual = ko.observable();
     self.tareaActual = ko.observable();
 
     self.headers = [
-        {title:'Apellido',sortKey:'apellido'},
-        {title:'Nombre',sortKey:'nombre'},
-        {title:'# Grupo',sortKey:'grupo'},
-        {title:'Subió VideoClase',sortKey:'videoclase'},
+        {title:'Apellido',sortKey:'last_name'},
+        {title:'Nombre',sortKey:'first_name'},
+        {title:'# Grupo',sortKey:'group'},
+        {title:'Subió VideoClase',sortKey:'videoclase'}
     ];
 
     self.crearArrayGrupos = function() {
-        var grupos = []
+        var grupos = [];
         var j = 0;
         var grupoActual = 1;
         var cantidad = parseInt(self.cantidadPorGrupo());
-        for (i = 0; i < self.alumnos().length; i++) {
+        for (i = 0; i < self.students().length; i++) {
             if (j < cantidad) {
                 grupos.push(grupoActual);
                 j++;
@@ -42,20 +42,21 @@ function EditarGrupo() {
             }
         }
         return grupos;
-    }
+    };
 
     self.asignarAleatorio = function() {
         grupos = self.crearArrayGrupos();
-        for (i = 0; i < self.alumnos().length; i++) {
+        for (i = 0; i < self.students().length; i++) {
+            var group;
             if (parseInt(self.cantidadPorGrupo()) == 1) {
-                var grupo = grupos[i];
+                group = grupos[i];
             } else {
                 var ri = Math.floor(Math.random() * grupos.length);
-                var grupo = grupos.splice(ri, 1);
+                group = grupos.splice(ri, 1);
             }
-            self.alumnos()[i].grupo(grupo);
+            self.students()[i].group(group);
         }
-    }
+    };
 
     self.getVideoclaseText = function(hasVideoclase) {
         if (hasVideoclase) {
@@ -63,42 +64,42 @@ function EditarGrupo() {
         } else {
             return 'No';
         }
-    }
+    };
 
     self.siTodosTienenGrupo = function() {
-        for (var i = 0; i < self.alumnos().length; i++){
-            var alumno = self.alumnos()[i];
-            if (alumno.grupo() == undefined || !alumno.grupo()) {
+        for (var i = 0; i < self.students().length; i++){
+            var student = self.students()[i];
+            if (student.group() == undefined || !student.group()) {
                 return false;
             }
         }
         return true;
-    }
+    };
 
     self.sortTable = function(sortKey) {
         switch(sortKey){
-            case 'nombre':
-                self.alumnos.sort(function(a,b){
-                    return a.nombre() < b.nombre() ? -1 : a.nombre() > b.nombre() ? 1 : a.nombre() == b.nombre() ? 0 : 0;
+            case 'first_name':
+                self.students.sort(function(a,b){
+                    return a.first_name() < b.first_name() ? -1 : a.first_name() > b.first_name() ? 1 : a.first_name() == b.first_name() ? 0 : 0;
                 });
                 break;
-            case 'apellido':
-                self.alumnos.sort(function(a,b){
-                    return a.apellido() < b.apellido() ? -1 : a.apellido() > b.apellido() ? 1 : a.apellido() == b.apellido() ? 0 : 0;
+            case 'last_name':
+                self.students.sort(function(a,b){
+                    return a.last_name() < b.last_name() ? -1 : a.last_name() > b.last_name() ? 1 : a.last_name() == b.last_name() ? 0 : 0;
                 });
                 break;
-            case 'grupo':
-                self.alumnos.sort(function(a,b){
-                    return a.grupo() < b.grupo() ? -1 : a.grupo() > b.grupo() ? 1 : a.grupo() == b.grupo() ? 0 : 0;
+            case 'group':
+                self.students.sort(function(a,b){
+                    return a.group() < b.group() ? -1 : a.group() > b.group() ? 1 : a.group() == b.group() ? 0 : 0;
                 });
                 break;
             case 'videoclase':
-                self.alumnos.sort(function(a,b){
+                self.students.sort(function(a,b){
                     return a.videoclase() < b.videoclase() ? -1 : a.videoclase() > b.videoclase() ? 1 : a.videoclase() == b.videoclase() ? 0 : 0;
                 });
                 break;
         }
-    }
+    };
 
     self.sort = function(header,event) {
         self.sortTable(header.sortKey);
@@ -106,8 +107,8 @@ function EditarGrupo() {
 
     self.submitGrupos = function(grupos, url) {
         var fd = new FormData();
-        fd.append("grupos", JSON.stringify(grupos));
-        fd.append("tarea", parseInt(self.tareaActual()));
+        fd.append("groups", JSON.stringify(grupos));
+        fd.append("homework", parseInt(self.tareaActual()));
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -119,23 +120,24 @@ function EditarGrupo() {
             data: fd,
             type: "post",
             processData: false,
-            contentType: false,
+            contentType: false
         });
-    }
+    };
 
     self.validateGrupos = function() {
         var valid = true;
-        var grupoNumbers = []
-        for (var i = 0; i < self.alumnos().length; i++) {
-            var grupo = parseInt(self.alumnos()[i].grupo());
-            if ($.inArray(grupo, grupoNumbers) == -1) {
-                grupoNumbers.push(grupo)
+        var grupoNumbers = [];
+        var i;
+        for (i = 0; i < self.students().length; i++) {
+            var group = parseInt(self.students()[i].group());
+            if ($.inArray(group, grupoNumbers) == -1) {
+                grupoNumbers.push(group)
             }
         }
         grupoNumbers = grupoNumbers.sort(function (a, b) { 
             return a - b;
         });
-        for (var i = 0; i < grupoNumbers.length; i++) {
+        for (i = 0; i < grupoNumbers.length; i++) {
             if (grupoNumbers[i] != i + 1)
                 valid = false;
         }

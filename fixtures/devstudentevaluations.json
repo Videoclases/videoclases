@@ -1,0 +1,155 @@
+[
+{
+    "fields": {
+        "author": 4,
+        "videoclase": 33,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 22
+},
+{
+    "fields": {
+        "author": 4,
+        "videoclase": 35,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 23
+},
+{
+    "fields": {
+        "author": 4,
+        "videoclase": 38,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 24
+},
+{
+    "fields": {
+        "author": 1,
+        "videoclase": 38,
+        "value": -1
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 25
+},
+{
+    "fields": {
+        "author": 1,
+        "videoclase": 37,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 26
+},
+{
+    "fields": {
+        "author": 1,
+        "videoclase": 36,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 27
+},
+{
+    "fields": {
+        "author": 1,
+        "videoclase": 35,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 28
+},
+{
+    "fields": {
+        "author": 1,
+        "videoclase": 34,
+        "value": 1
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 29
+},
+{
+    "fields": {
+        "author": 3,
+        "videoclase": 38,
+        "value": -1
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 30
+},
+{
+    "fields": {
+        "author": 3,
+        "videoclase": 33,
+        "value": -1
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 31
+},
+{
+    "fields": {
+        "author": 3,
+        "videoclase": 35,
+        "value": 1
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 32
+},
+{
+    "fields": {
+        "author": 3,
+        "videoclase": 31,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 33
+},
+{
+    "fields": {
+        "author": 2,
+        "videoclase": 38,
+        "value": 1
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 34
+},
+{
+    "fields": {
+        "author": 2,
+        "videoclase": 32,
+        "value": 1
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 35
+},
+{
+    "fields": {
+        "author": 2,
+        "videoclase": 34,
+        "value": -1
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 36
+},
+{
+    "fields": {
+        "author": 2,
+        "videoclase": 33,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 37
+},
+{
+    "fields": {
+        "author": 2,
+        "videoclase": 36,
+        "value": 0
+    },
+    "model": "videoclases.studentevaluations",
+    "pk": 38
+}
+]

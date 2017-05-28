@@ -1,0 +1,72 @@
+﻿{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block teacher-active %}class="menu-top-active"{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-2"><h4>Profesor</h4></div>
+        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
+        <div class="col-xs-2 col-xs-offset-6">
+            <button onclick="location.href = '{% url 'editar_course' course.id %}';" class="btn btn-info">Editar Curso
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><h4>Colegio</h4></div>
+        <div class="col-xs-2"><h5>{{ course.school.name }}</h5></div>
+        <div class="col-xs-2 col-xs-offset-6">
+            <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h6 class="page-head-line"></h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h6 class="page-head-line">Curso {{ course.name }}</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive col-xs-12">
+            {% if students %}
+                <table id="example" class="cell-border" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Apellido</th>
+                        <th>Nombre</th>
+                        <th>Nombre de user</th>
+                        <th>Tareas entregadas</th>
+                        <th>Tareas pendientes</th>
+                        <th>VideoClases respondidas</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for a in students %}
+                        <tr>
+                            <td class="table-clickable"
+                                onclick="location.href = '{% url 'videoclases_student' a.id %}';">
+                                <a>{{ a.last_name }}</a></td>
+                            <td class="table-clickable"
+                                onclick="location.href = '{% url 'videoclases_student' a.id %}';">
+                                <a>{{ a.first_name }}</a></td>
+                            <td>{{ a.username }}</td>
+                            <td>{{ a.homeworks_entregadas }}</td>
+                            <td>{{ a.homeworks_pendientes }}</td>
+                            <td>{{ a.videoclases_respondidas }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <label>Este course no tiene students asignados</label>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra-script %}
+    {% include 'aux/table-translation-es.html' %}
+{% endblock %}

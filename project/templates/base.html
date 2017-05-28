@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load videoclases_tags %}
+{% load crispy_forms_tags %}
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
@@ -10,14 +11,15 @@
     <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <![endif]-->
-    <title>{% block title %}VideoClases{% endblock %}</title>
-    <link rel="shortcut icon" type="image/png" href="{% static "img/favicon.png" %}"/>
+    <title>{% block title %}Teaching is Learning{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static "img/logoTIL_burned.png" %}"/>
     <!-- BOOTSTRAP CORE STYLE  -->
     <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
     <!-- FONT AWESOME ICONS  -->
     <link href="{% static "assets/css/font-awesome.css" %}" rel="stylesheet">
     <!-- CUSTOM STYLE  -->
     <link href="{% static "assets/css/style.css" %}" rel="stylesheet">
+    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
     <link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet">
     <!-- CORE SCRIPTS -->
     <script src="{% static "assets/js/jquery-1.11.1.js" %}"></script>
@@ -44,8 +46,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    <img src="{% static "img/logo.png" %}" />
+                <a href="{% url 'index' %}">
+                    <img src="{% static "img/logoTIL_full.png" %}" />
                 </a>
             </div>
             <div class="left-div">
@@ -58,17 +60,23 @@
                                 <br /><a href="{% url 'logout' %}">Cerrar sesión</a>
                             </div>
                         {% else %}
-                            <form class="form-inline" action="{% url 'login' %}" method="post" id="login-form">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <input class="input-sm" id="id_username" maxlength="100" name="username" type="text" placeholder="Nombre de usuario" />
+                               {% crispy form %}
+                            <a style="color: white;"  data-toggle="modal" data-target="#forgot_password" href="#">Olvidé mi clave</a>
+                            <div class="modal fade" id="forgot_password" tabindex="-1" role="dialog" aria-labelledby="forgot_passwordLabel" style="color:black">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="gridSystemModalLabel">Recuperar contraseña</h4>
+                                      </div>
+                                      <div class="modal-body" >
+                                    <span>Pidele a tu profesor que cambie tu contraseña, en caso de ser un profesor contacta a
+                                        <a href="mailto:software@teachingislearning.cl">software@teachingislearning.cl</a>
+                                        </span>
+                                  </div>
                                 </div>
-                                <div class="form-group">
-                                    <input class="input-sm" id="id_password" name="password" type="password" placeholder="Contraseña"/>
-                                </div>
-                                <button type="submit" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-user"></span> Ingresar</button>
-                            </form>
-                            <a style="color: white;" href="">Olvidé mi clave</a>
+                              </div>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -80,7 +88,7 @@
     <section class="menu-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <div class="navbar-collapse collapse ">
                         <ul id="menu-top" class="nav navbar-nav navbar-right">
                             {% block menu-top %}
@@ -90,10 +98,10 @@
                                 Videoclases</a></li>
                                 {% endcomment %}
                                 {% ifusergroup Alumnos %}
-                                    <li><a {% block alumno-active %}{% endblock %} href="{% url 'alumno' %}">Alumno</a></li>
+                                    <li><a {% block student-active %}{% endblock %} href="{% url 'student' %}">Alumno</a></li>
                                 {% endifusergroup %}
                                 {% ifusergroup Profesores %}
-                                    <li><a {% block profesor-active %}{% endblock %} href="{% url 'profesor' %}">Profesor</a></li>
+                                    <li><a {% block teacher-active %}{% endblock %} href="{% url 'teacher' %}">Profesor</a></li>
                                 {% endifusergroup %}
                                 {% if not user.is_anonymous %}
                                     <li><a {% block perfil-active %}{% endblock %} href="{% url 'perfil' %}"><img width="20px" height="20px" src="{% static "img/settings.png" %}" /></a></li>
@@ -108,17 +116,37 @@
     </section>
 <!-- MENU SECTION END-->
 
+    <div class="content-wrapper">
+<div class="container">
+        {% if messages %}
+    <div class="row">
+    <div class="col-xs-12">
+    <div class="row">
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {% for message in messages %}
+            <div align="center">{{ message }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+</div>
+        {% endif %}
     {% block body %}
     {% endblock %}
+    </div>
+
+    </div>
+
 
 
     <footer>
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    ¿Quiere usar VideoClases en su colegio? 
+                <div class="col-xs-12">
+                    ¿Quiere usar la methodologia TiL en su colegio?
                     <button class="btn btn-success btn-sm">
-                        <span class="glyphicon glyphicon-pencil"> <a href="mailto:contacto@tuapp.org">contacto@tuapp.org</a></span>
+                        <span class="glyphicon glyphicon-pencil"> <a href="mailto:contacto@teachingislearning.cl">contacto@teachingislearning.cl</a></span>
                     </button>
                 </div>
             </div>

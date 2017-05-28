@@ -1,0 +1,109 @@
+﻿{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block teacher-active %}class="menu-top-active"{% endblock %}
+
+{% block extra-head %}
+<script type="text/javascript">
+    function deleteTarea(homeworkId) {
+        if (confirm("¿Seguro que deseas borrar esta tarea?")) {
+
+        }
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="col-xs-12">
+                        <div class="col-xs-6"><h4>Profesor</h4></div>
+                        <div class="col-xs-6"><h5>{{ user.get_full_name }}</h5></div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="col-xs-6"><h4>Colegio</h4></div>
+                        <div class="col-xs-6"><h5>{{ user.teacher.school.name }}</h5></div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="col-xs-4">
+                        <button onclick="location.href = '{% url 'crear_course' %}';" class="btn btn-info">Crear curso
+                        </button>
+                    </div>
+                    <div class="col-xs-4 ">
+                        <button onclick="location.href = '{% url 'crear_homework' %}';" class="btn btn-info">Crear
+                            tarea
+                        </button>
+                    </div>
+                    <div class="col-xs-4 ">
+                        <button onclick="location.href = '{% url 'new_conceptual_test' %}';" class="btn btn-info">Crear
+                            Test Conceptual
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h6 class="page-head-line"></h6>
+                </div>
+            </div>
+            <div class="row table-responsive col-xs-12">
+                <table id="example" class="cell-border" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Curso</th>
+                            <th>Profesor</th>
+                            <th>Tareas</th>
+                            <th>Estado de<br> tarea</th>
+                            <th>Test Conceptual </th>
+                            <th>VideoClases<br> subidas</th>
+                            <th>Fecha de<br> entrega</th>
+                            <th>Fecha de<br> evaluación</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in homeworks %}
+                            <tr>
+                                <td class="table-clickable" onclick="location.href = '{% url 'course' t.course.id %}';"><a>{{ t.course.name }}</a></td>
+                                <td>{{ t.teacher.user.get_full_name }}</td>
+                                <td class="table-clickable" onclick="location.href = '{% url 'videoclases_homework' t.id %}';"><a>{{ t.title }}</a></td>
+                                <td>{{ t.get_estado_nombre }}</td>
+                                {% if t.pedagogicalquestions %}
+                                <td  class="table-clickable" onclick="location.href = '{% url 'pedagogical_questions' t.pedagogicalquestions.id %}';">
+                                    <a>{{ t.pedagogicalquestions|truncatechars:15|default:'No posee test aún'}}</a></td>
+                                    {% else %}<td>No posee test aún</td>
+                                {% endif %}
+                                <td>{{ t.get_uploaded_videoclases }} / {{ t.groups.count }}</td>
+                                <td>{{ t.date_upload|date:'d-m-Y' }}</td>
+                                <td>{{ t.date_evaluation|date:'d-m-Y' }}</td>
+                                <td><form action="{% url 'borrar_homework' %}" method="post">
+                                        {% csrf_token %}
+                                        <input name="homework" style="display: none" value="{{t.id}}" />
+
+                                        <input type="submit" value="Borrar" class="btn btn-danger" onclick="deleteTarea({{t.id}})" />
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        {% for c in courses_sin_homework %}
+                            <tr>
+                                <td class="table-clickable" onclick="location.href = '{% url 'course' c.id %}';"><a>{{ c.name }}</a></td>
+                                <td>{{ c.student_set.count }}</td>
+                                <td>Sin tareas</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+{% endblock %}
+
+{% block extra-script %}
+{% include 'aux/teacher-table.html' %}
+{% endblock %}

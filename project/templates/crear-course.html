@@ -1,0 +1,70 @@
+﻿{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block teacher-active %}class="menu-top-active"{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-2"><h4>Profesor</h4></div>
+        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
+        <div class="col-xs-2 col-xs-offset-6">
+            <button class="btn btn-info">Crear curso</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"><h4>Colegio</h4></div>
+        <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
+        <div class="col-xs-2 col-xs-offset-6">
+            <button onclick="location.href = '{% url 'crear_homework' %}';" class="btn btn-info">Crear Tarea</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h6 class="page-head-line"></h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h6 class="page-head-line">Crear curso</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12" align="center">
+            <div class="row">
+                <h4>Si deseas subir una planilla, sigue este formato:</h4>
+                <img src="{% static "img/formatoPlanilla.png" %}"/>
+            </div>
+            <div class="row">
+                <div class="col-xs-3 col-xs-offset-3">
+                    <h4>Descargar planilla: </h4>
+                </div>
+                <div class="col-xs-1">
+                    <h4><a href="{% static "templates/template.ods" %}">ODS</a></h4>
+                </div>
+                <div class="col-xs-1">
+                    <h4><a href="{% static "templates/template.xls" %}">XLS</a></h4>
+                </div>
+                <div class="col-xs-1">
+                    <h4><a href="{% static "templates/template.xlsx" %}">XLSX</a></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-xs-2" align="center">{{ form.name.label }}</div>
+            <div class="col-xs-2" align="center"><input class="form-control" type="text" name="{{ form.name.name }}"/>
+            </div>
+            <div class="col-xs-2" align="center">{{ form.year.label }}</div>
+            <div class="col-xs-2" align="center">
+                <input class="form-control" type="number" name="{{ form.year.name }}" min="2015" step="1"/></div>
+            <div class="col-xs-1" align="center">{{ form.file.label }}</div>
+            <div class="col-xs-3" align="center">
+                <input id="id_file" name="{{ form.file.name }}" type="file" class="form-control"/></div>
+            <div class="col-xs-12" align="center">
+                <button type="submit" class="btn btn-success">Crear Curso</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
