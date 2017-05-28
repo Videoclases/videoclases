@@ -1,3 +1,4 @@
+# coding=utf-8
 import urlparse
 
 from django.core.validators import MaxLengthValidator
@@ -26,8 +27,13 @@ class Homework(models.Model):
     homework_to_evaluate = models.ForeignKey('Homework', blank=True, null=True)
 
     def __unicode__(self):
-        return 'Course: ' + self.course.name + ' ' + str(self.course.year) + ' ' + \
-        self.title
+        return u"Curso: {0}, {1}".format(self.course.name,self.title)
+
+    def full_name(self):
+        return u"Curso: {0} {1} {2}".format(
+            self.course.name,
+            self.course.year,
+            self.title)
 
     def get_estado(self):
         today = timezone.datetime.date(timezone.datetime.today())

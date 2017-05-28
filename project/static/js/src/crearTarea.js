@@ -40,7 +40,7 @@ function viewModel() {
         fd.append("revision", parseInt(self.homework.revision()));
         fd.append("title", self.homework.title());
         fd.append("video", self.homework.video());
-        fd.append("homework_to_evaluate", self.homework.homework_to_evaluate());
+        if(self.homework.homework_to_evaluate()) fd.append("homework_to_evaluate", self.homework.homework_to_evaluate());
         var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
         var subidaArray = reggie.exec(self.homework.date_upload());
         var evaluacionArray = reggie.exec(self.homework.date_evaluation());
@@ -63,7 +63,6 @@ function viewModel() {
             processData: false,
             contentType: false,
             success: function(response){
-                console.log(response);
                 if (response.success) {
                     self.asignarGrupo.tareaActual(response.id);
                     $("#asignar-group-form-submit").click();

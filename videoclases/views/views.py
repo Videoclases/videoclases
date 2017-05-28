@@ -676,6 +676,7 @@ class EditarTareaView(UpdateView):
         homework = Homework.objects.get(id=self.kwargs['homework_id'])
         context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
         context['homework'] = homework
+        context['homeworks'] = Homework.objects.filter(course__in=context['courses']).exclude(id=homework.id)
         context['videoclases_recibidas'] = GroupOfStudents.objects.filter(homework=homework) \
             .exclude(videoclase__video__isnull=True) \
             .exclude(videoclase__video__exact='').count()
@@ -683,16 +684,8 @@ class EditarTareaView(UpdateView):
 
     def form_valid(self, form):
         self.object = self.get_object()
-        if self.object.video not in ['', None]:
-            video = self.object.video
-        else:
-            video = form.cleaned_data['video']
-        if form.cleaned_data['video'] == 'empty video':
-            video = ''
-        self.object = form.save(commit=False)
-        self.object.video = video
-        self.object.save()
-        result_dict = {}
+        self.object = form.save()
+        result_dict = dict()
         result_dict['id'] = self.object.id
         return JsonResponse(result_dict)
 

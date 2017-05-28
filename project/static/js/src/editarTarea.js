@@ -118,46 +118,53 @@ function viewModel() {
         var mustSubmit = false;
         var hasErrors = self.checkFormErrors();
         if (!hasErrors) {
-            if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) != 0) {
+            if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) !== 0) {
                 mustSubmit = true;
                 fd.append("title", self.homework.title());
             }
-            if (self.homework.description().localeCompare(self.homeworkDatosIniciales.description()) != 0) {
+            if (self.homework.description().localeCompare(self.homeworkDatosIniciales.description()) !== 0) {
                 mustSubmit = true;
                 fd.append("description", self.homework.description());
             }
-            if (parseInt(self.homework.course()) != parseInt(self.homeworkDatosIniciales.course())) {
+            if (parseInt(self.homework.course()) !== parseInt(self.homeworkDatosIniciales.course())) {
                 mustSubmit = true;
                 fd.append("course", parseInt(self.homework.course()));
             }
-            if (parseInt(self.homework.revision()) != parseInt(self.homeworkDatosIniciales.revision())) {
+            if (parseInt(self.homework.revision()) !== parseInt(self.homeworkDatosIniciales.revision())) {
                 mustSubmit = true;
                 fd.append("revision", parseInt(self.homework.revision()));
             }
-            if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) != 0) {
+            if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) !== 0) {
                 mustSubmit = true;
                 fd.append("title", self.homework.title());
             }
             if (self.homework.video()) {
-                if (self.homework.video().localeCompare(self.homeworkDatosIniciales.video()) != 0) {
+                if (self.homework.video().localeCompare(self.homeworkDatosIniciales.video()) !== 0) {
                     mustSubmit = true;
                     fd.append("video", self.homework.video());
                 }
             } else {
                 if (self.homeworkDatosIniciales.video()) {
                     mustSubmit = true;
-                    fd.append("video", "empty video");
+                    fd.append("video", "empty");
                 }
             }
+            if (self.homework.homework_to_evaluate() !== self.homeworkDatosIniciales.homework_to_evaluate()) {
+                mustSubmit = true;
+                if(self.homework.homework_to_evaluate())
+                    fd.append("homework_to_evaluate", self.homework.homework_to_evaluate());
+                else
+                    fd.append('homework_to_evaluate',self.id());
+            }
             var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-            if (self.homework.date_upload().localeCompare(self.homeworkDatosIniciales.date_upload()) != 0) {
+            if (self.homework.date_upload().localeCompare(self.homeworkDatosIniciales.date_upload()) !== 0) {
                 mustSubmit = true;
                 var subidaArray = reggie.exec(self.homework.date_upload());
                 var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
                     +(+subidaArray[1]);
                 fd.append("date_upload", subidaDate);
             }
-            if (self.homework.date_evaluation().localeCompare(self.homeworkDatosIniciales.date_evaluation()) != 0) {
+            if (self.homework.date_evaluation().localeCompare(self.homeworkDatosIniciales.date_evaluation()) !== 0) {
                 mustSubmit = true;
                 var evaluacionArray = reggie.exec(self.homework.date_evaluation());
                 var evaluacionDate = (+evaluacionArray[3]) + '-' + (+evaluacionArray[2]) + '-'
