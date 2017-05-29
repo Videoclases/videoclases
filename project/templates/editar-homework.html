@@ -17,7 +17,17 @@
                         {name: '{{ c.name }}', id: {{ c.id }}},
                     {% endif %}
                 {% endfor %}
-            ]
+            ];
+
+            self.homework_to_evaluate = [
+                {% for c in homeworks %}
+                    {% if forloop.last %}
+                        {name: '{{ c }}', id: {{ c.id }}}
+                    {% else %}
+                        {name: '{{ c }}', id: {{ c.id }}},
+                    {% endif %}
+                {% endfor %}
+            ];
         }
     </script>
     <script src="{% static "js/src/editarGrupo.js" %}"></script>
@@ -44,6 +54,10 @@
             vm.homeworkDatosIniciales.date_upload("{{ homework.date_upload|date:'d/m/Y' }}");
             vm.homeworkDatosIniciales.revision({{ homework.revision }});
             vm.homeworkDatosIniciales.course({{ homework.course.id }});
+            {% if homework.homework_to_evaluate %}
+                vm.homework.homework_to_evaluate({{ homework.homework_to_evaluate.id}});
+                vm.homeworkDatosIniciales.homework_to_evaluate({{ homework.homework_to_evaluate.id}});
+            {% endif %}
             vm.id({{ homework.id }});
 
             // initial data for groups
@@ -226,6 +240,17 @@
                                         startView: 2
                                     });
                                 </script>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-7">Tarea a evaluar</div>
+                            <div class="col-xs-5">
+                                <select name="homework_to_evaluate" class="form-control" id="id_homework_to_evaluate"
+                                        data-bind="options: select.homework_to_evaluate,
+                                            optionsText: 'name',
+                                            optionsValue: 'id',
+                                            optionsCaption: '-- escoja para evaluar otra tarea--',
+                                            value: homework.homework_to_evaluate"></select>
                             </div>
                         </div>
                     </div>

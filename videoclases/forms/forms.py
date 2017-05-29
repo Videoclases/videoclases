@@ -170,7 +170,7 @@ class EditarTareaForm(forms.ModelForm):
     class Meta:
         model = Homework
         fields = ['video', 'title', 'description', 'course', 'revision',
-                  'date_upload', 'date_evaluation']
+                  'date_upload', 'date_evaluation', 'homework_to_evaluate']
         dateOptions = {
             'weekStart': 1,
             'todayHighlight': True,
@@ -193,6 +193,19 @@ class EditarTareaForm(forms.ModelForm):
         if date_evaluation < date_upload:
             msg = u'Fecha para evaluar debe ser posterior a Fecha para subir homework.'
             self._errors['date_evaluation'] = self.error_class([msg])
+
+    def save(self, commit=True):
+        instance = super(EditarTareaForm, self).save(commit=False)
+        if self.cleaned_data.get('video', None) is not None:
+            instance.video = self.cleaned_data['video']
+        if self.cleaned_data.get('video', None) == 'empty video':
+            instance.video = u""
+        if self.cleaned_data.get('homework_to_evaluate', None) == instance:
+            instance.homework_to_evaluate = None
+
+        if commit:
+            instance.save()
+        return instance
 
     def __init__(self, *args, **kwargs):
         super(EditarTareaForm, self).__init__(*args, **kwargs)
