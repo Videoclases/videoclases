@@ -1,6 +1,6 @@
 from django.db import models
 
-from quality_control.models.quality_item import QualityItem
+from .quality_item import QualityItem
 from videoclases.models.homework import Homework
 
 

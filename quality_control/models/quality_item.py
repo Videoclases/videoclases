@@ -1,6 +1,6 @@
 from django.db import models
 
-from quality_control.models.quality_score import QualityScore
+from .quality_score import QualityScore
 from videoclases.models.video_clase import VideoClase
 
 
