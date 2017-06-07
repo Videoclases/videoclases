@@ -28,4 +28,8 @@ class StudentEvaluations(models.Model):
     videoclase = models.ForeignKey(VideoClase, related_name='evaluations')
 
     def __unicode__(self):
-        return 'Autor: ' + self.author.user.first_name + '. Valor: ' + str(self.value)
+        return u'{0}, videoclase:{1}, {2}'.format(
+            self.author.user.get_full_name(),
+            self.videoclase.id,
+            self.videoclase.homework.full_name()
+        )

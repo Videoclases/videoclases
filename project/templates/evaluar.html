@@ -8,34 +8,19 @@
         function ResponseValues() {
             var self = this;
             self.alternativas = [
-                {% for a in alternativas %}
-                    {% if forloop.last %}
-                        '{{ a }}'
-                    {% else %}
-                        '{{ a }}',
-                    {% endif %}
-                {% endfor %}
             ];
-            self.value = ko.observable({{evaluacion.value}});
+            self.value = ko.observable();
 
-            self.format = ko.observable({{evaluacion.format}});
-            self.copyright = ko.observable({{evaluacion.copyright}});
-            self.theme = ko.observable({{evaluacion.theme}});
-            self.pedagogical = ko.observable({{evaluacion.pedagogical}});
-            self.rythm = ko.observable({{evaluacion.rythm}});
-            self.originality = ko.observable({{evaluacion.originality}});
+            self.format = ko.observable();
+            self.copyright = ko.observable();
+            self.theme = ko.observable();
+            self.pedagogical = ko.observable();
+            self.rythm = ko.observable();
+            self.originality = ko.observable();
 
-            self.score_choices = [
-                {% for a in evaluacion.scores %}
-                    {% if forloop.last %}
-                         {'name':'{{ a.0 }}', 'value': {{ a.1 }} }
-                    {% else %}
-                        {'name':'{{ a.0 }}', 'value': {{ a.1 }} } ,
-                    {% endif %}
-                {% endfor %}
-            ];
-            self.videoclase = ko.observable({{group.videoclase.id}});
-            self.evaluacion = ko.observable({{evaluacion.pk}});
+            self.score_choices = [];
+            self.videoclase = ko.observable();
+            self.evaluacion = ko.observable();
             self.thumbUpGray = ko.observable('{% static "img/thumb-up-gray.png" %}');
             self.thumbUpGreen = ko.observable('{% static "img/thumb-up-green.png" %}');
             self.thumbDownGray = ko.observable('{% static "img/thumb-down-gray.png" %}');
@@ -59,8 +44,13 @@
             <strong>¡Oh no! La answer correcta era <span data-bind="text: correctAnswerText"></span>. En unos segundos cargará la siguiente VideoClase.</strong>
         </div>
     </div>
+    <div class="loader" data-bind="visible: loading">
+        <div class="loader-text" align="center">
+            <strong>Cargando evaluación, espere un momento</strong>
+        </div>
+    </div>
     <div class="content-wrapper">
-        <div class="container">
+        <div class="container" data-bind="visible: !loading">
             <div class="row">
                 <div class="col-xs-2 col-xs-offset-10">
                     <button onclick="location.href = '{% url 'student' %}';" class="btn btn-info">Volver</button>

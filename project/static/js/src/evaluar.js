@@ -6,8 +6,8 @@ function viewModel() {
     var self = this;
 
     self.responseValues = new ResponseValues();
-
     self.correctAnswer = ko.observable(false);
+    self.loading = ko.observable(true);
     self.wrongAnswer = ko.observable(false);
     self.doNotShowAnswer = ko.observable(false);
     self.correctAnswerText = ko.observable("");
@@ -24,39 +24,59 @@ function viewModel() {
     self.originality = ko.observable();
 
     self.thumbUp = ko.computed(function() { 
-        if (parseInt(self.value()) == 1) {
+        if (parseInt(self.value()) === 1) {
             return self.responseValues.thumbUpGreen(); 
         } else {
             return self.responseValues.thumbUpGray(); 
         }
     });
     self.thumbDown = ko.computed(function() { 
-        if (parseInt(self.value()) == -1) {
+        if (parseInt(self.value()) === -1) {
             return self.responseValues.thumbDownRed(); 
         } else {
             return self.responseValues.thumbDownGray(); 
         }
     });
 
+    self.loadVideoInfo = function () {
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        return $.ajax('/api/get-videoclases/' + self.responseValues.evaluacion() + '/', {
+            type: "get",
+            processData: false,
+            contentType: false,
+            success: function(response){
+            }
+        });
+    };
+
     self.clickSiguienteVideoclase = function() {
-        if (self.answer() == undefined) {
-            alert("Debes seleccionar una respuesta");
-            return;
+        if(self.loading.value()){
+            if (self.answer() === undefined) {
+                alert("Debes seleccionar una respuesta");
+                return;
+            }
+            if(self.format() === undefined || self.copyright() === undefined
+                || self.theme() === undefined || self.pedagogical() === undefined
+                || self.pedagogical() === undefined || self.rythm() === undefined
+                || self.originality() === undefined){
+                alert("Debes completar la evaluación de los criterios");
+                return;
+            }
+            self.submitEvaluacionDeAlumno();
+            self.submitRespuestaDeAlumno();
         }
-        if(self.format() == undefined || self.copyright() == undefined
-        || self.theme() == undefined || self.pedagogical() == undefined
-        || self.pedagogical() == undefined || self.rythm() == undefined
-        || self.originality() == undefined){
-            alert("Debes completar la evaluación de los criterios");
-            return;
-        }
-        self.submitEvaluacionDeAlumno();
-        self.submitRespuestaDeAlumno();
-    }
+
+    };
 
     self.evaluar = function(value) {
         self.responseValues.value(value);
-    }
+    };
 
     self.submitEvaluacionDeAlumno = function(data, event) {
         var fd = new FormData();
@@ -85,7 +105,7 @@ function viewModel() {
             success: function(response){
             }
         });
-    }
+    };
 
     self.submitRespuestaDeAlumno = function() {
         var fd = new FormData();
