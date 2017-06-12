@@ -11,6 +11,18 @@ function viewModel() {
     self.wrongAnswer = ko.observable(false);
     self.doNotShowAnswer = ko.observable(false);
     self.correctAnswerText = ko.observable("");
+    self.homework = ko.observable();
+    self.group = ko.observable();
+    self.video= ko.observable("");
+    self.question= ko.observable("");
+    self.msg= ko.observable("");
+    self.videoclase_id= ko.observable();
+
+    self.formErrorsVisible = ko.observable(false);
+
+    self.changeFormErrorsVisible = function(visibility) {
+        self.formErrorsVisible(visibility);
+    };
 
     self.url = ko.observable(window.location.pathname);
     self.value = ko.computed(function() { return self.responseValues.value(); });
@@ -46,17 +58,32 @@ function viewModel() {
                 }
             }
         });
-        return $.ajax('/api/get-videoclases/' + self.responseValues.evaluacion() + '/', {
+        return $.ajax('/api/homework/' + self.responseValues.homework() + '/evaluate', {
             type: "get",
             processData: false,
             contentType: false,
             success: function(response){
+                // debugger;
+                console.log(response);
+                if(response.redirect){
+                    alert("Completaste todas las evaluaciones de esta tarea");
+                    location.href="/";
+                }else{
+                    self.responseValues.alternativas(response.alternativas);
+                    self.responseValues.group(response.group);
+                    self.responseValues.video(response.video);
+                    self.responseValues.question(response.question);
+                    self.responseValues.videoclase_id(response.videoclase_id);
+                    self.loading(false);
+                }
             }
         });
     };
 
     self.clickSiguienteVideoclase = function() {
-        if(self.loading.value()){
+
+        if($("#answerForm").valid()){
+
             if (self.answer() === undefined) {
                 alert("Debes seleccionar una respuesta");
                 return;
@@ -68,6 +95,8 @@ function viewModel() {
                 alert("Debes completar la evaluación de los criterios");
                 return;
             }
+            self.msg("Guardando evaluación");
+            self.loading(true);
             self.submitEvaluacionDeAlumno();
             self.submitRespuestaDeAlumno();
         }
@@ -89,7 +118,7 @@ function viewModel() {
         fd.append("rythm", parseFloat(self.rythm()));
         fd.append("originality", parseFloat(self.originality()));
 
-        fd.append("videoclase", parseInt(self.responseValues.videoclase()));
+        fd.append("videoclase", parseInt(self.responseValues.videoclase_id()));
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -97,7 +126,7 @@ function viewModel() {
                 }
             }
         });
-        return $.ajax('/student/evaluar-video/' + self.responseValues.evaluacion() + '/', {
+        return $.ajax('/student/evaluar-video/', {
             data: fd,
             type: "post",
             processData: false,
@@ -110,7 +139,7 @@ function viewModel() {
     self.submitRespuestaDeAlumno = function() {
         var fd = new FormData();
         fd.append("answer", self.answer());
-        fd.append("videoclase", self.responseValues.videoclase());
+        fd.append("videoclase", self.responseValues.videoclase_id());
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -125,6 +154,7 @@ function viewModel() {
             contentType: false,
             success: function(response){
                 if (response.success) {
+                    self.loading(false);
                     if (response.show_correct_answer) {
                         if (response.is_correct) {
                             self.correctAnswer(true);
@@ -132,9 +162,9 @@ function viewModel() {
                             self.correctAnswerText(response.correct_answer);
                             self.wrongAnswer(true);
                         }
-                        setTimeout(function() { location.reload(); }, 2500);
+                        setTimeout(function() { location.href =self.url(); }, 5000);
                     } else {
-                        location.reload();
+                        location.href=self.url();
                     }
                 }
             }

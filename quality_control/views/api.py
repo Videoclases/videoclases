@@ -6,7 +6,8 @@ from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
-
+from django.views.generic.detail import DetailView
+from django.core import serializers
 from videoclases.models.groupofstudents import GroupOfStudents
 from videoclases.models.homework import Homework
 from videoclases.models.student_evaluations import StudentEvaluations
@@ -17,13 +18,12 @@ def in_students_group(user):
         return user.groups.filter(name='Alumnos').exists()
     return False
 
-class GetVideoClaseView(TemplateView):
+class GetVideoClaseView(DetailView):
     template_name = 'blank.html'
+    model = Homework
     def get(self, request, *args, **kwargs):
-        import ipdb
-        ipdb.set_trace()
         result = dict()
-        homework_base = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
+        homework_base = self.get_object()
         homework = homework_base
         groups = GroupOfStudents.objects.filter(homework=homework)
         student = self.request.user.student
@@ -46,15 +46,14 @@ class GetVideoClaseView(TemplateView):
                             group.videoclase.alternative_2,
                             group.videoclase.alternative_3]
             random.shuffle(alternativas)
-            evaluacion, created = StudentEvaluations.objects.get_or_create(author=student,
-                                                                           videoclase=group.videoclase)
-            result['group'] = group
+            result['group'] = group.id
+            result['video'] = group.videoclase.video
+            result['question'] = group.videoclase.question
+            result['videoclase_id'] = group.videoclase.pk
             result['alternativas'] = alternativas
-            result['evaluacion'] = evaluacion
             result['redirect'] = False
         else:
             result['redirect'] = True
-
         #TODO: chequear usuario, formato de result y enviar
         return JsonResponse(result)
 

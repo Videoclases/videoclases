@@ -7,20 +7,32 @@
     <script type="text/javascript">
         function ResponseValues() {
             var self = this;
-            self.alternativas = [
-            ];
+            self.question = "";
+            self.alternativas = ko.observable([]);
             self.value = ko.observable();
-
+            self.video = ko.observable();
+            self.videoclase_id = ko.observable();
+            self.group = ko.observable();
+            self.question = ko.observable("");
+            self.msg = ko.observable("");
             self.format = ko.observable();
             self.copyright = ko.observable();
             self.theme = ko.observable();
             self.pedagogical = ko.observable();
             self.rythm = ko.observable();
             self.originality = ko.observable();
-
-            self.score_choices = [];
+            self.homework = ko.observable({{ homework_id }});
             self.videoclase = ko.observable();
             self.evaluacion = ko.observable();
+            self.score_choices = [
+                {% for a in score %}
+                    {% if forloop.last %}
+                         {'name':'{{ a.0 }}', 'value': {{ a.1 }} }
+                    {% else %}
+                        {'name':'{{ a.0 }}', 'value': {{ a.1 }} } ,
+                    {% endif %}
+                {% endfor %}
+            ];
             self.thumbUpGray = ko.observable('{% static "img/thumb-up-gray.png" %}');
             self.thumbUpGreen = ko.observable('{% static "img/thumb-up-green.png" %}');
             self.thumbDownGray = ko.observable('{% static "img/thumb-down-gray.png" %}');
@@ -34,6 +46,7 @@
 {% endblock %}
 
 {% block body %}
+<form id="answerForm" method="post">
     <div class="correct-answer" data-bind="visible: correctAnswer">
         <div align="center">
             <strong>¡Felicitaciones! Tu answer es correcta. En unos segundos cargará la siguiente VideoClase.</strong>
@@ -46,54 +59,57 @@
     </div>
     <div class="loader" data-bind="visible: loading">
         <div class="loader-text" align="center">
-            <strong>Cargando evaluación, espere un momento</strong>
+            <strong data-bind="visible: msg.length==0">Cargando evaluación, espere un momento</strong>
+            <strong data-bind="visible: msg.length>0, text: msg">Guardando evaluación, espere un momento</strong>
         </div>
     </div>
     <div class="content-wrapper">
-        <div class="container" data-bind="visible: !loading">
-            <div class="row">
+        <div class="container">
+            <div class="row" id="top-form-head-line">
                 <div class="col-xs-2 col-xs-offset-10">
                     <button onclick="location.href = '{% url 'student' %}';" class="btn btn-info">Volver</button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <h6 class="page-head-line">{{ user.student.course_actual.school.name }} - {{ user.student.course_actual.name }} - {{ group.homework.title }}</h6>
+                    <h6 class="page-head-line">{{ user.student.course_actual.school.name }} - {{ user.student.course_actual.name }} - {{ homework.title }}</h6>
+                    <h3>Evaluaciones realizadas: {{ number_evaluations }}, mínimo: {{ homework.revision }}</h3>
                 </div>
             </div>
-            <div class="row">
+
+            <div class="row" data-bind="visible: formErrorsVisible">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-bind="click: function() {changeFormErrorsVisible(false)}"
+                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div align="center">
+                        Se deben completar todos los campos
+                    </div>
+                </div>
+            </div>
+            <div class="row" data-bind="visible: !responseValues.loading">
                 <div class="col-xs-6">
-                    <iframe width="100%" height="315" src="{{ group.videoclase.video }}" frameborder="0" allowfullscreen></iframe>
-                    <form data-bind="event: {'submit': submitEvaluacionDeAlumno}">
+                    <iframe width="100%" height="315" data-bind="attr: { src: responseValues.video }" frameborder="0" allowfullscreen></iframe>
                         <div class="col-xs-6" align="right">
-                            <input id="meGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbUp }, click: evaluar(1)" />
+                            <button id="meGustaInput" class="button-invisible" type="button" data-bind="click: evaluar(1)">
+                                <img width="35" height="46" data-bind="attr: { src: thumbUp }">
+                            </button>
                         </div>
                         <div class="col-xs-6">
-                            <input id="noMeGustaInput" width="35" height="46" type="image" data-bind="attr: { src: thumbDown }, click: evaluar(-1)" />
+                            <button id="noMeGustaInput" class="button-invisible" type="button" data-bind="click: evaluar(-1)">
+                                <img width="35" height="46" data-bind="attr: { src: thumbDown }">
+                            </button>
                         </div>
-                    </form>
                 </div>
                 <div class="col-xs-6">
                     <div class="panel panel-default">
-                        <div class="panel-heading" style="line-height:1.3;">
-                            Integrantes:<br/>
-                            {% for a in group.students.all %}
-                                {% if forloop.last %}
-                                    {{ a.user.get_full_name }}
-                                {% else %}
-                                    {{ a.user.get_full_name }} -
-                                {% endif %}
-                            {% endfor %}
-                        </div>
 
                         <div class="panel-body">
-                            <form id="answerForm" method="post">
                                 {% csrf_token %}
                                 <h3>Pregunta pedagógica</h3>
 
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <label ><h4>{{ group.videoclase.question }}</h4></label>
+                                        <label ><h4 data-bind="text:responseValues.question"></h4></label>
 
                                         <select name="answer" class="form-control" id="id_answer"
                                             data-bind="options: responseValues.alternativas,
@@ -102,7 +118,7 @@
                                             valueAllowUnset: false"></select>
                                     </div>
                                 </div>
-                                <input type="hidden" name="videoclase" value="{{ group.videoclase.id }}" />
+                                <input type="hidden" name="videoclase" data-bind="value: responseValues.videoclase_id" />
                                 <h3>Evaluación Video</h3>
                                 <div class="row">
                                     <div class="col-xs-12">
@@ -163,7 +179,6 @@
                                     </div>
                                 </div>
                                 <button style="display:none" id="#answerButton" type="submit"></button>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -175,4 +190,6 @@
             </div>
         </div>
     </div>
+</form>
+
 {% endblock %}

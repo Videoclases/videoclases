@@ -13,7 +13,9 @@ class StudentEvaluations(models.Model):
 
     scores = [
         (u'No cumple el criterio', 0),
+        (u'Cumple muy parcialmente el criterio', 0.3),
         (u'Cumple parcialmente el criterio', 0.5),
+        (u'Cumple en su gran mayoria el criterio', 0.8),
         (u'Cumple el criterio', 1)
     ]
 

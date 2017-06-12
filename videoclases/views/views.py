@@ -18,7 +18,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonRespons
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
-from django.views.generic.edit import FormView, UpdateView
+from django.views.generic.edit import FormView, UpdateView, CreateView
 from pyexcel_ods import get_data as ods_get_data
 from pyexcel_xls import get_data as xls_get_data
 from pyexcel_xlsx import get_data as xlsx_get_data
@@ -748,7 +748,7 @@ class EnviarVideoclaseView(UpdateView):
                 'alternative_3': self.object.alternative_3 if self.object.alternative_3 is not None else ''}
 
 
-class EvaluacionesDeAlumnosFormView(UpdateView):
+class EvaluacionesDeAlumnosFormView(CreateView):
     template_name = 'blank.html'
     form_class = EvaluacionesDeAlumnosForm
     success_url = reverse_lazy('teacher')
@@ -759,8 +759,12 @@ class EvaluacionesDeAlumnosFormView(UpdateView):
         return super(EvaluacionesDeAlumnosFormView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.author = self.request.user.student
+        student = self.request.user.student
+        evaluation, created = StudentEvaluations.objects.get_or_create(
+            author=student,videoclase=form.cleaned_data['videoclase']
+        )
+        self.object = EvaluacionesDeAlumnosForm(self.request.POST,instance=evaluation)
+        # self.object.author = self.request.user.student
         self.object.save()
         result_dict = {}
         result_dict['value'] = form.cleaned_data['value']
@@ -778,11 +782,23 @@ class EvaluarVideoclaseView(FormView):
         if homework_base.homework_to_evaluate is not None:
             homework = homework_base.homework_to_evaluate
 
-        # group = get_object_or_404(GroupOfStudents, students=self.request.user.student, homework=homework)
         if homework.get_estado() != 2:
             messages.info(self.request, u'Esta tarea no está en período de evaluación.')
             return HttpResponseRedirect(reverse('student'))
         return super(EvaluarVideoclaseView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(EvaluarVideoclaseView, self).get_context_data(**kwargs)
+        context['homework_id'] = self.kwargs['homework_id']
+        context['homework'] = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
+        homework_base = context['homework']
+        homework = homework_base
+        if homework_base.homework_to_evaluate is not None:
+            homework = homework_base.homework_to_evaluate
+        context['number_evaluations'] = \
+            StudentEvaluations.objects.filter(author=self.request.user.student, videoclase__homework=homework).count()
+        context['score'] = StudentEvaluations.scores
+        return context
 
     def get(self, request, *args, **kwargs):
         homework = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
