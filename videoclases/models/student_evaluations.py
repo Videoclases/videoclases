@@ -13,9 +13,9 @@ class StudentEvaluations(models.Model):
 
     scores = [
         (u'No cumple el criterio', 0),
-        (u'Cumple muy parcialmente el criterio', 0.3),
+        # (u'Cumple muy parcialmente el criterio', 0.3),
         (u'Cumple parcialmente el criterio', 0.5),
-        (u'Cumple en su gran mayoria el criterio', 0.8),
+        # (u'Cumple en su gran mayoria el criterio', 0.8),
         (u'Cumple el criterio', 1)
     ]
 
@@ -27,6 +27,7 @@ class StudentEvaluations(models.Model):
     pedagogical = models.DecimalField(default=0, max_digits=2, decimal_places=1)
     rythm = models.DecimalField(default=0, max_digits=2, decimal_places=1)
     originality = models.DecimalField(default=0, max_digits=2, decimal_places=1)
+    comments = models.TextField(default="",null=True,blank=True)
     videoclase = models.ForeignKey(VideoClase, related_name='evaluations')
 
     def __unicode__(self):

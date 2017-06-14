@@ -54,12 +54,10 @@ class GetVideoClaseView(DetailView):
             result['redirect'] = False
         else:
             result['redirect'] = True
-        #TODO: chequear usuario, formato de result y enviar
         return JsonResponse(result)
 
     def get_context_data(self, **kwargs):
         context = super(GetVideoClaseView, self).get_context_data(**kwargs)
-
         return context
 
     @method_decorator(user_passes_test(in_students_group, login_url='/'))

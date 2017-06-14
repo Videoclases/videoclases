@@ -16,6 +16,7 @@ function viewModel() {
     self.video= ko.observable("");
     self.question= ko.observable("");
     self.msg= ko.observable("");
+    self.comments = ko.observable("");
     self.videoclase_id= ko.observable();
 
     self.formErrorsVisible = ko.observable(false);
@@ -117,6 +118,7 @@ function viewModel() {
         fd.append("pedagogical", parseFloat(self.pedagogical()));
         fd.append("rythm", parseFloat(self.rythm()));
         fd.append("originality", parseFloat(self.originality()));
+        fd.append("comments", self.comments());
 
         fd.append("videoclase", parseInt(self.responseValues.videoclase_id()));
         $.ajaxSetup({

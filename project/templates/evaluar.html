@@ -15,6 +15,7 @@
             self.group = ko.observable();
             self.question = ko.observable("");
             self.msg = ko.observable("");
+            self.comments = ko.observable("");
             self.format = ko.observable();
             self.copyright = ko.observable();
             self.theme = ko.observable();
@@ -175,6 +176,12 @@
                                             optionsCaption: '-- escoja una alternativa --',
                                             value: originality,
                                             valueAllowUnset: false"></select>
+                                            </div>
+
+                                        <div class="form-group">
+                                        <label class="form-group">Comentarios para mejorar el trabajo realizado </label>
+                                        <textarea name="comments" class="form-control" id="id_comments"
+                                            data-bind="value: comments"></textarea>
                                             </div>
                                     </div>
                                 </div>
