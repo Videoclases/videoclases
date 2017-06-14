@@ -52,11 +52,8 @@ class GetVideoClaseView(DetailView):
                 items = control.list_items.all() \
                     .exclude(videoclase__answers__student=student)
                 item_to_evaluate = items[0] if items.exists() else None
-                import ipdb
-                ipdb.set_trace()
                 if item_to_evaluate and element_response:
                     value_random = random.random()
-                    print(str(value_random))
                     # TODO: need to be a more smart filter
                     element_response = item_to_evaluate if value_random > 0.65 else element_response
                 elif item_to_evaluate:
