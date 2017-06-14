@@ -8,6 +8,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.core import serializers
+
+from quality_control.models.quality_control import QualityControl
 from videoclases.models.groupofstudents import GroupOfStudents
 from videoclases.models.homework import Homework
 from videoclases.models.student_evaluations import StudentEvaluations
@@ -40,16 +42,34 @@ class GetVideoClaseView(DetailView):
             .exclude(videoclase__answers__student=student) \
             .annotate(revision=Count('videoclase__answers')) \
             .order_by('revision', '?')
-        group = groups[0] if groups.exists() else None
-        if group:
-            alternativas = [group.videoclase.correct_alternative,
-                            group.videoclase.alternative_2,
-                            group.videoclase.alternative_3]
+        element_response = groups[0] if groups.exists() else None
+        control = QualityControl.objects.filter(homework=homework)
+        control = control[0] if control.exists() else None
+        if control:
+            evaluated_items = control.list_items.filter(videoclase__answers__student=student)
+            # limit max evaluation of quality item to 5
+            if evaluated_items.count() < 5:
+                items = control.list_items.all() \
+                    .exclude(videoclase__answers__student=student)
+                item_to_evaluate = items[0] if items.exists() else None
+                import ipdb
+                ipdb.set_trace()
+                if item_to_evaluate and element_response:
+                    value_random = random.random()
+                    print(str(value_random))
+                    # TODO: need to be a more smart filter
+                    element_response = item_to_evaluate if value_random > 0.65 else element_response
+                elif item_to_evaluate:
+                    element_response = item_to_evaluate
+
+        if element_response:
+            alternativas = [element_response.videoclase.correct_alternative,
+                            element_response.videoclase.alternative_2,
+                            element_response.videoclase.alternative_3]
             random.shuffle(alternativas)
-            result['group'] = group.id
-            result['video'] = group.videoclase.video
-            result['question'] = group.videoclase.question
-            result['videoclase_id'] = group.videoclase.pk
+            result['video'] = element_response.videoclase.video
+            result['question'] = element_response.videoclase.question
+            result['videoclase_id'] = element_response.videoclase.pk
             result['alternativas'] = alternativas
             result['redirect'] = False
         else:
