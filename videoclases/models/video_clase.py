@@ -182,5 +182,5 @@ class VideoClase(models.Model):
         super(VideoClase, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return 'Curso: ' + self.group.homework.course.name + '. Tarea: ' + \
-        self.group.homework.title + '. Grupo de Estudiantes: ' + str(self.group.number)
+        return 'Curso: ' + self.homework.course.name + '. Tarea: ' + \
+        self.homework.title + '. Grupo de Estudiantes: ' + str(self.group.number if self.group else "")
