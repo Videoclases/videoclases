@@ -12,7 +12,6 @@ function viewModel() {
     self.doNotShowAnswer = ko.observable(false);
     self.correctAnswerText = ko.observable("");
     self.homework = ko.observable();
-    self.group = ko.observable();
     self.video= ko.observable("");
     self.question= ko.observable("");
     self.msg= ko.observable("");
@@ -71,7 +70,6 @@ function viewModel() {
                     location.href="/";
                 }else{
                     self.responseValues.alternativas(response.alternativas);
-                    self.responseValues.group(response.group);
                     self.responseValues.video(response.video);
                     self.responseValues.question(response.question);
                     self.responseValues.videoclase_id(response.videoclase_id);

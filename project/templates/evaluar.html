@@ -12,7 +12,6 @@
             self.value = ko.observable();
             self.video = ko.observable();
             self.videoclase_id = ko.observable();
-            self.group = ko.observable();
             self.question = ko.observable("");
             self.msg = ko.observable("");
             self.comments = ko.observable("");
@@ -124,7 +123,7 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="form-group">
-                                        <label >Formato video (Introducción, desarrollo, conclusión)</label>
+                                        <label  class="form-group">Formato video (Introducción, desarrollo, conclusión)</label>
                                         <select name="format" class="form-control" id="id_format"
                                             data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
                                             optionsCaption: '-- escoja una alternativa --',
