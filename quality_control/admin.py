@@ -7,6 +7,7 @@ from quality_control.models.quality_item import QualityItem
 from quality_control.models.quality_score import QualityScore
 from videoclases.models.course import Course
 from videoclases.models.homework import Homework
+from videoclases.models.video_clase import VideoClase
 
 
 class MyAdminSite(AdminSite):
@@ -53,12 +54,16 @@ class QualityModelAdmin(CustomModelAdmin):
         qs = super(QualityModelAdmin, self).queryset(request)
         if request.user.is_superuser:
             # It is mine, all mine. Just return everything.
-            return qs
+            return qs.filter(homework__course__in=teacher_courses(request))
         # Now we just add an extra filter on the queryset and
         # we're done. Assumption: Page.owner is a foreignkey
         # to a User.
         return qs.filter(homework__course__in=teacher_courses(request))
 
+
+class VideoClaseAdmin(QualityModelAdmin):
+    readonly_fields = ('group',)
+    list_per_page = 20
 
 admin.site.register(QualityControl)
 admin.site.register(QualityItem)
@@ -68,3 +73,4 @@ admin.site.register(QualityScore)
 admin_site.register(QualityControl, QualityModelAdmin)
 admin_site.register(QualityItem, QualityModelAdmin)
 admin_site.register(QualityScore, CustomModelAdmin)
+admin_site.register(VideoClase, VideoClaseAdmin)

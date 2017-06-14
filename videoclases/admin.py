@@ -21,7 +21,7 @@ from videoclases.models.video_clase import VideoClase
 
 class VideoClaseAdmin(admin.ModelAdmin):
     readonly_fields = ('group',)
-
+    list_per_page = 20
 
 class StudentEvaluationsAdmin(admin.ModelAdmin):
     readonly_fields = ('videoclase', 'author')
