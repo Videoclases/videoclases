@@ -1,8 +1,10 @@
 import random
 
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db.models.aggregates import Count
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
@@ -79,4 +81,9 @@ class GetVideoClaseView(DetailView):
 
     @method_decorator(user_passes_test(in_students_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
+        obj = self.get_object()
+        hw = Homework.objects.filter(id=obj.id,course__students=self.request.user.student)
+        if hw.count() == 0:
+            messages.info(self.request, 'No tienes permisos para evaluar esta tarea.')
+            return HttpResponseRedirect(reverse('student'))
         return super(GetVideoClaseView, self).dispatch(*args, **kwargs)

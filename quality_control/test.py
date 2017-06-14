@@ -21,6 +21,31 @@ this_year = datetime.date.today().year
 class ApiTestCase(TestCase):
     fixtures = todos_los_fixtures
 
+
+    def test_student_has_api_permissions(self):
+        self.client.login(username='student2', password='alumno')
+        response = self.client.get(reverse('api_get_videoclase', kwargs={'pk':10}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_teacher_permissions(self):
+        self.client.login(username='profe', password='profe')
+        response = self.client.get(reverse('api_get_videoclase', kwargs={'pk':10}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_anonymous_user_permissions(self):
+        response = self.client.get(reverse('api_get_videoclase', kwargs={'pk':10}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_student_does_not_have_api_permissions(self):
+        self.client.login(username='student1', password='alumno')
+        response = self.client.get(reverse('api_get_videoclase', kwargs={'pk':2}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_student_api_does_not_exist_permissions(self):
+        self.client.login(username='student1', password='alumno')
+        response = self.client.get(reverse('api_get_videoclase', kwargs={'pk':1234567}))
+        self.assertEqual(response.status_code, 404)
+
     def test_template_get_random_group_data(self):
         self.client.login(username='student2', password='alumno')
         response = self.client.get(reverse('api_get_videoclase', kwargs={'pk': 10}))
