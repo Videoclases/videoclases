@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
         result = []
         for videosclase in videosclases:
-            hw = videosclase.homework
+            hw = videosclase.group.homework
             result.append(u", ".join([videosclase.video,hw.title,hw.course.name,str(hw.course.year)]))
 
         return json.dumps(result, indent=4)

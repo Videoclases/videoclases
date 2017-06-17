@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^student/send-videoclase/(?P<homework_id>\d+)/$',
         vv.EnviarVideoclaseView.as_view(),
         name='enviar_videoclase'),
-    url(r'^student/evaluar-video/(?P<pk>\d+)/$',
+    url(r'^student/evaluar-video/$',
         vv.EvaluacionesDeAlumnosFormView.as_view(),
         name='evaluar_video'),
     url(r'^student/evaluar-videoclase/(?P<homework_id>\d+)/$',

@@ -7,13 +7,14 @@ from videoclases.models.groupofstudents import GroupOfStudents
 
 
 class VideoClase(models.Model):
-    group          = models.OneToOneField(GroupOfStudents)
+    group          = models.OneToOneField(GroupOfStudents,null=True,blank=True)
     video          = models.CharField(max_length=100, blank=True, null=True)
     question       = models.CharField(max_length=100, blank=True, null=True)
     correct_alternative = models.CharField(max_length=100, blank=True, null=True)
     alternative_2  = models.CharField(max_length=100, blank=True, null=True)
     alternative_3  = models.CharField(max_length=100, blank=True, null=True)
     upload_students = models.DateTimeField(blank=True, null=True)
+    homework = models.ForeignKey("Homework", blank=True, null=True)
 
     # StudentEvaluations
     def calcular_porcentaje_evaluaciones(self, value):
@@ -175,8 +176,11 @@ class VideoClase(models.Model):
             link, success = self.process_youtube_default_link(self.video)
             if success:
                 self.video = link
+        if self.homework is None and self.group is not None:
+            self.homework = self.group.homework
+
         super(VideoClase, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return 'Curso: ' + self.group.homework.course.name + '. Tarea: ' + \
-        self.group.homework.title + '. Grupo de Estudiantes: ' + str(self.group.number)
+        return 'Curso: ' + self.homework.course.name + '. Tarea: ' + \
+        self.homework.title + '. Grupo de Estudiantes: ' + str(self.group.number if self.group else "")
