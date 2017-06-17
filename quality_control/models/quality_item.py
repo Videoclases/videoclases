@@ -10,4 +10,4 @@ class QualityItem(models.Model):
     score_check = models.ManyToManyField(QualityScore)
 
     def __unicode__(self):
-        return "{0}".format(self.videoclase.question)
+        return u"{0}".format(self.videoclase.question[:50])
