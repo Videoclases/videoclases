@@ -18,17 +18,27 @@ from videoclases.models.student_responses import StudentResponses
 from videoclases.models.homework import Homework
 from videoclases.models.video_clase import VideoClase
 
+
+class VideoClaseAdmin(admin.ModelAdmin):
+    readonly_fields = ('group',)
+    list_per_page = 20
+
+class StudentEvaluationsAdmin(admin.ModelAdmin):
+    readonly_fields = ('videoclase', 'author')
+    list_per_page = 20
+
+
 admin.site.register(Student)
 admin.site.register(BooleanParameters)
 admin.site.register(School)
 admin.site.register(Course)
-admin.site.register(StudentEvaluations)
+admin.site.register(StudentEvaluations,StudentEvaluationsAdmin)
 admin.site.register(GroupOfStudents)
 admin.site.register(FinalScores)
 admin.site.register(Teacher)
 admin.site.register(StudentResponses)
 admin.site.register(Homework)
-admin.site.register(VideoClase)
+admin.site.register(VideoClase, VideoClaseAdmin)
 admin.site.register(PedagogicalQuestions)
 admin.site.register(PedagogicalQuestionsAnswers)
 admin.site.register(Question)
