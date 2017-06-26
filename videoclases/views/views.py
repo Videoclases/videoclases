@@ -620,7 +620,10 @@ class EditarGrupoFormView(FormView):
                         group.students.clear()
                         for a in list_submitted_students:
                             group.students.add(a)
-                            nf = FinalScores.objects.get(group__homework=homework, student=a)
+                            try:
+                                nf = FinalScores.objects.get(group__homework=homework, student=a)
+                            except Exception:
+                                nf = FinalScores(student=a)
                             nf.group = group
                             nf.save()
                 # if group does not exist, create group and add students
