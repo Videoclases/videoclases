@@ -196,7 +196,9 @@ class ChangePasswordView(FormView):
             user.student.save()
             return reverse('student')
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
         return form_class(self.request.user, **self.get_form_kwargs())
 
     def get_initial(self):
@@ -228,7 +230,9 @@ class ChangeStudentPasswordView(FormView):
     def form_invalid(self, form, *args, **kwargs):
         return super(ChangeStudentPasswordView, self).form_invalid(form, *args, **kwargs)
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
         form = form_class(**self.get_form_kwargs())
         course = Course.objects.get(id=self.kwargs['course_id'])
         form.fields['student'].queryset = course.students.all()
@@ -254,7 +258,9 @@ class ChangeStudentPasswordSelectCursoView(FormView):
     def form_invalid(self, form, *args, **kwargs):
         return super(ChangeStudentPasswordSelectCursoView, self).form_invalid(form, *args, **kwargs)
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
         form = form_class(**self.get_form_kwargs())
         form.fields['course'].queryset = self.request.user.teacher.courses.all()
         form.fields['course'].label = 'Curso'
