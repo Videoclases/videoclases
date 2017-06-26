@@ -13,10 +13,10 @@ $(document).ready(function() {
                 required: "Debes ingresar la respuesta correcta"
             },
             alternative_2: {
-                required: "Debes ingresar respuesta incorrecta en Alternativa 2",
+                required: "Debes ingresar respuesta incorrecta en Alternativa 2"
             },
             alternative_3: {
-                required: "Debes ingresar respuesta incorrecta en Alternativa 3",
+                required: "Debes ingresar respuesta incorrecta en Alternativa 3"
             }
         },
         rules: {

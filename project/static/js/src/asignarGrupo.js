@@ -19,13 +19,13 @@ function AsignarGrupo() {
     self.tareaActual = ko.observable();
 
     self.headers = [
-        {title:'Apellido',sortKey:'last_name'},
-        {title:'Nombre',sortKey:'first_name'},
-        {title:'# Grupo',sortKey:'group'}
+        {title: 'Apellido', sortKey: 'last_name'},
+        {title: 'Nombre', sortKey: 'first_name'},
+        {title: '# Grupo', sortKey: 'group'}
     ];
 
-    self.crearArrayGrupos = function() {
-        var grupos = []
+    self.crearArrayGrupos = function () {
+        var grupos = [];
         var j = 0;
         var grupoActual = 1;
         var cantidad = parseInt(self.cantidadPorGrupo());
@@ -40,61 +40,62 @@ function AsignarGrupo() {
             }
         }
         return grupos;
-    }
+    };
 
-    self.asignarAleatorio = function() {
+    self.asignarAleatorio = function () {
         grupos = self.crearArrayGrupos();
         for (i = 0; i < self.students().length; i++) {
-            if (parseInt(self.cantidadPorGrupo()) == 1) {
-                var group = grupos[i];
+            var group;
+            if (parseInt(self.cantidadPorGrupo()) === 1) {
+                group = grupos[i];
             } else {
                 var ri = Math.floor(Math.random() * grupos.length);
-                var group = grupos.splice(ri, 1);
+                group = grupos.splice(ri, 1);
             }
             self.students()[i].group(group);
         }
-    }
+    };
 
-    self.siTodosTienenGrupo = function() {
-        for (var i = 0; i < self.students().length; i++){
+    self.siTodosTienenGrupo = function () {
+        for (var i = 0; i < self.students().length; i++) {
             var student = self.students()[i];
-            if (student.group() == undefined || !student.group()) {
+            if (student.group() === undefined || !student.group()) {
                 return false;
             }
         }
         return true;
-    }
+    };
 
-    self.sortTable = function(sortKey) {
-        switch(sortKey){
+    self.sortTable = function (sortKey) {
+        switch (sortKey) {
             case 'first_name':
-                self.students.sort(function(a,b){
-                    return a.first_name() < b.first_name() ? -1 : a.first_name() > b.first_name() ? 1 : a.first_name() == b.first_name() ? 0 : 0;
+                self.students.sort(function (a, b) {
+                    return a.first_name() < b.first_name() ? -1 : a.first_name() > b.first_name() ? 1 : a.first_name() === b.first_name() ? 0 : 0;
                 });
                 break;
             case 'last_name':
-                self.students.sort(function(a,b){
-                    return a.last_name() < b.last_name() ? -1 : a.last_name() > b.last_name() ? 1 : a.last_name() == b.last_name() ? 0 : 0;
+                self.students.sort(function (a, b) {
+                    return a.last_name() < b.last_name() ? -1 : a.last_name() > b.last_name() ? 1 : a.last_name() === b.last_name() ? 0 : 0;
                 });
                 break;
             case 'group':
-                self.students.sort(function(a,b){
-                    return a.group() < b.group() ? -1 : a.group() > b.group() ? 1 : a.group() == b.group() ? 0 : 0;
+                self.students.sort(function (a, b) {
+                    return a.group() < b.group() ? -1 : a.group() > b.group() ? 1 : a.group() === b.group() ? 0 : 0;
                 });
                 break;
         }
-    }
+    };
 
-    self.sort = function(header,event) {
+    self.sort = function (header, event) {
         self.sortTable(header.sortKey);
     };
 
-    self.submitGrupos = function(grupos, url) {
+    self.submitGrupos = function (grupos, url) {
         var fd = new FormData();
         fd.append("groups", JSON.stringify(grupos));
         fd.append("homework", parseInt(self.tareaActual()));
         $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
+            beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
@@ -104,7 +105,7 @@ function AsignarGrupo() {
             data: fd,
             type: "post",
             processData: false,
-            contentType: false,
+            contentType: false
         });
-    }
+    };
 }
