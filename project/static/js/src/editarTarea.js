@@ -120,34 +120,34 @@ function viewModel() {
         if (!hasErrors) {
             if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) !== 0) {
                 mustSubmit = true;
-                fd.append("title", self.homework.title());
             }
+            fd.append("title", self.homework.title());
             if (self.homework.description().localeCompare(self.homeworkDatosIniciales.description()) !== 0) {
                 mustSubmit = true;
-                fd.append("description", self.homework.description());
             }
+            fd.append("description", self.homework.description());
             if (parseInt(self.homework.course()) !== parseInt(self.homeworkDatosIniciales.course())) {
                 mustSubmit = true;
-                fd.append("course", parseInt(self.homework.course()));
             }
+            fd.append("course", parseInt(self.homework.course()));
             if (parseInt(self.homework.revision()) !== parseInt(self.homeworkDatosIniciales.revision())) {
                 mustSubmit = true;
-                fd.append("revision", parseInt(self.homework.revision()));
             }
+            fd.append("revision", parseInt(self.homework.revision()));
             if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) !== 0) {
                 mustSubmit = true;
-                fd.append("title", self.homework.title());
             }
+            fd.append("title", self.homework.title());
             if (self.homework.video()) {
                 if (self.homework.video().localeCompare(self.homeworkDatosIniciales.video()) !== 0) {
                     mustSubmit = true;
-                    fd.append("video", self.homework.video());
                 }
+                fd.append("video", self.homework.video());
             } else {
                 if (self.homeworkDatosIniciales.video()) {
                     mustSubmit = true;
-                    fd.append("video", "empty");
                 }
+                fd.append("video", "empty");
             }
             if (self.homework.homework_to_evaluate() !== self.homeworkDatosIniciales.homework_to_evaluate()) {
                 mustSubmit = true;
