@@ -206,14 +206,16 @@
                         </div>
                     {% if comments and comments|length > 0 %}
                         <div class="row">
-                        <div class="col-xs-12"><strong>Comentarios</strong></div>
-                            <ul>
-                                {% for key,value in comments.items %}
-                                    <li>{{ value }}</li>
-                                    {% empty %}
-                                    <li>No posee comentarios de tus compañeros</li>
-                                {% endfor %}
-                            </ul>
+                            <div class="col-xs-12"><strong>Comentarios</strong></div>
+                            <div class="col-xs-12">
+                                <ul>
+                                    {% for key,value in comments.items %}
+                                        <li>{{ value }}</li>
+                                        {% empty %}
+                                        <li>No posee comentarios de tus compañeros</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     {% endif %}
                     </div>
