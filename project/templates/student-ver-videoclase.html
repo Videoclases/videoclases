@@ -209,8 +209,8 @@
                             <div class="col-xs-12"><strong>Comentarios</strong></div>
                             <div class="col-xs-12">
                                 <ul>
-                                    {% for key,value in comments.items %}
-                                        <li>{{ value }}</li>
+                                    {% for c in comments %}
+                                        <li>{{ c.comments }}</li>
                                         {% empty %}
                                         <li>No posee comentarios de tus compañeros</li>
                                     {% endfor %}
