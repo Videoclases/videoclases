@@ -210,6 +210,8 @@
                             <ul>
                                 {% for key,value in comments.items %}
                                     <li>{{ value }}</li>
+                                    {% empty %}
+                                    <li>No posee comentarios de tus compañeros</li>
                                 {% endfor %}
                             </ul>
                         </div>
