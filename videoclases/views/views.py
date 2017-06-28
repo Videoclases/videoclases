@@ -939,6 +939,9 @@ class VerVideoclaseView(TemplateView):
         context = super(VerVideoclaseView, self).get_context_data(**kwargs)
         homework = Homework.objects.get(id=self.kwargs['homework_id'])
         group = GroupOfStudents.objects.get(homework=homework, students=self.request.user.student)
+        comments = StudentEvaluations.objects.filter(videoclase=group.videoclase,comments__isnull=False).exclude(
+            comments__exact='').values('comments')
+        context['comments'] = comments
         context['group'] = group
         return context
 

@@ -204,6 +204,16 @@
                                 {% endfor %}
                             </div>
                         </div>
+                    {% if comments and comments|length > 0 %}
+                        <div class="row">
+                        <div class="col-xs-12"><strong>Comentarios</strong></div>
+                            <ul>
+                                {% for key,value in comments.items %}
+                                    <li>{{ value }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                     </div>
                 </div>
             </div>
