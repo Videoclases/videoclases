@@ -60,14 +60,23 @@ class AlumnoView(TemplateView):
         groups = GroupOfStudents.objects.filter(students=student)
         for group in groups:
             group.nota_final = FinalScores.objects.get(student=student, group=group).ponderar_notas()
-            homework =group.homework
+            homework_base =group.homework
+            homework =homework_base
             if homework.homework_to_evaluate is not None:
                 homework = homework.homework_to_evaluate
-            group.videoclases_evaluadas = StudentEvaluations.objects \
-                .filter(author=student) \
-                .filter(videoclase__group__homework=homework).count()
+            group.videoclases_evaluadas = StudentResponses.objects.filter(
+                Q(videoclase__homework=homework) | Q(videoclase__homework=homework_base),
+                student=student).count()
+            control = QualityControl.objects.filter(homework=homework)
+            control = control[0] if control.exists() else None
+            if control:
+                group.videoclases_evaluadas += control.list_items.filter(
+                    videoclase__answers__student=student).count()
+
             try:
-                group.pq_answer = PedagogicalQuestionsAnswers.objects.get(student=student,test=group.homework.pedagogicalquestions, state=group.homework.pedagogicalquestions.get_state())
+                group.pq_answer = PedagogicalQuestionsAnswers.objects.get(
+                    student=student,test=group.homework.pedagogicalquestions,
+                    state=group.homework.pedagogicalquestions.get_state())
             except:
                 group.pq_answer = None
 

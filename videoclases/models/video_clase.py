@@ -105,11 +105,12 @@ class VideoClase(models.Model):
         students_array = []
         for a in students:
             student_dict = {}
-            homework = self.group.homework
+            homework_base = self.group.homework
+            homework = homework_base
             if homework.homework_to_evaluate is not None:
                 homework = homework.homework_to_evaluate
             answers = StudentResponses.objects.filter(
-                            videoclase__group__homework=homework,
+                            Q(videoclase__homework=homework) | Q(videoclase__homework=homework_base),
                             student=a)
             correctas = 0
             for r in answers:
