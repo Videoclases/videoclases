@@ -8,6 +8,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+
+from quality_control.models.quality_control import QualityControl
 from videoclases.forms.authentication_form import CustomAutheticationForm
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -795,8 +797,17 @@ class EvaluarVideoclaseView(FormView):
         homework = homework_base
         if homework_base.homework_to_evaluate is not None:
             homework = homework_base.homework_to_evaluate
-        context['number_evaluations'] = \
-            StudentEvaluations.objects.filter(author=self.request.user.student, videoclase__homework=homework).count()
+        number_evaluations = \
+            StudentEvaluations.objects.filter(
+                Q(author=self.request.user.student),
+                Q(videoclase__homework=homework) | Q(videoclase__homework=homework_base)).count()
+        control = QualityControl.objects.filter(homework=homework)
+        control = control[0] if control.exists() else None
+
+        if control:
+            number_evaluations += control.list_items.filter(videoclase__answers__student=self.request.user.student).count()
+
+        context['number_evaluations'] = number_evaluations
         context['score'] = StudentEvaluations.scores
         return context
 
