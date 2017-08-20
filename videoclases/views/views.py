@@ -8,6 +8,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+
+from quality_control.models.quality_control import QualityControl
 from videoclases.forms.authentication_form import CustomAutheticationForm
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -18,7 +20,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonRespons
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
-from django.views.generic.edit import FormView, UpdateView
+from django.views.generic.edit import FormView, UpdateView, CreateView
 from pyexcel_ods import get_data as ods_get_data
 from pyexcel_xls import get_data as xls_get_data
 from pyexcel_xlsx import get_data as xlsx_get_data
@@ -58,14 +60,23 @@ class AlumnoView(TemplateView):
         groups = GroupOfStudents.objects.filter(students=student)
         for group in groups:
             group.nota_final = FinalScores.objects.get(student=student, group=group).ponderar_notas()
-            homework =group.homework
+            homework_base =group.homework
+            homework =homework_base
             if homework.homework_to_evaluate is not None:
                 homework = homework.homework_to_evaluate
-            group.videoclases_evaluadas = StudentEvaluations.objects \
-                .filter(author=student) \
-                .filter(videoclase__group__homework=homework).count()
+            group.videoclases_evaluadas = StudentResponses.objects.filter(
+                Q(videoclase__homework=homework) | Q(videoclase__homework=homework_base),
+                student=student).count()
+            control = QualityControl.objects.filter(homework=homework)
+            control = control[0] if control.exists() else None
+            if control:
+                group.videoclases_evaluadas += control.list_items.filter(
+                    videoclase__answers__student=student).count()
+
             try:
-                group.pq_answer = PedagogicalQuestionsAnswers.objects.get(student=student,test=group.homework.pedagogicalquestions, state=group.homework.pedagogicalquestions.get_state())
+                group.pq_answer = PedagogicalQuestionsAnswers.objects.get(
+                    student=student,test=group.homework.pedagogicalquestions,
+                    state=group.homework.pedagogicalquestions.get_state())
             except:
                 group.pq_answer = None
 
@@ -277,7 +288,7 @@ class CrearCursoFormView(FormView):
     def form_valid(self, form, *args, **kwargs):
         # (self, file, field_name, name, content_type, size, charset, content_type_extra=None)
         f = form.cleaned_data['file']
-	f.name = f.name.encode('ascii', 'ignore').decode('ascii')
+        f.name = f.name.encode('ascii', 'ignore').decode('ascii')
         path = settings.MEDIA_ROOT + '/' + f.name
 
         def save_file(f, path):
@@ -748,7 +759,7 @@ class EnviarVideoclaseView(UpdateView):
                 'alternative_3': self.object.alternative_3 if self.object.alternative_3 is not None else ''}
 
 
-class EvaluacionesDeAlumnosFormView(UpdateView):
+class EvaluacionesDeAlumnosFormView(CreateView):
     template_name = 'blank.html'
     form_class = EvaluacionesDeAlumnosForm
     success_url = reverse_lazy('teacher')
@@ -759,8 +770,12 @@ class EvaluacionesDeAlumnosFormView(UpdateView):
         return super(EvaluacionesDeAlumnosFormView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.author = self.request.user.student
+        student = self.request.user.student
+        evaluation, created = StudentEvaluations.objects.get_or_create(
+            author=student,videoclase=form.cleaned_data['videoclase']
+        )
+        self.object = EvaluacionesDeAlumnosForm(self.request.POST,instance=evaluation)
+        # self.object.author = self.request.user.student
         self.object.save()
         result_dict = {}
         result_dict['value'] = form.cleaned_data['value']
@@ -778,55 +793,37 @@ class EvaluarVideoclaseView(FormView):
         if homework_base.homework_to_evaluate is not None:
             homework = homework_base.homework_to_evaluate
 
-        # group = get_object_or_404(GroupOfStudents, students=self.request.user.student, homework=homework)
         if homework.get_estado() != 2:
             messages.info(self.request, u'Esta tarea no está en período de evaluación.')
             return HttpResponseRedirect(reverse('student'))
-        context = self.get_context_data(*args, **kwargs)
-        if context['redirect']:
-            messages.info(self.request, u'Ya contestaste las VideoClases de todos tus compañeros')
-            return HttpResponseRedirect(reverse('student'))
         return super(EvaluarVideoclaseView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(EvaluarVideoclaseView, self).get_context_data(**kwargs)
+        context['homework_id'] = self.kwargs['homework_id']
+        context['homework'] = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
+        homework_base = context['homework']
+        homework = homework_base
+        if homework_base.homework_to_evaluate is not None:
+            homework = homework_base.homework_to_evaluate
+        number_evaluations = \
+            StudentEvaluations.objects.filter(
+                Q(author=self.request.user.student),
+                Q(videoclase__homework=homework) | Q(videoclase__homework=homework_base)).count()
+        control = QualityControl.objects.filter(homework=homework)
+        control = control[0] if control.exists() else None
+
+        if control:
+            number_evaluations += control.list_items.filter(videoclase__answers__student=self.request.user.student).count()
+
+        context['number_evaluations'] = number_evaluations
+        context['score'] = StudentEvaluations.scores
+        return context
 
     def get(self, request, *args, **kwargs):
         homework = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
         group = get_object_or_404(GroupOfStudents, students=self.request.user.student, homework=homework)
         return super(EvaluarVideoclaseView, self).get(self, request, *args, **kwargs)
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(EvaluarVideoclaseView, self).get_context_data(**kwargs)
-        homework_base = get_object_or_404(Homework, pk=self.kwargs['homework_id'])
-        homework = homework_base
-        groups = GroupOfStudents.objects.filter(homework=homework)
-        student = self.request.user.student
-        if homework_base.homework_to_evaluate is not None:
-            homework = homework_base.homework_to_evaluate
-            groups = GroupOfStudents.objects.filter(homework=homework)
-        else:
-            group_student = get_object_or_404(GroupOfStudents, students=student, homework=homework)
-            groups = groups.exclude(id=group_student.id)
-
-        groups = groups \
-            .exclude(videoclase__video__isnull=True) \
-            .exclude(videoclase__video__exact='') \
-            .exclude(videoclase__answers__student=student)\
-            .annotate(revision=Count('videoclase__answers')) \
-            .order_by('revision', '?')
-        group = groups[0] if groups.exists() else None
-        if group:
-            alternativas = [group.videoclase.correct_alternative,
-                            group.videoclase.alternative_2,
-                            group.videoclase.alternative_3]
-            random.shuffle(alternativas)
-            evaluacion, created = StudentEvaluations.objects.get_or_create(author=student,
-                                                                           videoclase=group.videoclase)
-            context['group'] = group
-            context['alternativas'] = alternativas
-            context['evaluacion'] = evaluacion
-            context['redirect'] = False
-        else:
-            context['redirect'] = True
-        return context
 
     def get_success_url(self, *args, **kwargs):
         return reverse('evaluar_videoclase', kwargs={'homework_id': self.kwargs['homework_id']})
@@ -962,6 +959,9 @@ class VerVideoclaseView(TemplateView):
         context = super(VerVideoclaseView, self).get_context_data(**kwargs)
         homework = Homework.objects.get(id=self.kwargs['homework_id'])
         group = GroupOfStudents.objects.get(homework=homework, students=self.request.user.student)
+        comments = StudentEvaluations.objects.filter(videoclase=group.videoclase,comments__isnull=False).exclude(
+            comments__exact='').values('comments')
+        context['comments'] = comments
         context['group'] = group
         return context
 

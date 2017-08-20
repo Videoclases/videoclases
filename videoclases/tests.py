@@ -1296,6 +1296,7 @@ class EditarTareaTestCase(TestCase):
         # assert processing of link
         link, success = Homework.process_youtube_default_link('https://www.youtube.com/embed/JFfcD-SkqIc')
         self.assertEqual(link, u'https://www.youtube.com/embed/JFfcD-SkqIc')
+        form_data['video'] = link
 
         # assert valid response
         response = self.client.post(reverse('editar_homework_form', kwargs={'homework_id':9}), form_data)
@@ -1305,7 +1306,7 @@ class EditarTareaTestCase(TestCase):
         homework_editada = Homework.objects.get(id=9)
         self.assertNotEqual(homework_editada.revision, homework_original.revision)
         self.assertEqual(homework_editada.date_upload, homework_original.date_upload)
-        self.assertEqual(homework_editada.video, homework_original.video)
+        self.assertEqual(homework_editada.video, link)
         self.assertEqual(5, Homework.objects.get(id=9).revision)
 
     def test_editar_homework_form_empty_video(self):
@@ -1414,7 +1415,7 @@ class EvaluarVideoclaseTestCase(TestCase):
     def test_student_does_not_have_homework_permissions(self):
         self.client.login(username='student1', password='alumno')
         response = self.client.get(reverse('evaluar_videoclase', kwargs={'homework_id':2}))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
 
     def test_student_homework_status_wrong_permissions(self):
         self.client.login(username='student1', password='alumno')
@@ -1426,42 +1427,6 @@ class EvaluarVideoclaseTestCase(TestCase):
         response = self.client.get(reverse('evaluar_videoclase', kwargs={'homework_id':1234567}))
         self.assertEqual(response.status_code, 404)
 
-    def test_template_get_random_group_data(self):
-        self.client.login(username='student2', password='alumno')
-        response = self.client.get(reverse('evaluar_videoclase', kwargs={'homework_id':10}))
-        homework = Homework.objects.get(id=10)
-        user = User.objects.get(username='student2')
-
-        # random group, with as less revision as possible
-        group_student = GroupOfStudents.objects.get(students=user.student, homework=homework)
-        groups = GroupOfStudents.objects.filter(homework=homework).exclude(id=group_student.id) \
-                      .exclude(videoclase__video__isnull=True) \
-                      .exclude(videoclase__video__exact='') \
-                      .annotate(revision=Count('videoclase__answers')) \
-                      .order_by('revision','?')
-
-        response_group = response.context['group']
-        self.assertIn(response_group, groups)
-        self.assertTrue(groups[0].revision <= groups.reverse()[0].revision)
-        for i in range(0,20):
-            self.assertNotEqual(response_group, group_student)
-
-        # alternativas to question in context
-        alternativas = [response_group.videoclase.correct_alternative,
-                        response_group.videoclase.alternative_2,
-                        response_group.videoclase.alternative_3]
-        alternativas.sort()
-        response.context['alternativas'].sort()
-        self.assertEqual(response.context['alternativas'], alternativas)
-
-        # evaluaciondestudent
-        evaluacion, created = StudentEvaluations.objects. \
-                              get_or_create(author=user.student, videoclase=response_group.videoclase)
-        self.assertEqual(response.context['evaluacion'], evaluacion)
-
-        # videoclase question not responded before
-        self.assertFalse(response_group.videoclase.answers.filter(student=user.student))
-        
     def test_evaluar_video_correct_data(self):
         self.client.login(username='student1', password='alumno')
         student = User.objects.get(username='student1').student
@@ -1484,7 +1449,7 @@ class EvaluarVideoclaseTestCase(TestCase):
         self.assertTrue(form.is_valid())
 
         # assert valid response
-        response = self.client.post(reverse('evaluar_video', kwargs={'pk':27}), form_data)
+        response = self.client.post(reverse('evaluar_video'), form_data)
         self.assertEqual(response.status_code, 200)
 
         # assert valid edit of object

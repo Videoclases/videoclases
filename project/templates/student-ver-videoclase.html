@@ -204,6 +204,20 @@
                                 {% endfor %}
                             </div>
                         </div>
+                    {% if comments %}
+                        <div class="row">
+                            <div class="col-xs-12"><strong>Comentarios</strong></div>
+                            <div class="col-xs-12">
+                                <ul>
+                                    {% for c in comments %}
+                                        <li>{{ c.comments }}</li>
+                                        {% empty %}
+                                        <li>No posee comentarios de tus compañeros</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
                     </div>
                 </div>
             </div>
