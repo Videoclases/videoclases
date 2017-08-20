@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.db import models
 
 from .quality_score import QualityScore
@@ -9,4 +10,4 @@ class QualityItem(models.Model):
     score_check = models.ManyToManyField(QualityScore)
 
     def __unicode__(self):
-        return "{0}".format(self.videoclase.question)
+        return u"{0}".format(self.videoclase.question[:50])

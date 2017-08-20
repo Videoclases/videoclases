@@ -47,17 +47,18 @@ class GetVideoClaseView(DetailView):
         element_response = groups[0] if groups.exists() else None
         control = QualityControl.objects.filter(homework=homework)
         control = control[0] if control.exists() else None
+
         if control:
             evaluated_items = control.list_items.filter(videoclase__answers__student=student)
             # limit max evaluation of quality item to 5
-            if evaluated_items.count() < 5:
+            if evaluated_items.count() < 3:
                 items = control.list_items.all() \
                     .exclude(videoclase__answers__student=student)
-                item_to_evaluate = items[0] if items.exists() else None
+                item_to_evaluate = items[random.randint(0, items.count()-1)] if items.exists() else None
                 if item_to_evaluate and element_response:
                     value_random = random.random()
                     # TODO: need to be a more smart filter
-                    element_response = item_to_evaluate if value_random > 0.65 else element_response
+                    element_response = item_to_evaluate if value_random > 0.55 else element_response
                 elif item_to_evaluate:
                     element_response = item_to_evaluate
 

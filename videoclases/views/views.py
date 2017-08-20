@@ -8,6 +8,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+
+from quality_control.models.quality_control import QualityControl
 from videoclases.forms.authentication_form import CustomAutheticationForm
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -58,14 +60,23 @@ class AlumnoView(TemplateView):
         groups = GroupOfStudents.objects.filter(students=student)
         for group in groups:
             group.nota_final = FinalScores.objects.get(student=student, group=group).ponderar_notas()
-            homework =group.homework
+            homework_base =group.homework
+            homework =homework_base
             if homework.homework_to_evaluate is not None:
                 homework = homework.homework_to_evaluate
-            group.videoclases_evaluadas = StudentEvaluations.objects \
-                .filter(author=student) \
-                .filter(videoclase__group__homework=homework).count()
+            group.videoclases_evaluadas = StudentResponses.objects.filter(
+                Q(videoclase__homework=homework) | Q(videoclase__homework=homework_base),
+                student=student).count()
+            control = QualityControl.objects.filter(homework=homework)
+            control = control[0] if control.exists() else None
+            if control:
+                group.videoclases_evaluadas += control.list_items.filter(
+                    videoclase__answers__student=student).count()
+
             try:
-                group.pq_answer = PedagogicalQuestionsAnswers.objects.get(student=student,test=group.homework.pedagogicalquestions, state=group.homework.pedagogicalquestions.get_state())
+                group.pq_answer = PedagogicalQuestionsAnswers.objects.get(
+                    student=student,test=group.homework.pedagogicalquestions,
+                    state=group.homework.pedagogicalquestions.get_state())
             except:
                 group.pq_answer = None
 
@@ -804,8 +815,17 @@ class EvaluarVideoclaseView(FormView):
         homework = homework_base
         if homework_base.homework_to_evaluate is not None:
             homework = homework_base.homework_to_evaluate
-        context['number_evaluations'] = \
-            StudentEvaluations.objects.filter(author=self.request.user.student, videoclase__homework=homework).count()
+        number_evaluations = \
+            StudentEvaluations.objects.filter(
+                Q(author=self.request.user.student),
+                Q(videoclase__homework=homework) | Q(videoclase__homework=homework_base)).count()
+        control = QualityControl.objects.filter(homework=homework)
+        control = control[0] if control.exists() else None
+
+        if control:
+            number_evaluations += control.list_items.filter(videoclase__answers__student=self.request.user.student).count()
+
+        context['number_evaluations'] = number_evaluations
         context['score'] = StudentEvaluations.scores
         return context
 
@@ -948,6 +968,9 @@ class VerVideoclaseView(TemplateView):
         context = super(VerVideoclaseView, self).get_context_data(**kwargs)
         homework = Homework.objects.get(id=self.kwargs['homework_id'])
         group = GroupOfStudents.objects.get(homework=homework, students=self.request.user.student)
+        comments = StudentEvaluations.objects.filter(videoclase=group.videoclase,comments__isnull=False).exclude(
+            comments__exact='').values('comments')
+        context['comments'] = comments
         context['group'] = group
         return context
 

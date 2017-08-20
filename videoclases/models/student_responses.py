@@ -14,4 +14,4 @@ class StudentResponses(models.Model):
 
     def __unicode__(self):
         return 'Responde: ' + self.student.user.first_name + '. Respuesta: ' + unicode(self.answer) + \
-        ' .Videoclase ' + str(self.videoclase.id) + ' ' + self.videoclase.group.homework.title
+        ' .Videoclase ' + str(self.videoclase.id) + ' ' + self.videoclase.homework.title
