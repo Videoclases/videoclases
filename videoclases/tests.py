@@ -1258,6 +1258,18 @@ class EditarGrupoTestCase(TestCase):
 class EditarTareaTestCase(TestCase):
     fixtures = todos_los_fixtures
 
+    def create_hw(self, homework_original):
+        form_data = {}
+        form_data['title'] = homework_original.title
+        form_data['description'] = homework_original.description
+        form_data['course'] = homework_original.course.id
+        form_data['revision'] = homework_original.revision
+        form_data['date_upload'] = homework_original.date_upload
+        form_data['date_evaluation'] = homework_original.date_evaluation
+
+        form_data['video'] = homework_original.video
+        return form_data
+
     def test_teacher_permissions(self):
         self.client.login(username='profe', password='profe')
         response = self.client.get(reverse('homework', kwargs={'homework_id':1}))
@@ -1286,7 +1298,7 @@ class EditarTareaTestCase(TestCase):
     def test_editar_homework_form(self):
         self.client.login(username='profe', password='profe')
         homework_original = Homework.objects.get(id=9)
-        form_data = {}
+        form_data = self.create_hw(homework_original)
         form_data['revision'] = 5
         form = EditarTareaForm(form_data)
 
@@ -1312,7 +1324,8 @@ class EditarTareaTestCase(TestCase):
     def test_editar_homework_form_empty_video(self):
         self.client.login(username='profe', password='profe')
         homework_original = Homework.objects.get(id=9)
-        form_data = {}
+        form_data = self.create_hw(homework_original)
+
         form_data['video'] = 'empty video'
         form = EditarTareaForm(form_data)
 

@@ -4,8 +4,8 @@ $(document).ready(function() {
         "greaterThan",
         function(value, element, params) {
             var target = $(params).val();
-            var isValue = value != undefined && value != false
-            var isTarget = target != undefined && target != false
+            var isValue = value !== undefined && value !== false;
+            var isTarget = target !== undefined && target !== false;
             if (isValue && isTarget) {
                 var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
                 var valueArray = reggie.exec(value); 

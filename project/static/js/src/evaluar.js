@@ -2,7 +2,7 @@
  *  ViewModel for the evaluar template, using Knockout.js
  */
 
-function viewModel() {
+function ViewModel() {
     var self = this;
 
     self.responseValues = new ResponseValues();
@@ -172,4 +172,4 @@ function viewModel() {
     }
 }
 
-var vm = new viewModel();
+var vm = new ViewModel();

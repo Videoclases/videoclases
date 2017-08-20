@@ -7,6 +7,6 @@ function EnviarVideoclase() {
     self.changeFormErrorsVisible = function(visibility) {
         self.formErrorsVisible(visibility);
     }
-}
+};
 
 var vm = new EnviarVideoclase();

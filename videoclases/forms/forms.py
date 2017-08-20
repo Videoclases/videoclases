@@ -207,16 +207,6 @@ class EditarTareaForm(forms.ModelForm):
             instance.save()
         return instance
 
-    def __init__(self, *args, **kwargs):
-        super(EditarTareaForm, self).__init__(*args, **kwargs)
-        self.fields['video'].required = False
-        self.fields['title'].required = False
-        self.fields['description'].required = False
-        self.fields['course'].required = False
-        self.fields['revision'].required = False
-        self.fields['date_upload'].required = False
-        self.fields['date_evaluation'].required = False
-
 class EnviarVideoclaseForm(forms.ModelForm):
 
     class Meta:

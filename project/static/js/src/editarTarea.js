@@ -2,7 +2,7 @@
  *  ViewModel for EditarTarea template
  */
 
-function viewModel() {
+function ViewModel() {
     var self = this;
     self.editarGrupo = new EditarGrupo();
     self.select = new Select();
@@ -14,17 +14,17 @@ function viewModel() {
     self.headers = [
         {title:'Apellido',sortKey:'last_name'},
         {title:'Nombre',sortKey:'first_name'},
-        {title:'# Grupo',sortKey:'group'},
+        {title:'# Grupo',sortKey:'group'}
     ];
 
     self.changeFormErrorsVisible = function(visibility) {
         self.formErrorsVisible(visibility);
-    }
+    };
 
     self.course = {
         name: ko.observable(),
         id: ko.observable()
-    }
+    };
 
     self.homeworkDatosIniciales = {
         course: ko.observable(),
@@ -35,7 +35,7 @@ function viewModel() {
         title: ko.observable(),
         video: ko.observable(),
         homework_to_evaluate: ko.observable()
-    }
+    };
 
     self.homework = {
         course: ko.observable(),
@@ -46,7 +46,7 @@ function viewModel() {
         title: ko.observable(),
         video: ko.observable(),
         homework_to_evaluate: ko.observable()
-    }
+    };
 
     self.checkFormErrors = function() {
         var errors = false;
@@ -73,7 +73,7 @@ function viewModel() {
             }
         }
         return errors;
-    }
+    };
 
     self.descartarCambiosTarea = function() {
         self.editarTareaBoolean(false);
@@ -85,15 +85,15 @@ function viewModel() {
         self.homework.title(self.homeworkDatosIniciales.title());
         self.homework.video(self.homeworkDatosIniciales.video());
         self.homework.homework_to_evaluate(self.homeworkDatosIniciales.homework_to_evaluate());
-    }
+    };
 
     self.editarTarea = function() {
         self.editarTareaBoolean(true);
-    }
+    };
 
     self.greaterThan = function(value, target) {
-        var isValue = value != undefined && value != false
-        var isTarget = target != undefined && target != false
+        var isValue = value !== undefined && value !== false;
+        var isTarget = target !== undefined && target !== false;
         if (isValue && isTarget) {
             var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
             var valueArray = reggie.exec(value); 
@@ -111,7 +111,7 @@ function viewModel() {
             return valueDate > targetDate;
         }
         return false;
-    }
+    };
 
     self.submitEditarTarea = function() {
         var fd = new FormData();
@@ -120,29 +120,29 @@ function viewModel() {
         if (!hasErrors) {
             if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) !== 0) {
                 mustSubmit = true;
-                fd.append("title", self.homework.title());
             }
+            fd.append("title", self.homework.title());
             if (self.homework.description().localeCompare(self.homeworkDatosIniciales.description()) !== 0) {
                 mustSubmit = true;
-                fd.append("description", self.homework.description());
             }
+            fd.append("description", self.homework.description());
             if (parseInt(self.homework.course()) !== parseInt(self.homeworkDatosIniciales.course())) {
                 mustSubmit = true;
-                fd.append("course", parseInt(self.homework.course()));
             }
+            fd.append("course", parseInt(self.homework.course()));
             if (parseInt(self.homework.revision()) !== parseInt(self.homeworkDatosIniciales.revision())) {
                 mustSubmit = true;
-                fd.append("revision", parseInt(self.homework.revision()));
             }
+            fd.append("revision", parseInt(self.homework.revision()));
             if (self.homework.title().localeCompare(self.homeworkDatosIniciales.title()) !== 0) {
                 mustSubmit = true;
-                fd.append("title", self.homework.title());
             }
+            fd.append("title", self.homework.title());
             if (self.homework.video()) {
                 if (self.homework.video().localeCompare(self.homeworkDatosIniciales.video()) !== 0) {
                     mustSubmit = true;
-                    fd.append("video", self.homework.video());
                 }
+                fd.append("video", self.homework.video());
             } else {
                 if (self.homeworkDatosIniciales.video()) {
                     mustSubmit = true;
@@ -197,7 +197,7 @@ function viewModel() {
                 scrollTop: $("#top-form").offset().top},
                 'slow');
         }
-    }
+    };
 
     self.submitForms = function() {
         if (self.editarGrupo.validateGrupos()) {
@@ -207,7 +207,7 @@ function viewModel() {
         } else {
             alert("Los números de los grupos no son consecutivos. Revisa si hay algún error.");
         }
-    }
+    };
 
     self.submitGruposForm = function() {
         self.editarGrupo.tareaActual(self.id());
@@ -230,7 +230,7 @@ function viewModel() {
                 }
             }
         );
-    }
+    };
 }
 
-var vm = new viewModel();
+var vm = new ViewModel();
