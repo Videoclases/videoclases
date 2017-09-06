@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 
 from videoclases.models.course import Course
+from videoclases.models.evaluation.group_of_criterias import GroupOfCriterias
 from videoclases.models.teacher import Teacher
 
 
@@ -25,6 +26,7 @@ class Homework(models.Model):
     date_evaluation = models.DateField()
     revision = models.IntegerField(default=3)
     homework_to_evaluate = models.ForeignKey('Homework', blank=True, null=True)
+    criterias = models.ManyToManyField(GroupOfCriterias)
 
     def __unicode__(self):
         return u"Curso: {0}, {1}".format(self.course.name,self.title)

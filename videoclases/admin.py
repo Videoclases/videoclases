@@ -1,6 +1,10 @@
 # coding=utf-8
 from django.contrib import admin
 
+from videoclases.models.evaluation.criteria import Criteria
+from videoclases.models.evaluation.group_of_criterias import GroupOfCriterias
+from videoclases.models.evaluation.scala import Scala
+from videoclases.models.evaluation.scala_value import ScalaValue
 from videoclases.models.pedagogical_questions.alternative import Alternative
 from videoclases.models.pedagogical_questions.pedagogical_questions import PedagogicalQuestions
 from videoclases.models.pedagogical_questions.pedagogical_questions_answers import PedagogicalQuestionsAnswers
@@ -44,3 +48,8 @@ admin.site.register(PedagogicalQuestionsAnswers)
 admin.site.register(Question)
 admin.site.register(Response)
 admin.site.register(Alternative)
+
+admin.site.register(GroupOfCriterias)
+admin.site.register(Criteria)
+admin.site.register(Scala)
+admin.site.register(ScalaValue)
