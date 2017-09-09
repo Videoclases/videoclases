@@ -1726,8 +1726,12 @@ class VideoClaseModelMethodsTestCase(TestCase):
     def test_integrantes_y_answers(self):
         vc = VideoClase.objects.get(id=35)
         a = vc.group.students.all()[0]
+        homework = vc.group.homework
+        homework_base = vc.group.homework
+        if homework.homework_to_evaluate is not None:
+            homework = homework.homework_to_evaluate
         answers = StudentResponses.objects.filter(
-                        videoclase__group__homework=vc.group.homework,
+            Q(videoclase__homework=homework) | Q(videoclase__homework=homework_base),
                         student=a)
         correctas = 0
         for r in answers:
