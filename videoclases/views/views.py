@@ -329,7 +329,10 @@ class CrearCursoFormView(FormView):
                 complete &= student_array[2] not in [None, '']
                 complete &= student_array[3] not in [None, '']
             if not complete:
-                os.remove(path)
+                try:
+                    os.remove(path)
+                except Exception:
+                    print("Not possible delete path")
                 messages.info(self.request, 'El archivo no tiene toda la información de un alumno.')
                 return HttpResponseRedirect(reverse('crear_course'))
         # Create Course
@@ -584,7 +587,7 @@ class EditarGrupoFormView(FormView):
             return True, None
 
     def groups_numbers_correct(self, groups_json):
-        numbers = range(1, len(groups_json) + 1)
+        numbers = list(range(1, len(groups_json) + 1))
         for number in groups_json:
             number_int = int(number)
             try:

@@ -6,7 +6,7 @@ class ScalaValue(models.Model):
     name = models.CharField(max_length=150)
     value = models.IntegerField()
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.value)
 
     class Meta:

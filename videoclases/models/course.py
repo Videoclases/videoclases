@@ -9,5 +9,5 @@ class Course(models.Model):
     name = models.CharField(max_length=256)
     year = models.IntegerField(default=datetime.datetime.now().year)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name + ' ' + str(self.year)

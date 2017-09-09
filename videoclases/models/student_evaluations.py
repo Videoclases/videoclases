@@ -30,7 +30,7 @@ class StudentEvaluations(models.Model):
     comments = models.TextField(default="",null=True,blank=True)
     videoclase = models.ForeignKey(VideoClase, related_name='evaluations')
 
-    def __unicode__(self):
+    def __str__(self):
         return u'{0}, videoclase:{1}, {2}'.format(
             self.author.user.get_full_name(),
             self.videoclase.id,

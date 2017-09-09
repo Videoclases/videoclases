@@ -1,5 +1,5 @@
 # coding=utf-8
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from django.db import models
 from django.db.models import Q
 
@@ -164,8 +164,8 @@ class VideoClase(models.Model):
         if 'youtu.be/' in link:
             video_id = link.split('youtu.be/',1)[1]
             return 'https://www.youtube.com/embed/' + str(video_id), True
-        url_data = urlparse.urlparse(link)
-        query = urlparse.parse_qs(url_data.query)
+        url_data = urlparse(link)
+        query = parse_qs(url_data.query)
         try:
             video_id = query['v'][0]
             return 'https://www.youtube.com/embed/' + str(video_id), True
@@ -182,6 +182,6 @@ class VideoClase(models.Model):
 
         super(VideoClase, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Curso: ' + self.homework.course.name + '. Tarea: ' + \
         self.homework.title + '. Grupo de Estudiantes: ' + str(self.group.number if self.group else "")

@@ -14,7 +14,7 @@ class Student(models.Model):
         course_qs = self.courses.filter(year=timezone.now().year)
         return course_qs[0] if course_qs.exists() else False
 
-    def __unicode__(self):
+    def __str__(self):
         if self.course_actual():
             return 'Course: ' + self.course_actual().name + ' ' + str(self.course_actual().year) + ' ' + \
                    self.user.get_full_name()

@@ -1,6 +1,5 @@
 # coding=utf-8
-from urllib.parse import urlparse
-
+from urllib.parse import urlparse,parse_qs
 from django.core.validators import MaxLengthValidator
 from django.db import models
 from django.utils import timezone
@@ -28,7 +27,7 @@ class Homework(models.Model):
     homework_to_evaluate = models.ForeignKey('Homework', blank=True, null=True)
     criterias = models.ManyToManyField(GroupOfCriterias)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"Curso: {0}, {1}".format(self.course.name,self.title)
 
     def full_name(self):
@@ -69,8 +68,8 @@ class Homework(models.Model):
         if 'youtu.be/' in link:
             video_id = link.split('youtu.be/',1)[1]
             return 'https://www.youtube.com/embed/' + str(video_id), True
-        url_data = urlparse.urlparse(link)
-        query = urlparse.parse_qs(url_data.query)
+        url_data = urlparse(link)
+        query = parse_qs(url_data.query)
         if 'youtube.com/embed/' in link:
             return link, True
         try:
@@ -83,5 +82,5 @@ class Homework(models.Model):
         if self.video:
             link, success = self.process_youtube_default_link(self.video)
             if success:
-                self.video = unicode(link)
+                self.video = str(link)
         super(Homework, self).save(*args, **kwargs)

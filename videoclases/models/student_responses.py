@@ -12,6 +12,6 @@ class StudentResponses(models.Model):
     def is_correct(self):
         return self.answer == self.videoclase.correct_alternative
 
-    def __unicode__(self):
-        return 'Responde: ' + self.student.user.first_name + '. Respuesta: ' + unicode(self.answer) + \
+    def __str__(self):
+        return 'Responde: ' + self.student.user.first_name + '. Respuesta: ' + str(self.answer) + \
         ' .Videoclase ' + str(self.videoclase.id) + ' ' + self.videoclase.homework.title

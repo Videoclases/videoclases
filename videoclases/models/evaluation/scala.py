@@ -9,7 +9,7 @@ class Scala(models.Model):
     description = models.TextField(null=True, blank=True)
     values = models.ManyToManyField(ScalaValue)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.name)
 
     class Meta:

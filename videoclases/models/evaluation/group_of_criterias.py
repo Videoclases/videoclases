@@ -13,7 +13,7 @@ class GroupOfCriterias(models.Model):
     scala = models.ForeignKey(Scala)
     teacher = models.ForeignKey(Teacher)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.value)
 
     class Meta:

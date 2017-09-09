@@ -12,6 +12,6 @@ class GroupOfStudents(models.Model):
     class Meta:
         unique_together = (('number', 'homework'),)
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Course: ' + self.homework.course.name + '. Homework: ' + \
         self.homework.title + '. GroupOfStudents: ' + str(self.number)

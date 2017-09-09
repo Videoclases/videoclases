@@ -13,7 +13,7 @@ class FinalScores(models.Model):
     def ponderar_notas(self):
         return self.teacher_score
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Curso: ' + self.group.homework.course.name + '. Tarea: ' + \
         self.group.homework.title + '. Grupo: ' + str(self.group.number) + \
         '. Nota: ' + str(self.ponderar_notas())
