@@ -1,6 +1,5 @@
 # coding=utf-8
-import urlparse
-
+from urllib.parse import urlparse
 from django.db import models
 from django.db.models import Q
 

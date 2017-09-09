@@ -7,7 +7,7 @@ from videoclases.models.homework import Homework
 from videoclases.models.pedagogical_questions.question import Question
 from django.utils import timezone
 from pyexcel_xls import save_data
-import StringIO
+from io import StringIO
 
 
 class PedagogicalQuestions(models.Model):

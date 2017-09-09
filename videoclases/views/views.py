@@ -343,10 +343,10 @@ class CrearCursoFormView(FormView):
                 student_array = sheet[i]
                 if len(student_array) == 0:
                     continue
-                apellidos = unicode(student_array[0])
-                name = unicode(student_array[1])
-                username = unicode(student_array[2])
-                password = unicode(student_array[3])
+                apellidos = str(student_array[0])
+                name = str(student_array[1])
+                username = str(student_array[2])
+                password = str(student_array[3])
                 if apellidos and name and username and password:
                     try:
                         user = User.objects.get(username=username)
@@ -399,7 +399,7 @@ class CrearTareaFormView(FormView):
         result_dict['id'] = -1
         form_errors = []
         for field, errors in form.errors.items():
-            print errors
+            print(errors)
             for error in errors:
                 form_errors.append(error)
         result_dict['errors'] = form_errors
@@ -673,11 +673,11 @@ class EditarGrupoFormView(FormView):
         except ValueError:
             result_dict = {}
             result_dict['success'] = False
-            result_dict['message'] = unicode(message)
+            result_dict['message'] = str(message)
             return JsonResponse(result_dict)
 
     def form_invalid(self, form):
-        print form.errors
+        print(form.errors)
         return super(EditarGrupoFormView, self).form_invalid(form)
 
 
@@ -873,7 +873,7 @@ class EvaluarVideoclaseFormView(FormView):
         return JsonResponse(result_dict)
 
     def form_invalid(self, form):
-        print form.errors
+        print(form.errors)
         result_dict = {}
         return JsonResponse(result_dict)
 

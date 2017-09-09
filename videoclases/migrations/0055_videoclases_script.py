@@ -8,7 +8,7 @@ def add_homework(apps, schema_editor):
     # We can't import the Person model directly as it may be a newer
     # version than this migration expects. We use the historical version.
     VideoClase = apps.get_model('videoclases', 'VideoClase')
-    print VideoClase.objects.all().count()
+    # print VideoClase.objects.all().count()
     for v in VideoClase.objects.all():
         v.save()
 
