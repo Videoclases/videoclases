@@ -6073,8 +6073,8 @@ button.close {
 
     -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-    -webkit-perspective: 1000;
-            perspective: 1000;
+    -webkit-perspective: inherit;
+            perspective: inherit;
   }
   .carousel-inner > .item.next,
   .carousel-inner > .item.active.right {

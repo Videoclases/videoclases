@@ -7,7 +7,7 @@ from videoclases.models.evaluation.scala_value import ScalaValue
 class Scala(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(null=True, blank=True)
-    values = models.ManyToManyField(ScalaValue)
+    values = models.ManyToManyField(ScalaValue, blank=True)
 
     def __str__(self):
         return str(self.name)

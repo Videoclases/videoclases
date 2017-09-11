@@ -4,10 +4,10 @@ from django.db import models
 
 class ScalaValue(models.Model):
     name = models.CharField(max_length=150)
-    value = models.IntegerField()
+    value = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
-        return str(self.value)
+        return str(self.name)
 
     class Meta:
         verbose_name = 'Valores de Escala'
