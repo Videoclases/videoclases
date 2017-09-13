@@ -1,15 +1,15 @@
 # coding=utf-8
 from django.db import models
 
-from videoclases.models.evaluation.criteria import Criteria
+from videoclases.models.evaluation.criterias_by_teacher import CriteriasByTeacher
 from videoclases.models.evaluation.scala import Scala
 from videoclases.models.teacher import Teacher
 
 
-class GroupOfCriterias(models.Model):
+class ModelsOfCriterias(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(null=True, blank=True)
-    criterias = models.ManyToManyField(Criteria)
+    criterias = models.ManyToManyField(CriteriasByTeacher)
     scala = models.ForeignKey(Scala)
     teacher = models.ForeignKey(Teacher)
     custom_cal = models.CharField(max_length=256, null=True, blank=True)

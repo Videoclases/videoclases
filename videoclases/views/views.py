@@ -27,6 +27,7 @@ from pyexcel_xlsx import get_data as xlsx_get_data
 
 from videoclases.forms.forms import *
 from videoclases.models.boolean_parameters import BooleanParameters
+from videoclases.models.evaluation.models_of_criterias import ModelsOfCriterias
 from videoclases.models.final_scores import FinalScores
 from videoclases.models.groupofstudents import GroupOfStudents
 from videoclases.models.pedagogical_questions.pedagogical_questions import PedagogicalQuestions
@@ -378,7 +379,9 @@ class CrearTareaView(TemplateView):
         context = super(CrearTareaView, self).get_context_data(**kwargs)
         form = CrearTareaForm()
         context['crear_homework_form'] = form
-        context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
+        teacher = self.request.user.teacher
+        context['courses'] = teacher.courses.filter(year=timezone.now().year)
+        context['previous_scalas'] = ModelsOfCriterias.objects.all(teacher__school=teacher.school)
         context['homeworks'] = Homework.objects.filter(course__in=context['courses'])
         return context
 

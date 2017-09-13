@@ -2,7 +2,8 @@
 from django.contrib import admin
 
 from videoclases.models.evaluation.criteria import Criteria
-from videoclases.models.evaluation.group_of_criterias import GroupOfCriterias
+from videoclases.models.evaluation.criterias_by_teacher import CriteriasByTeacher
+from videoclases.models.evaluation.models_of_criterias import ModelsOfCriterias
 from videoclases.models.evaluation.scala import Scala
 from videoclases.models.evaluation.scala_value import ScalaValue
 from videoclases.models.pedagogical_questions.alternative import Alternative
@@ -49,7 +50,8 @@ admin.site.register(Question)
 admin.site.register(Response)
 admin.site.register(Alternative)
 
-admin.site.register(GroupOfCriterias)
+admin.site.register(ModelsOfCriterias)
+admin.site.register(CriteriasByTeacher)
 admin.site.register(Criteria)
 admin.site.register(Scala)
 admin.site.register(ScalaValue)
