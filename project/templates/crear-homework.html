@@ -28,6 +28,26 @@
                 {% endfor %}
             ];
 
+            self.previous_scalas = [
+                                {% for c in previous_scalas %}
+                    {% if forloop.last %}
+                        {name: '{{ c }}', id: {{ c.id }} , criterias: ['{{ c.criterias.all|join:"','"}}' ] }
+                    {% else %}
+                        {name: '{{ c }}', id: {{ c.id }}, criterias: ['{{ c.criterias.all|join:"','"}}' ] },
+                    {% endif %}
+                {% endfor %}
+            ];
+
+            self.type_scalas =  [
+                                {% for c in types_scalas %}
+                    {% if forloop.last %}
+                        {name: '{{ c }}', id: {{ c.id }}, description: `{{ c.description}}`  }
+                    {% else %}
+                        {name: '{{ c }}', id: {{ c.id }}, description: `{{ c.description }}` },
+                    {% endif %}
+                {% endfor %}
+            ];
+
         }
     </script>
     <script src="{% static "js/src/asignarGrupo.js" %}"></script>
@@ -69,6 +89,8 @@
             </div>
         </div>
     </div>
+
+
     <div class="row">
         <form id="crear-homework-form" data-bind="submit: submitCrearTareaForm">
             <div align="center" class="col-xs-6">
@@ -173,7 +195,58 @@
             <h6 class="page-head-line">Criterios de evaluación</h6>
         </div>
         <div class="col-xs-12" >
-            Basarse en criterios existentes...
+            <div class="">
+                <div class="row form-group" data-bind="enable: select.previous_scalas.length > 0">
+                    <label class="col-md-6 control-label">Basarse en criterios existentes (Opcional)</label>
+                    <div class="col-md-6">
+                        <select name="previous_scalas" class="form-control" id="id_previous_scalas"
+                                data-bind="options: select.previous_scalas,
+                                optionsText: 'name',
+                                optionsValue: 'id',
+                                optionsCaption: '-- escoja un listado existente --',
+                                value: homework.previous_scalas,
+                                valueAllowUnset: true"></select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-6 control-label">Tipo de Escala a usar</label>
+                    <div class="col-md-6">
+                        <select name="type_scalas" class="form-control" id="id_type_scalas"
+                                data-bind="options: select.type_scalas,
+                                optionsText: 'name',
+                                optionsCaption: '-- escoja una escala --',
+                                value: chosen_scala,
+                                valueAllowUnset: false"></select>
+                    </div>
+                    <div class="col-xs-12" data-bind="with: chosen_scala">
+                        <span data-bind="text:description" class="pull-right"></span>
+                    </div>
+                </div>
+                <div class="row form-group" >
+                                <div class="col-md-4">
+                                    <label class=" control-label">Criterios a Evaluar</label><br>
+                                    <button data-bind="click: addCriteria" class="btn btn-xs btn-success"><i class="fa fa-plus-circle"></i> Agregar criterio</button>
+                                    <br>
+                                </div>
+                    <div  class="col-md-8" data-bind="foreach: { data: criterias, as: 'c' }">
+                        <div class="row" >
+                                        <div class="col-xs-1">
+                                            <span data-bind="text: $index()+1"></span>
+                                        </div>
+                                        <div class="col-xs-9 margin-bottom">
+                                            <input name="alternative" class="form-control alternative required "
+                                                   data-bind="value: c.value"/>
+                                        </div>
+                                        <div class="col-xs-2 ">
+                                            <button data-bind="click: $parent.removeCriteria" class="btn btn-danger">
+                                                <i class="fa fa-remove"></i> Borrar
+                                            </button>
+                                        </div>
+                                    </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
     <div class="row">

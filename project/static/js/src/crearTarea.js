@@ -19,10 +19,25 @@ function ViewModel() {
         id: ko.observable()
     };
 
+    self.previous_scalas = {
+        name: ko.observable(),
+        id: ko.observable(),
+        criterias: ko.observable()
+    };
+
+
+    self.type_scalas = {
+        name: ko.observable(),
+        id: ko.observable(),
+        description: ko.observable()
+    };
+
+
     self.select = new Select();
     self.homework = {
         description: ko.observable(""),
         course: ko.observable(),
+        previous_scalas: ko.observable(),
         revision: ko.observable(3),
         title: ko.observable(""),
         video: ko.observable(""),
@@ -31,7 +46,36 @@ function ViewModel() {
         homework_to_evaluate: ko.observable()
     };
 
+    self.model_evaluation ={
+        scala: ko.observable()
+    };
+    self.chosen_scala = ko.observable();
+
     self.asignarGrupo = new AsignarGrupo();
+
+    self.indexLetter = function(index) {
+        return String.fromCharCode(97 + index);
+    };
+
+    self.criterias = ko.observableArray(ko.utils.arrayMap([""], function(item) {
+            return { value: ko.observable(item) };
+        }));
+    self.removeCriteria = function(child) {
+            if (self.criterias().length <= 1) {
+                vm.formErrors.removeAll();
+                vm.changeFormErrorsVisible(true);
+                vm.formErrors.push("Debes tener al menos un criterio");
+                $('html,body').animate({
+                scrollTop: $("#top-form-head-line").offset().top},
+                'slow');
+            }else {
+             self.criterias.remove(child);
+            }
+        };
+    self.addCriteria = function () {
+            self.criterias.push({ value: ko.observable("") });
+        }
+
 
     self.submitCrearTareaForm = function () {
         var fd = new FormData();
@@ -108,6 +152,15 @@ function ViewModel() {
     // Subscribe function for change in select
     self.homework.course.subscribe(function () {
         self.onSelectChangeValue(self.homework.course());
+    });
+
+    self.homework.previous_scalas.subscribe(function () {
+        var val = self.homework.previous_scalas();
+        if(val){
+            console.log("WIII",val);
+        }else{
+            console.log("no value");
+        }
     });
 
     self.submitGruposForm = function () {
