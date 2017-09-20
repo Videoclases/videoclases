@@ -26,6 +26,49 @@ function ViewModel() {
         id: ko.observable()
     };
 
+
+    self.type_scalas = {
+        name: ko.observable(),
+        id: ko.observable(),
+        description: ko.observable()
+    };
+
+    self.model_criteria = {
+        scala: ko.observable(),
+        criterias:ko.observableArray([])
+    };
+    self.model_criteria_initials = {
+        scala: ko.observable(),
+        id:ko.observable,
+        criterias:ko.observableArray([])
+    };
+
+    self.chosen_scala = ko.observable("");
+    self.model_criteria.scala.subscribe(function () {
+        let val = self.model_criteria ? self.model_criteria.scala() : null;
+        self.chosen_scala(val ? self.select.type_scalas.filter(d=>d.id === val)[0].description : "");
+
+    });
+
+    self.criterias = ko.observableArray(ko.utils.arrayMap([""], function(item) {
+            return { name: ko.observable(item),description: ko.observable(item), id:ko.observable() };
+        }));
+    self.removeCriteria = function(child) {
+            if (self.model_criteria.criterias().length <= 1) {
+                vm.formErrors.removeAll();
+                vm.changeFormErrorsVisible(true);
+                vm.formErrors.push("Debes tener al menos un criterio");
+                $('html,body').animate({
+                scrollTop: $("#top-form-head-line").offset().top},
+                'slow');
+            }else {
+             self.model_criteria.criterias.remove(child);
+            }
+        };
+    self.addCriteria = function () {
+            self.model_criteria.criterias.push({ name: ko.observable(""),description: ko.observable("") });
+        };
+
     self.homeworkDatosIniciales = {
         course: ko.observable(),
         description: ko.observable(),
@@ -234,3 +277,5 @@ function ViewModel() {
 }
 
 var vm = new ViewModel();
+
+//TODO: validar cambios y actualizar información

@@ -27,6 +27,8 @@ from pyexcel_xlsx import get_data as xlsx_get_data
 
 from videoclases.forms.forms import *
 from videoclases.models.boolean_parameters import BooleanParameters
+from videoclases.models.evaluation.criteria import Criteria
+from videoclases.models.evaluation.criterias_by_teacher import CriteriasByTeacher
 from videoclases.models.evaluation.models_of_criterias import ModelsOfCriterias
 from videoclases.models.evaluation.scala import Scala
 from videoclases.models.final_scores import FinalScores
@@ -382,7 +384,7 @@ class CrearTareaView(TemplateView):
         context['crear_homework_form'] = form
         teacher = self.request.user.teacher
         context['courses'] = teacher.courses.filter(year=timezone.now().year)
-        context['previous_scalas'] = ModelsOfCriterias.objects.filter(teacher=teacher)
+        context['previous_scalas'] = ModelsOfCriterias.objects.filter(criterias__teacher=teacher)
         context['types_scalas'] = Scala.objects.all()
         context['homeworks'] = Homework.objects.filter(course__in=context['courses'])
         return context
@@ -415,8 +417,27 @@ class CrearTareaFormView(FormView):
 
     def form_valid(self, form):
         result_dict = {}
+        scala = self.request.POST.get("scala", None)
+        teacher = self.request.user.teacher
         homework = form.save(commit=False)
-        homework.teacher = self.request.user.teacher
+        import ipdb
+        if scala:
+            try:
+                scala = json.loads(scala)
+            except Exception as e:
+                print(e)
+            model = CriteriasByTeacher.objects.create(teacher=teacher)
+            model.save()
+            model_criterias = ModelsOfCriterias.objects.create(scala=Scala.objects.get(id=scala.get("scala")))
+            model_criterias.save()
+            model_criterias.criterias.add(model)
+            for c in scala.get('criterias'):
+                print(c)
+                model.criterias.create(value=c.get("name"), description=c.get('description', ""))
+            ipdb.set_trace()
+            homework.scala = model_criterias
+
+        homework.teacher = teacher
         homework.save()
         result_dict['success'] = True
         result_dict['id'] = homework.id
@@ -704,6 +725,7 @@ class EditarTareaView(UpdateView):
         homework = Homework.objects.get(id=self.kwargs['homework_id'])
         context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
         context['homework'] = homework
+        context['types_scalas'] = Scala.objects.all()
         context['homeworks'] = Homework.objects.filter(course__in=context['courses']).exclude(id=homework.id)
         context['videoclases_recibidas'] = GroupOfStudents.objects.filter(homework=homework) \
             .exclude(videoclase__video__isnull=True) \

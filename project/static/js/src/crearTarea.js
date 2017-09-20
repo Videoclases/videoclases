@@ -38,6 +38,7 @@ function ViewModel() {
         description: ko.observable(""),
         course: ko.observable(),
         previous_scalas: ko.observable(),
+        type_scalas: ko.observable(),
         revision: ko.observable(3),
         title: ko.observable(""),
         video: ko.observable(""),
@@ -46,19 +47,18 @@ function ViewModel() {
         homework_to_evaluate: ko.observable()
     };
 
-    self.model_evaluation ={
-        scala: ko.observable()
-    };
-    self.chosen_scala = ko.observable();
+    self.chosen_scala = ko.observable("");
+    self.homework.type_scalas.subscribe(function () {
+        let val = self.homework ? self.homework.type_scalas() : null;
+        self.chosen_scala(val ? self.select.type_scalas.filter(d=>d.id === val)[0].description : "");
+
+    });
 
     self.asignarGrupo = new AsignarGrupo();
 
-    self.indexLetter = function(index) {
-        return String.fromCharCode(97 + index);
-    };
 
     self.criterias = ko.observableArray(ko.utils.arrayMap([""], function(item) {
-            return { value: ko.observable(item) };
+            return { name: ko.observable(item),description: ko.observable(item) };
         }));
     self.removeCriteria = function(child) {
             if (self.criterias().length <= 1) {
@@ -73,8 +73,8 @@ function ViewModel() {
             }
         };
     self.addCriteria = function () {
-            self.criterias.push({ value: ko.observable("") });
-        }
+            self.criterias.push({ name: ko.observable(""),description: ko.observable("") });
+        };
 
 
     self.submitCrearTareaForm = function () {
@@ -84,6 +84,11 @@ function ViewModel() {
         fd.append("revision", parseInt(self.homework.revision()));
         fd.append("title", self.homework.title());
         fd.append("video", self.homework.video());
+        let criterias_arr = [];
+        for(let c of self.criterias()){
+            criterias_arr.push({name:c.name(),description: c.description()});
+        }
+        fd.append("scala",JSON.stringify({criterias: criterias_arr, scala: self.homework.type_scalas()}));
         if (self.homework.homework_to_evaluate()) fd.append("homework_to_evaluate", self.homework.homework_to_evaluate());
         var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
         var subidaArray = reggie.exec(self.homework.date_upload());
@@ -170,6 +175,7 @@ function ViewModel() {
             try {
                 grupos[student.group().toString()].push(student.id());
             } catch (err) {
+                console.log(err);
                 grupos[student.group().toString()] = [student.id()];
             }
         }

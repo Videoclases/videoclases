@@ -5,7 +5,6 @@
 
 {% block extra-head %}
     {{ crear_homework_form.media }}
-    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
     <script type="text/javascript">
         function Select() {
             var self = this;
@@ -91,8 +90,8 @@
     </div>
 
 
+<form id="crear-homework-form" data-bind="submit: submitCrearTareaForm">
     <div class="row">
-        <form id="crear-homework-form" data-bind="submit: submitCrearTareaForm">
             <div align="center" class="col-xs-6">
                 <div class="form-group">
                     <label for="id_video">Subir video explicativo (opcional)</label>
@@ -117,7 +116,7 @@
                         <div class="row">
                             <div class="col-xs-7">Curso</div>
                             <div class="col-xs-5">
-                                <select name="course" class="form-control" id="id_course"
+                                <select name="course" class="form-control  margin-top   " id="id_course"
                                         data-bind="options: select.courses,
                                             optionsText: 'name',
                                             optionsValue: 'id',
@@ -128,14 +127,14 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-7">Revisiones mínimas</div>
-                            <div class="col-xs-5"><input class="form-control" type="number" name="revision" min="1"
+                            <div class="col-xs-5"><input class="form-control  margin-top" type="number" name="revision" min="1"
                                                          max="7" step="1" data-bind="value: homework.revision"></div>
                         </div>
                         <div class="row">
                             <div class="col-xs-7">Fecha límite para subir tarea</div>
                             <div class="col-xs-5">
                                 <div class="controls input-append date">
-                                    <input class="form-control" id="id_fecha_subida" name="date_upload" readonly=""
+                                    <input class="form-control  margin-top" id="id_fecha_subida" name="date_upload" readonly=""
                                            type="text" data-bind="value: homework.date_upload"/>
                                     <span class="add-on"><i class="icon-remove"></i></span>
                                     <span class="add-on"><i class="icon-th"></i></span>
@@ -156,7 +155,7 @@
                             <div class="col-xs-7">Fecha límite para evaluar tarea</div>
                             <div class="col-xs-5">
                                 <div class="controls input-append date">
-                                    <input class="form-control" id="id_fecha_evaluacion" name="date_evaluation"
+                                    <input class="form-control  margin-top" id="id_fecha_evaluacion" name="date_evaluation"
                                            readonly="" type="text" data-bind="value: homework.date_evaluation"/>
                                     <span class="add-on"><i class="icon-remove"></i></span>
                                     <span class="add-on"><i class="icon-th"></i></span>
@@ -174,9 +173,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-7">Tarea a evaluar</div>
+                            <div class="col-xs-7">Tarea a evaluar (Opcional)</div>
                             <div class="col-xs-5">
-                                <select name="homework_to_evaluate" class="form-control" id="id_homework_to_evaluate"
+                                <select name="homework_to_evaluate" class="form-control margin-top" id="id_homework_to_evaluate"
                                         data-bind="options: select.homework_to_evaluate,
                                             optionsText: 'name',
                                             optionsValue: 'id',
@@ -188,7 +187,7 @@
                 </div>
             </div>
             <input id="crear-homework-form-submit" type="submit" value="Submit" style="display: none;">
-        </form>
+
     </div>
     <div class="row">
         <div class="col-xs-12">
@@ -196,59 +195,63 @@
         </div>
         <div class="col-xs-12" >
             <div class="">
-                <div class="row form-group" data-bind="enable: select.previous_scalas.length > 0">
-                    <label class="col-md-6 control-label">Basarse en criterios existentes (Opcional)</label>
-                    <div class="col-md-6">
-                        <select name="previous_scalas" class="form-control" id="id_previous_scalas"
-                                data-bind="options: select.previous_scalas,
-                                optionsText: 'name',
-                                optionsValue: 'id',
-                                optionsCaption: '-- escoja un listado existente --',
-                                value: homework.previous_scalas,
-                                valueAllowUnset: true"></select>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <label class="col-md-6 control-label">Tipo de Escala a usar</label>
+{#                <div class="row form-group" data-bind="enable: select.previous_scalas.length > 0">#}
+{#                    <label class="col-md-6 control-label">Basarse en criterios existentes (Opcional)</label>#}
+{#                    <div class="col-md-6">#}
+{#                        <select name="previous_scalas" class="form-control" id="id_previous_scalas"#}
+{#                                data-bind="options: select.previous_scalas,#}
+{#                                optionsText: 'name',#}
+{#                                optionsValue: 'id',#}
+{#                                optionsCaption: '-- escoja un listado existente --',#}
+{#                                value: homework.previous_scalas,#}
+{#                                valueAllowUnset: true"></select>#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="row form-group" >
+                    <label class="col-md-6 control-label">Tipo de Escala a usar
+                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top"
+                                           title="Rango de valores usados para evaluar, si no aparece la escala que necesita escribanos a software@teachingislearning.cl para agregarla"></i></label>
                     <div class="col-md-6">
                         <select name="type_scalas" class="form-control" id="id_type_scalas"
                                 data-bind="options: select.type_scalas,
                                 optionsText: 'name',
+                                optionsValue: 'id',
                                 optionsCaption: '-- escoja una escala --',
-                                value: chosen_scala,
+                                value: homework.type_scalas,
                                 valueAllowUnset: false"></select>
                     </div>
                     <div class="col-xs-12" data-bind="with: chosen_scala">
-                        <span data-bind="text:description" class="pull-right"></span>
+                        <span data-bind="text:$data" class="pull-right"></span>
                     </div>
                 </div>
                 <div class="row form-group" >
                                 <div class="col-md-4">
-                                    <label class=" control-label">Criterios a Evaluar</label><br>
-                                    <button data-bind="click: addCriteria" class="btn btn-xs btn-success"><i class="fa fa-plus-circle"></i> Agregar criterio</button>
+                                    <label class=" control-label">Criterios a Evaluar
+                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top"
+                                           title="Listado de criterios que se mostrarán con la escala selecionada a los alumnos"></i></label><br>
+                                    <button data-bind="click: addCriteria" class="btn btn-md btn-success"><i class="fa fa-plus-circle"></i> Agregar</button>
                                     <br>
                                 </div>
                     <div  class="col-md-8" data-bind="foreach: { data: criterias, as: 'c' }">
                         <div class="row" >
-                                        <div class="col-xs-1">
+                                        <div class="col-md-3">
                                             <span data-bind="text: $index()+1"></span>
-                                        </div>
-                                        <div class="col-xs-9 margin-bottom">
-                                            <input name="alternative" class="form-control alternative required "
-                                                   data-bind="value: c.value"/>
-                                        </div>
-                                        <div class="col-xs-2 ">
-                                            <button data-bind="click: $parent.removeCriteria" class="btn btn-danger">
+                                            <button data-bind="click: $parent.removeCriteria" class="btn  btn-md btn-danger">
                                                 <i class="fa fa-remove"></i> Borrar
                                             </button>
                                         </div>
+                                        <div class="col-md-9">
+                                            <input type="text" name="name_criteria" class="form-control margin-top name-criteria" data-bind="value: c.name" placeholder="Nombre del criterio (Requerido)" required/>
+                                            <textarea data-bind="value: c.description" class="form-control margin-top" placeholder="Comentarios para entender el criterio (Opcional)"></textarea>
+                                        </div>
                                     </div>
+                        <hr>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+</form>
     <div class="row">
         <div class="col-xs-12">
             <h6 class="page-head-line">Designar grupos para tarea</h6>
