@@ -27,15 +27,7 @@
                 {% endfor %}
             ];
 
-            self.previous_scalas = [
-                                {% for c in previous_scalas %}
-                    {% if forloop.last %}
-                        {name: '{{ c }}', id: {{ c.id }} , criterias: ['{{ c.criterias.all|join:"','"}}' ] }
-                    {% else %}
-                        {name: '{{ c }}', id: {{ c.id }}, criterias: ['{{ c.criterias.all|join:"','"}}' ] },
-                    {% endif %}
-                {% endfor %}
-            ];
+            self.previous_scalas = [];
 
             self.type_scalas =  [
                                 {% for c in types_scalas %}

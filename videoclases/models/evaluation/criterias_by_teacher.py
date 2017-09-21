@@ -6,7 +6,7 @@ from videoclases.models.teacher import Teacher
 
 
 class CriteriasByTeacher(models.Model):
-    name = models.CharField(max_length=150,null=True,blank=True)
+    name = models.CharField(max_length=150,null=True, blank=True)
     criterias = models.ManyToManyField(Criteria)
     teacher = models.ForeignKey(Teacher)
 

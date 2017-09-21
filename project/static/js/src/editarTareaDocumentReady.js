@@ -25,7 +25,7 @@ $(document).ready(function() {
             return false;
         },
         'Debe ser posterior a fecha de subida.');
-    $('#editar-homework-form').validate({ // initialize the plugin
+    $('#edit-homework-form').validate({ // initialize the plugin
         messages: {
             title: {
                 required: "Debes ingresar título a la tarea"
@@ -88,7 +88,7 @@ $(document).ready(function() {
             for (var i = 0; i < validator.errorList.length; i++){
                 vm.formErrors.push(validator.errorList[i].message);
             }
-            if (!vm.asignarGrupo.siTodosTienenGrupo()) {
+            if (!vm.editarGrupo.siTodosTienenGrupo()) {
                 vm.formErrors.push("Debes asignar grupo a todos los estudiantes");
             }
             $('html,body').animate({

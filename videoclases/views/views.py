@@ -29,7 +29,6 @@ from videoclases.forms.forms import *
 from videoclases.models.boolean_parameters import BooleanParameters
 from videoclases.models.evaluation.criteria import Criteria
 from videoclases.models.evaluation.criterias_by_teacher import CriteriasByTeacher
-from videoclases.models.evaluation.models_of_criterias import ModelsOfCriterias
 from videoclases.models.evaluation.scala import Scala
 from videoclases.models.final_scores import FinalScores
 from videoclases.models.groupofstudents import GroupOfStudents
@@ -384,7 +383,6 @@ class CrearTareaView(TemplateView):
         context['crear_homework_form'] = form
         teacher = self.request.user.teacher
         context['courses'] = teacher.courses.filter(year=timezone.now().year)
-        context['previous_scalas'] = ModelsOfCriterias.objects.filter(criterias__teacher=teacher)
         context['types_scalas'] = Scala.objects.all()
         context['homeworks'] = Homework.objects.filter(course__in=context['courses'])
         return context
@@ -420,25 +418,22 @@ class CrearTareaFormView(FormView):
         scala = self.request.POST.get("scala", None)
         teacher = self.request.user.teacher
         homework = form.save(commit=False)
-        import ipdb
+        homework.teacher = teacher
+        homework.save()
         if scala:
             try:
                 scala = json.loads(scala)
             except Exception as e:
                 print(e)
-            model = CriteriasByTeacher.objects.create(teacher=teacher)
+            model = CriteriasByTeacher.objects.create(teacher=teacher, name=homework.full_name())
             model.save()
-            model_criterias = ModelsOfCriterias.objects.create(scala=Scala.objects.get(id=scala.get("scala")))
-            model_criterias.save()
-            model_criterias.criterias.add(model)
             for c in scala.get('criterias'):
                 print(c)
                 model.criterias.create(value=c.get("name"), description=c.get('description', ""))
-            ipdb.set_trace()
-            homework.scala = model_criterias
+            homework.scala = Scala.objects.get(id=scala.get("scala"))
+            homework.criterias.add(model)
+            homework.save()
 
-        homework.teacher = teacher
-        homework.save()
         result_dict['success'] = True
         result_dict['id'] = homework.id
         result_dict['errors'] = []

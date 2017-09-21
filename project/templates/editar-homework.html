@@ -31,9 +31,9 @@
             self.type_scalas =  [
                 {% for c in types_scalas %}
                     {% if forloop.last %}
-                        {name: '{{ c }}', id: {{ c.id }}, description: `{{ c.description}}`  }
+                        {name: '{{ c.name }}', id: {{ c.id }}, description: `{{ c.description}}`  }
                     {% else %}
-                        {name: '{{ c }}', id: {{ c.id }}, description: `{{ c.description }}` },
+                        {name: '{{ c.name }}', id: {{ c.id }}, description: `{{ c.description }}` },
                     {% endif %}
                 {% endfor %}
             ];
@@ -71,21 +71,20 @@
 
             /* NEW model of criterias*/
             {% if homework.scala %}
-            vm.model_criteria_initials.id({{ homework.scala.id }});
-            vm.model_criteria_initials.scala({{ homework.scala.scala.id }});
+                vm.model_criteria.scala({{ homework.scala.id }});
+                vm.model_criteria_initials.scala({{ homework.scala.id }});
 
-            let arr = [
-                {% for g in homework.scala.criterias.all %}
+                let arr = [
+                {% for g in homework.criterias.all %}
                     {% for c in g.criterias.all %}
                         { id:{{ c.id }}, name:'{{ c.value }}', description:'{{ c.description|default:"" }}', editable:{% if user.teacher == g.teacher %} true {% else %} false {% endif %} },
                     {% endfor %}
                 {% endfor %}
-            ];
-            for(let e of arr){
+                ];
+                for(let e of arr){
                 vm.model_criteria_initials.criterias.push(e);
                 vm.model_criteria.criterias.push(e);
             }
-            vm.model_criteria.scala({{ homework.scala.scala.id }});
             {% endif %}
 
             // initial data for groups
@@ -303,7 +302,7 @@
                     <div class="col-md-6">
                         <select name="type_scalas" class="form-control" id="id_type_scalas"
                                 data-bind="options: select.type_scalas,
-                                visible: editarTareaBoolean
+                                visible: editarTareaBoolean,
                                 optionsText: 'name',
                                 optionsValue: 'id',
                                 optionsCaption: '-- escoja una escala --',
@@ -320,20 +319,21 @@
                                            title="Listado de criterios que se mostrarán con la escala selecionada a los alumnos"></i></label><br>
                                     <button data-bind="click: addCriteria, visible: editarTareaBoolean" class="btn btn-md btn-success"><i class="fa fa-plus-circle"></i> Agregar</button>
                                     <br>
+                                    <span><strong>NOTA:</strong> no puedes editar los criterios creados por otros profesores</span>
                                 </div>
                     <div  class="col-md-8" data-bind="foreach: { data: model_criteria.criterias, as: 'c' }">
                         <div class="row">
                             <div class="col-md-3">
                                 <span data-bind="text: $index()+1"></span>
-                                <button data-bind="click: $parent.removeCriteria, visible: $root.editarTareaBoolean" class="btn  btn-md btn-danger">
+                                <button data-bind="click: $parent.removeCriteria, visible: $root.editarTareaBoolean() && c.editable" class="btn  btn-md btn-danger">
                                     <i class="fa fa-remove"></i> Borrar
                                 </button>
                             </div>
                             <div class="col-md-9" data-bind="visible: $root.editarTareaBoolean">
-                                <input type="text" name="name_criteria" class="form-control margin-top name-criteria" data-bind="value: c.name" placeholder="Nombre del criterio (Requerido)" required/>
-                                <textarea data-bind="value: c.description" class="form-control margin-top" placeholder="Comentarios para entender el criterio (Opcional)"></textarea>
+                                <input type="text" class="form-control margin-top name-criteria" data-bind="value: c.name, enable: c.editable" placeholder="Nombre del criterio (Requerido)" required/>
+                                <textarea data-bind="value: c.description,  enable: c.editable" class="form-control margin-top" placeholder="Comentarios para entender el criterio (Opcional)"></textarea>
                             </div>
-                            <div class="col-md-9" data-bind="hidden: $root.editarTareaBoolean">
+                            <div class="col-md-9" data-bind="style: {display: $root.editarTareaBoolean() ? 'none' : 'inline'}">
                                 <strong data-bind="text: c.name"></strong><br>
                                 <span data-bind="text: c.description"></span>
                             </div>

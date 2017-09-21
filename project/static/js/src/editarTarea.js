@@ -39,7 +39,6 @@ function ViewModel() {
     };
     self.model_criteria_initials = {
         scala: ko.observable(),
-        id:ko.observable,
         criterias:ko.observableArray([])
     };
 
@@ -66,7 +65,7 @@ function ViewModel() {
             }
         };
     self.addCriteria = function () {
-            self.model_criteria.criterias.push({ name: ko.observable(""),description: ko.observable("") });
+            self.model_criteria.criterias.push({ name: ko.observable(""),description: ko.observable(""), editable: ko.observable(true) });
         };
 
     self.homeworkDatosIniciales = {
@@ -277,5 +276,3 @@ function ViewModel() {
 }
 
 var vm = new ViewModel();
-
-//TODO: validar cambios y actualizar información
