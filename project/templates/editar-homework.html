@@ -82,8 +82,8 @@
                 {% endfor %}
                 ];
                 for(let e of arr){
-                vm.model_criteria_initials.criterias.push(e);
-                vm.model_criteria.criterias.push(e);
+                vm.model_criteria_initials.criterias.push({id:ko.observable(e.id), name: ko.observable(e.name),description: ko.observable(e.description), editable: ko.observable(e.editable) });
+                vm.model_criteria.criterias.push({id:ko.observable(e.id), name: ko.observable(e.name),description: ko.observable(e.description), editable: ko.observable(e.editable) });
             }
             {% endif %}
 
@@ -330,7 +330,7 @@
                                 </button>
                             </div>
                             <div class="col-md-9" data-bind="visible: $root.editarTareaBoolean">
-                                <input type="text" class="form-control margin-top name-criteria" data-bind="value: c.name, enable: c.editable" placeholder="Nombre del criterio (Requerido)" required/>
+                                <input type="text" name="name-criteria" class="form-control margin-top name-criteria" data-bind="value: c.name, enable: c.editable" placeholder="Nombre del criterio (Requerido)" required/>
                                 <textarea data-bind="value: c.description,  enable: c.editable" class="form-control margin-top" placeholder="Comentarios para entender el criterio (Opcional)"></textarea>
                             </div>
                             <div class="col-md-9" data-bind="style: {display: $root.editarTareaBoolean() ? 'none' : 'inline'}">

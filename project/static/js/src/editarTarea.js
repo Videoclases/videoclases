@@ -58,7 +58,7 @@ function ViewModel() {
                 vm.changeFormErrorsVisible(true);
                 vm.formErrors.push("Debes tener al menos un criterio");
                 $('html,body').animate({
-                scrollTop: $("#top-form-head-line").offset().top},
+                scrollTop: $("#top-form").offset().top},
                 'slow');
             }else {
              self.model_criteria.criterias.remove(child);
@@ -112,6 +112,17 @@ function ViewModel() {
             if (!self.greaterThan(self.homework.date_evaluation(), self.homework.date_upload())) {
                 errors = true;
                 self.formErrors.push("La fecha de evaluación debe ser posterior a la fecha de subida");
+            }
+        }
+        if(!self.model_criteria.scala()){
+               errors = true;
+                self.formErrors.push("Debes seleccionar una escala de evaluación");
+        }
+        for(let c of self.model_criteria.criterias()){
+            if(!c.name() || c.name().length < 4){
+                errors = true;
+                self.formErrors.push("Criterios no válidos");
+                break;
             }
         }
         return errors;
@@ -191,27 +202,67 @@ function ViewModel() {
                     fd.append("video", "empty");
                 }
             }
-            if (self.homework.homework_to_evaluate() !== self.homeworkDatosIniciales.homework_to_evaluate()) {
+            if(self.homework.homework_to_evaluate() !== self.homeworkDatosIniciales.homework_to_evaluate()) {
                 mustSubmit = true;
                 if(self.homework.homework_to_evaluate())
                     fd.append("homework_to_evaluate", self.homework.homework_to_evaluate());
                 else
                     fd.append('homework_to_evaluate',self.id());
             }
+
+            //criterias
+            fd.append("scala", self.model_criteria.scala());
+            if(self.model_criteria.scala !== self.model_criteria_initials.scala()){
+                mustSubmit = true;
+            }
+            let editable_criterias = self.model_criteria.criterias().filter(d=>d.editable);
+            let original_criterias = self.model_criteria_initials.criterias().filter(d=>d.editable);
+            let results_criterias = [];
+            for(let c of editable_criterias){
+                if(c.id && c.id()){
+                    let original = original_criterias.filter(d=>d.id && d.id() === c.id())[0];
+                    if(c.name() !== original.name() || c.description() !== original.description()){
+                        results_criterias.push({id:c.id(),name:c.name(),description:c.description(),editable:c.editable()});
+                    }
+                }else {
+                    //new result!
+                    results_criterias.push({name:c.name(),description:c.description(),editable:c.editable()})
+                }
+            }
+
+            if(editable_criterias.filter(d=>d.id).length !== original_criterias.filter(d=>d.id).length){
+                //must delete some criteria!
+                for(let o of original_criterias.filter(d=>d.id && d.id())){
+                    if(editable_criterias.filter(d=>d.id() === o.id()).length === 0){
+                        //Deleted element :(
+                        results_criterias.push({id:o.id(),name:o.name(),description:o.description(),editable:o.editable(),deleted:true});
+                    }
+                }
+            }
+
+            if(results_criterias.length > 0){
+                mustSubmit = true;
+                fd.append("criterias", JSON.stringify(results_criterias));
+            }
+
+            //end criterias
+
             var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
+            var subidaArray = reggie.exec(self.homework.date_upload());
+            var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
+                +(+subidaArray[1]);
+            fd.append("date_upload", subidaDate);
             if (self.homework.date_upload().localeCompare(self.homeworkDatosIniciales.date_upload()) !== 0) {
                 mustSubmit = true;
-                var subidaArray = reggie.exec(self.homework.date_upload());
-                var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
-                    +(+subidaArray[1]);
-                fd.append("date_upload", subidaDate);
             }
+
+            var evaluacionArray = reggie.exec(self.homework.date_evaluation());
+            var evaluacionDate = (+evaluacionArray[3]) + '-' + (+evaluacionArray[2]) + '-'
+                +(+evaluacionArray[1]);
+            fd.append("date_evaluation", evaluacionDate);
+
             if (self.homework.date_evaluation().localeCompare(self.homeworkDatosIniciales.date_evaluation()) !== 0) {
                 mustSubmit = true;
-                var evaluacionArray = reggie.exec(self.homework.date_evaluation());
-                var evaluacionDate = (+evaluacionArray[3]) + '-' + (+evaluacionArray[2]) + '-'
-                    +(+evaluacionArray[1]);
-                fd.append("date_evaluation", evaluacionDate);
             }
             if (mustSubmit) {
                 $.ajaxSetup({
@@ -276,3 +327,5 @@ function ViewModel() {
 }
 
 var vm = new ViewModel();
+
+//TODO: check later if works with jeremy user

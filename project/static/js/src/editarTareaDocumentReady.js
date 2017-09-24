@@ -25,6 +25,10 @@ $(document).ready(function() {
             return false;
         },
         'Debe ser posterior a fecha de subida.');
+    $.validator.addClassRules('name-criteria', {
+        required: true,
+        minlength:4
+    });
     $('#edit-homework-form').validate({ // initialize the plugin
         messages: {
             title: {

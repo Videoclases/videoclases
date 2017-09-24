@@ -3,6 +3,7 @@
 import json
 import os
 import random
+from json.decoder import JSONDecodeError
 
 from django.conf import settings
 from django.contrib import messages
@@ -423,16 +424,16 @@ class CrearTareaFormView(FormView):
         if scala:
             try:
                 scala = json.loads(scala)
-            except Exception as e:
-                print(e)
-            model = CriteriasByTeacher.objects.create(teacher=teacher, name=homework.full_name())
-            model.save()
-            for c in scala.get('criterias'):
-                print(c)
-                model.criterias.create(value=c.get("name"), description=c.get('description', ""))
-            homework.scala = Scala.objects.get(id=scala.get("scala"))
-            homework.criterias.add(model)
-            homework.save()
+                model = CriteriasByTeacher.objects.create(teacher=teacher, name=homework.full_name())
+                model.save()
+                for c in scala.get('criterias'):
+                    print(c)
+                    model.criterias.create(value=c.get("name"), description=c.get('description', ""))
+                homework.scala = Scala.objects.get(id=scala.get("scala"))
+                homework.criterias.add(model)
+                homework.save()
+            except JSONDecodeError as e:
+                pass
 
         result_dict['success'] = True
         result_dict['id'] = homework.id
@@ -730,6 +731,41 @@ class EditarTareaView(UpdateView):
     def form_valid(self, form):
         self.object = self.get_object()
         self.object = form.save()
+
+        criterias = self.request.POST.get('criterias', None)
+        teacher = self.request.user.teacher
+        import ipdb
+        if criterias:
+            try:
+                criterias = json.loads(criterias)
+                groups_criteria = self.object.criterias.filter(teacher=teacher)
+                if len(criterias) >0:
+                    if groups_criteria.count() == 0:
+                        model = CriteriasByTeacher.objects.create(teacher=teacher, name=self.object.full_name())
+                        model.save()
+                        filtered_criterias = [item for item in criterias if item.get('editable',None) and not item.get('id', None)]
+                        for c in filtered_criterias:
+                            model.criterias.create(value=c.get("name"), description=c.get('description', ""))
+                        self.object.criterias.add(model)
+                    else:
+                        group = groups_criteria[0]
+                        for c in criterias:
+                            id = c.get('id', None)
+                            editable = c.get('editable', False)
+                            ipdb.set_trace()
+                            if id and editable:
+                                original = group.criterias.filter(id=id)[0]
+                                if c.get('deleted', False):
+                                    original.delete()
+                                else:
+                                    original.value = c.get('name')
+                                    original.description = c.get('description',"")
+                                    original.save()
+                            elif not id and editable:
+                                group.criterias.create(value=c.get("name"), description=c.get('description', ""))
+
+            except JSONDecodeError:
+                pass
         result_dict = dict()
         result_dict['id'] = self.object.id
         return JsonResponse(result_dict)
