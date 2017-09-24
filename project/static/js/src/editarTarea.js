@@ -327,5 +327,3 @@ function ViewModel() {
 }
 
 var vm = new ViewModel();
-
-//TODO: check later if works with jeremy user
