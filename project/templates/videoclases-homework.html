@@ -69,7 +69,7 @@
                     <div align="center"><span>Este grupo no ha subido VideoClase</span></div>
                 {% endif %}
 
-                    <h3>Evaluación del Docente</h3>
+                <h3>Evaluación del Docente</h3>
                 {% for n in g.finalscores_set.all %}
                     <form data-bind="submit: function(){ submitForm({{ g.id }}, {{ n.student.id }}, responseValues.group{{ g.id }}.notaAlumno{{ n.student.id }}, responseValues.group{{ g.id }}.student{{ n.student.id }}FormVisible) }">
                         <div class="row margin-top">
@@ -102,83 +102,97 @@
                     </div>
                     <div class="panel-body">
                         <div class="col-xs-12">
-                        {% if g.videoclase.video %}
-                        <div class="row">
-                        <div class="col-xs-12">
-                            <h3>Nota obtenida por criterios</h3>
-                            {% with g.videoclase.get_multiple_criteria_score as score_by_criteria  %}
-                                <table class="table table-hover table-responsive">
-                                <tr>
-                                    <th>Formato</th>
-                                    <td>{{ score_by_criteria.format|floatformat }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Respeto por licencias</th>
-                                    <td>{{ score_by_criteria.copyright|floatformat }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Tema</th>
-                                    <td>{{ score_by_criteria.theme|floatformat }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Pedagogía</th>
-                                    <td>{{ score_by_criteria.pedagogical|floatformat }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Ritmo</th>
-                                    <td>{{ score_by_criteria.rythm|floatformat }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Originalidad</th>
-                                    <td>{{ score_by_criteria.originality|floatformat }}</td>
-                                </tr>
-                                <tr class="info">
-                                    <th>Nota obtenida por criterios</th>
-                                    <td>{{ score_by_criteria.total|floatformat }}</td>
-                                </tr>
-                                </table>
-
-                            {% endwith %}
-                        </div>
-                    </div>
-                        {% endif %}
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <strong>Evaluación de espectadores:</strong>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-4">
-                                            Me gusta: {{ g.videoclase.cantidad_me_gusta }}
-                                        </div>
-                                        <div class="col-xs-4">
-                                            Sin voto: {{ g.videoclase.cantidad_neutro }}
-                                        </div>
-                                        <div class="col-xs-4">
-                                            No me gusta: {{ g.videoclase.cantidad_no_me_gusta }}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="progress progress-striped active">
-                                            <div class="progress-bar progress-bar-success"
-                                                 style="width: {{ g.videoclase.porcentaje_me_gusta }}%">
-                                                <span class="sr-only">{{ g.videoclase.porcentaje_me_gusta }}%</span>
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning"
-                                                 style="width: {{ g.videoclase.porcentaje_neutro }}%">
-                                                <span class="sr-only">{{ g.videoclase.porcentaje_neutro }}%</span>
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger"
-                                                 style="width: {{ g.videoclase.porcentaje_no_me_gusta }}%">
-                                                <span class="sr-only">{{ g.videoclase.porcentaje_no_me_gusta }}%</span>
-                                            </div>
-                                        </div>
+                            {% if g.videoclase.video %}
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h3>Nota obtenida por criterios</h3>
+                                        {% if homework.scala %}
+                                            {% with g.videoclase.get_score_criterias as score_by_criteria  %}
+                                                <table class="table table-hover table-responsive">
+                                                    {% for c in score_by_criteria %}
+                                                        <tr>
+                                                            <th>{{ c.criterias__criteria__value }}</th>
+                                                            <td>{{ c.value|floatformat:3 }}</td>
+                                                        </tr>
+                                                        {% empty %}
+                                                        <tr><td class="text-center text-danger">Aún no posee evaluaciones</td></tr>
+                                                    {% endfor %}
+                                                </table>
+                                            {% endwith %}
+                                        {% else %}
+                                            {% with g.videoclase.get_multiple_criteria_score as score_by_criteria  %}
+                                                <table class="table table-hover table-responsive">
+                                                    <tr>
+                                                        <th>Formato</th>
+                                                        <td>{{ score_by_criteria.format|floatformat }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Respeto por licencias</th>
+                                                        <td>{{ score_by_criteria.copyright|floatformat }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Tema</th>
+                                                        <td>{{ score_by_criteria.theme|floatformat }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Pedagogía</th>
+                                                        <td>{{ score_by_criteria.pedagogical|floatformat }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Ritmo</th>
+                                                        <td>{{ score_by_criteria.rythm|floatformat }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Originalidad</th>
+                                                        <td>{{ score_by_criteria.originality|floatformat }}</td>
+                                                    </tr>
+                                                    <tr class="info">
+                                                        <th>Nota obtenida por criterios</th>
+                                                        <td>{{ score_by_criteria.total|floatformat }}</td>
+                                                    </tr>
+                                                </table>
+                                            {% endwith %}
+                                        {% endif %}
                                     </div>
                                 </div>
-
-                            </div>
+                            {% endif %}
+{#                        TODO: need to be optimized#}
+{#                            <div class="row">#}
+{#                                <div class="col-xs-12">#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-xs-12">#}
+{#                                            <strong>Evaluación de espectadores:</strong>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-xs-4">#}
+{#                                            Me gusta: {{ g.videoclase.cantidad_me_gusta }}#}
+{#                                        </div>#}
+{#                                        <div class="col-xs-4">#}
+{#                                            Sin voto: {{ g.videoclase.cantidad_neutro }}#}
+{#                                        </div>#}
+{#                                        <div class="col-xs-4">#}
+{#                                            No me gusta: {{ g.videoclase.cantidad_no_me_gusta }}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="row">#}
+{#                                        <div class="progress progress-striped active">#}
+{#                                            <div class="progress-bar progress-bar-success"#}
+{#                                                 style="width: {{ g.videoclase.porcentaje_me_gusta }}%">#}
+{#                                                <span class="sr-only">{{ g.videoclase.porcentaje_me_gusta }}%</span>#}
+{#                                            </div>#}
+{#                                            <div class="progress-bar progress-bar-warning"#}
+{#                                                 style="width: {{ g.videoclase.porcentaje_neutro }}%">#}
+{#                                                <span class="sr-only">{{ g.videoclase.porcentaje_neutro }}%</span>#}
+{#                                            </div>#}
+{#                                            <div class="progress-bar progress-bar-danger"#}
+{#                                                 style="width: {{ g.videoclase.porcentaje_no_me_gusta }}%">#}
+{#                                                <span class="sr-only">{{ g.videoclase.porcentaje_no_me_gusta }}%</span>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="row">
@@ -208,42 +222,42 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <strong>Evaluaciones de integrantes a otras VideoClases:</strong>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-4">
-                                            Me gusta: {{ g.videoclase.integrantes_cantidad_me_gusta }}
-                                        </div>
-                                        <div class="col-xs-4">
-                                            Sin voto: {{ g.videoclase.integrantes_cantidad_neutro }}
-                                        </div>
-                                        <div class="col-xs-4">
-                                            No me gusta: {{ g.videoclase.integrantes_cantidad_no_me_gusta }}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="progress progress-striped active">
-                                            <div class="progress-bar progress-bar-success"
-                                                 style="width: {{ g.videoclase.integrantes_porcentaje_me_gusta }}%">
-                                                <span class="sr-only">{{ g.videoclase.integrantes_porcentaje_me_gusta }}%</span>
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning"
-                                                 style="width: {{ g.videoclase.integrantes_porcentaje_neutro }}%">
-                                                <span class="sr-only">{{ g.videoclase.integrantes_porcentaje_neutro }}%</span>
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger"
-                                                 style="width: {{ g.videoclase.integrantes_porcentaje_no_me_gusta }}%">
-                                                <span class="sr-only">{{ g.videoclase.integrantes_porcentaje_no_me_gusta }}%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+{#                            <div class="row">#}
+{#                                <div class="col-xs-12">#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-xs-12">#}
+{#                                            <strong>Evaluaciones de integrantes a otras VideoClases:</strong>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-xs-4">#}
+{#                                            Me gusta: {{ g.videoclase.integrantes_cantidad_me_gusta }}#}
+{#                                        </div>#}
+{#                                        <div class="col-xs-4">#}
+{#                                            Sin voto: {{ g.videoclase.integrantes_cantidad_neutro }}#}
+{#                                        </div>#}
+{#                                        <div class="col-xs-4">#}
+{#                                            No me gusta: {{ g.videoclase.integrantes_cantidad_no_me_gusta }}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="row">#}
+{#                                        <div class="progress progress-striped active">#}
+{#                                            <div class="progress-bar progress-bar-success"#}
+{#                                                 style="width: {{ g.videoclase.integrantes_porcentaje_me_gusta }}%">#}
+{#                                                <span class="sr-only">{{ g.videoclase.integrantes_porcentaje_me_gusta }}%</span>#}
+{#                                            </div>#}
+{#                                            <div class="progress-bar progress-bar-warning"#}
+{#                                                 style="width: {{ g.videoclase.integrantes_porcentaje_neutro }}%">#}
+{#                                                <span class="sr-only">{{ g.videoclase.integrantes_porcentaje_neutro }}%</span>#}
+{#                                            </div>#}
+{#                                            <div class="progress-bar progress-bar-danger"#}
+{#                                                 style="width: {{ g.videoclase.integrantes_porcentaje_no_me_gusta }}%">#}
+{#                                                <span class="sr-only">{{ g.videoclase.integrantes_porcentaje_no_me_gusta }}%</span>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="row">

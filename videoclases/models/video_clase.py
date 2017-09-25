@@ -142,6 +142,7 @@ class VideoClase(models.Model):
         return_dict['incorrectas'] = incorrectas
         return return_dict
 
+    # DEPRECATED, use next function
     def get_multiple_criteria_score(self):
         from videoclases.models.student_evaluations import StudentEvaluations
         from django.db.models import Avg
@@ -158,6 +159,13 @@ class VideoClase(models.Model):
         except TypeError:
             result['total'] = ''
         return result
+
+    # new version
+    def get_score_criterias(self):
+        from django.db.models import Avg
+        return self.evaluations.exclude(criterias__isnull=True)\
+            .values('criterias__criteria__value').annotate(value=Avg('criterias__value'))
+
 
     @staticmethod
     def process_youtube_default_link(link):
