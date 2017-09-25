@@ -58,7 +58,7 @@
                     <div class="user-settings-right">
                         {% if user.is_authenticated %}
                             <div align="right">
-                                Bienvenido {{user.get_full_name}}
+                                Bienvenido/a {{user.get_full_name}}
                                 <br /><a href="{% url 'logout' %}">Cerrar sesión</a>
                             </div>
                         {% else %}
@@ -72,7 +72,7 @@
                                         <h4 class="modal-title" id="gridSystemModalLabel">Recuperar contraseña</h4>
                                       </div>
                                       <div class="modal-body" >
-                                    <span>Pidele a tu profesor que cambie tu contraseña, en caso de ser un profesor contacta a
+                                    <span>Pidele a tu profesor(a) que cambie tu contraseña, en caso de ser un profesor contacta a
                                         <a href="mailto:software@teachingislearning.cl">software@teachingislearning.cl</a>
                                         </span>
                                   </div>
