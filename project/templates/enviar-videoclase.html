@@ -65,7 +65,7 @@
                 <form id="enviar-videoclase-form" method="post">
                     {% csrf_token %}
                     <div class="panel-body">
-                        <div class="row">
+                        <div class="row  margin-top">
                             <div class="col-xs-4">Link de VideoClase</div>
                             <div class="col-xs-8">
                                 <input name="{{ form.video.name }}" id="videoLink" type="text" class="form-control"
@@ -73,35 +73,35 @@
                                        value="{{ form.initial.video }}"/>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row  margin-top">
                             <div class="col-xs-4">Pregunta</div>
                             <div class="col-xs-8">
                                 <input name="{{ form.question.name }}" class="form-control" maxlength="100" type="text"
                                        value="{{ form.initial.question }}"/>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row  margin-top">
                             <div class="col-xs-4">Alternativa correcta</div>
                             <div class="col-xs-8">
                                 <input name="{{ form.correct_alternative.name }}" class="form-control" maxlength="100"
                                        type="text" value="{{ form.initial.correct_alternative }}"/>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row margin-top">
                             <div class="col-xs-4">Alternativa 2</div>
                             <div class="col-xs-8">
                                 <input name="{{ form.alternative_2.name }}" class="form-control" maxlength="100"
                                        type="text" value="{{ form.initial.alternative_2 }}"/>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row margin-top">
                             <div class="col-xs-4">Alternativa 3</div>
                             <div class="col-xs-8">
                                 <input name="{{ form.alternative_3.name }}" class="form-control" maxlength="100"
                                        type="text" value="{{ form.initial.alternative_3 }}"/>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Enviar</button>
+                        <button type="submit" class="btn btn-success margin-top">Enviar</button>
                     </div>
                 </form>
             </div>

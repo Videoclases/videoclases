@@ -24,6 +24,18 @@
             self.homework = ko.observable({{ homework_id }});
             self.videoclase = ko.observable();
             self.evaluacion = ko.observable();
+
+            {% if homework.scala %}
+            self.score_choices = [
+                {% for a in homework.scala.values.all|dictsort:"value" %}
+                    {% if forloop.last %}
+                         {'name':'{{ a.name }}', 'value': {{ a.value }} }
+                    {% else %}
+                        {'name':'{{ a.name }}', 'value': {{ a.value }} } ,
+                    {% endif %}
+                {% endfor %}
+            ];
+                {% else %}
             self.score_choices = [
                 {% for a in score %}
                     {% if forloop.last %}
@@ -33,13 +45,24 @@
                     {% endif %}
                 {% endfor %}
             ];
+            {% endif %}
+
+            {% if homework.criterias %}
+            self.criterias = ko.observableArray();
+            {% for g in homework.criterias.all %}
+                {% for c in g.criterias.all %}
+                    self.criterias.push(
+                        {name:"{{c.value}}", description:"{{ c.description }}", response:ko.observable(), id:{{c.id}}}
+                    );
+                {% endfor %}
+            {% endfor %}
+            {% endif %}
             self.thumbUpGray = ko.observable('{% static "img/thumb-up-gray.png" %}');
             self.thumbUpGreen = ko.observable('{% static "img/thumb-up-green.png" %}');
             self.thumbDownGray = ko.observable('{% static "img/thumb-down-gray.png" %}');
             self.thumbDownRed = ko.observable('{% static "img/thumb-down-red.png" %}');
         }
     </script>
-    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
     <script src="{% static "js/src/evaluar.js" %}"></script>
     <script src="{% static "js/libs/jquery.validate.min.js" %}"></script>
     <script src="{% static "js/src/evaluarDocumentReady.js" %}"></script>
@@ -121,6 +144,29 @@
                                 <input type="hidden" name="videoclase" data-bind="value: responseValues.videoclase_id" />
                                 <h3>Evaluación Video</h3>
                                 <div class="row">
+                                    {% if homework.criterias %}
+                                        <div class="col-xs-12">
+                                        <!-- ko foreach: responseValues.criterias -->
+                                            <div class="form-group">
+                                            <label  class="control-label"><span data-bind="text: $data.name"></span> <i class="fa fa-info-circle" data-bind="attr: {title: $data.description}"></i></label>
+                                            <select class="criteria form-control"
+                                                data-bind="options: $root.responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                                optionsCaption: '-- escoja una alternativa --',
+                                                value: $data.response,
+                                                attr: { name: $data.id },
+                                                valueAllowUnset: false" required></select>
+                                            </div>
+                                          <!-- /ko -->
+
+                                            <div class="form-group">
+                                                <label class="form-group">Comentarios para mejorar el trabajo realizado (Opcional) </label>
+                                                <textarea name="comments" class="form-control" id="id_comments"
+                                                    data-bind="value: comments"></textarea>
+                                            </div>
+                                        </div>
+
+                                        {% else %}
+{#                                        TODO: legacy model,deprecated, need to be remove in next version#}
                                     <div class="col-xs-12">
                                         <div class="form-group">
                                         <label  class="form-group">Formato video (Introducción, desarrollo, conclusión)</label>
@@ -183,6 +229,7 @@
                                             data-bind="value: comments"></textarea>
                                             </div>
                                     </div>
+                                    {% endif %}
                                 </div>
                                 <button style="display:none" id="#answerButton" type="submit"></button>
                         </div>

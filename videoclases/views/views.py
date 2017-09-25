@@ -734,7 +734,6 @@ class EditarTareaView(UpdateView):
 
         criterias = self.request.POST.get('criterias', None)
         teacher = self.request.user.teacher
-        import ipdb
         if criterias:
             try:
                 criterias = json.loads(criterias)
@@ -752,7 +751,6 @@ class EditarTareaView(UpdateView):
                         for c in criterias:
                             id = c.get('id', None)
                             editable = c.get('editable', False)
-                            ipdb.set_trace()
                             if id and editable:
                                 original = group.criterias.filter(id=id)[0]
                                 if c.get('deleted', False):
@@ -841,13 +839,24 @@ class EvaluacionesDeAlumnosFormView(CreateView):
 
     def form_valid(self, form):
         student = self.request.user.student
+
         evaluation, created = StudentEvaluations.objects.get_or_create(
-            author=student,videoclase=form.cleaned_data['videoclase']
+            author=student, videoclase=form.cleaned_data['videoclase']
         )
-        self.object = EvaluacionesDeAlumnosForm(self.request.POST,instance=evaluation)
+        self.object = EvaluacionesDeAlumnosForm(self.request.POST, instance=evaluation)
         # self.object.author = self.request.user.student
         self.object.save()
-        result_dict = {}
+
+        criterias = self.request.POST.get('criteria', None)
+        if criterias:
+            try:
+                criterias = json.loads(criterias)
+                for c in criterias:
+                    evaluation.criterias.create(value=c['value'], criteria=Criteria.objects.get(id=c['criteria']))
+
+            except JSONDecodeError:
+                pass
+        result_dict = dict()
         result_dict['value'] = form.cleaned_data['value']
         return JsonResponse(result_dict)
 

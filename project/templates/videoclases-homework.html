@@ -72,7 +72,7 @@
                     <h3>Evaluación del Docente</h3>
                 {% for n in g.finalscores_set.all %}
                     <form data-bind="submit: function(){ submitForm({{ g.id }}, {{ n.student.id }}, responseValues.group{{ g.id }}.notaAlumno{{ n.student.id }}, responseValues.group{{ g.id }}.student{{ n.student.id }}FormVisible) }">
-                        <div class="row">
+                        <div class="row margin-top">
                             <div class="col-xs-6"><strong>Nota de {{ n.student.user.get_full_name }}</strong></div>
                             <div class="col-xs-6"><input
                                     data-bind="value:responseValues.group{{ g.id }}.notaAlumno{{ n.student.id }}"

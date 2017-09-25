@@ -219,7 +219,7 @@ class EvaluacionesDeAlumnosForm(forms.ModelForm):
     class Meta:
         model = StudentEvaluations
         fields = '__all__'
-        exclude = ['author']
+        exclude = ['author','criterias']
 
 class RespuestasDeAlumnosForm(forms.ModelForm):
 
