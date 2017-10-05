@@ -29,6 +29,9 @@ $(document).ready(function() {
         required: true,
         minlength:4
     });
+        $.validator.addClassRules('group', {
+        required: true
+    });
     $('#edit-homework-form').validate({ // initialize the plugin
         messages: {
             title: {

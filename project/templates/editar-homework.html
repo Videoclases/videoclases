@@ -330,7 +330,7 @@
                                 </button>
                             </div>
                             <div class="col-md-9" data-bind="visible: $root.editarTareaBoolean">
-                                <input type="text" name="name-criteria" class="form-control margin-top name-criteria" data-bind="value: c.name, enable: c.editable" placeholder="Nombre del criterio (Requerido)" required/>
+                                <input type="text" class="form-control margin-top name-criteria" data-bind="value: c.name, enable: c.editable, attr:{name: 'name_'+$index}" placeholder="Nombre del criterio (Requerido)" required/>
                                 <textarea data-bind="value: c.description,  enable: c.editable" class="form-control margin-top" placeholder="Comentarios para entender el criterio (Opcional)"></textarea>
                             </div>
                             <div class="col-md-9" data-bind="style: {display: $root.editarTareaBoolean() ? 'none' : 'inline'}">
@@ -346,7 +346,7 @@
     </div>
         <input id="edit-homework-form-submit" type="submit" value="Submit" style="display: none;">
     </form>
-    <form data-bind="submit: submitGruposForm">
+    <form id="groups-form" data-bind="submit: submitGruposForm">
 
     <div class="row">
         <div class="col-xs-12">
@@ -367,7 +367,7 @@
                         <td><span data-bind="text: $data.first_name"></span></td>
                         <td>
                             <span data-bind="text: $data.group, visible:!$root.editarTareaBoolean()"></span>
-                            <input class="form-control" data-bind="value: $data.group, visible:$root.editarTareaBoolean()"/>
+                            <input type="number" min="0" class="group form-control" data-bind="value: $data.group, visible:$root.editarTareaBoolean(), attr:{name: 'group_'+$index}" placeholder="ingrese numero de grupo" required/>
                         </td>
                         <td><span
                                 data-bind="text: $root.editarGrupo.getVideoclaseText($data.videoclase())"></span>

@@ -27,6 +27,14 @@ $(document).ready(function() {
             return false;
         },
         'Debe ser posterior a fecha de subida.');
+    $.validator.addClassRules('name-criteria', {
+        required: true,
+        minlength:4
+    });
+    $.validator.addClassRules('group', {
+        required: true,
+        digits: true,
+    });
     $('#crear-homework-form').validate({ // initialize the plugin
         messages: {
             title: {
@@ -91,7 +99,7 @@ $(document).ready(function() {
                 vm.formErrors.push(validator.errorList[i].message);
             }
             if (!vm.asignarGrupo.siTodosTienenGrupo()) {
-                vm.formErrors.push("Debes asignar grupo a todos los estudiantes");
+                vm.formErrors.push("Grupos ingresados no válidos");
             }
             $('html,body').animate({
                 scrollTop: $("#top-form-head-line").offset().top},

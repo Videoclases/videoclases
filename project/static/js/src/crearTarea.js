@@ -132,7 +132,7 @@ function ViewModel() {
     };
 
     self.submitForms = function () {
-        if ($("#crear-homework-form").valid()) {
+        if ($("#groups-form").valid() && $("#crear-homework-form").valid()) {
             self.loading(true);
             $(".loader").fadeIn("slow");
             $("#crear-homework-form-submit").click();

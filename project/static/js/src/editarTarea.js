@@ -294,7 +294,7 @@ function ViewModel() {
 
     self.submitForms = function() {
         if (self.editarGrupo.validateGrupos()) {
-            if ($("#edit-homework-form").valid()) {
+            if ($("#groups-form").valid() && $("#edit-homework-form").valid()) {
                 $("#edit-homework-form-submit").click();
             }
         } else {

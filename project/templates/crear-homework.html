@@ -233,7 +233,7 @@
                                             </button>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" name="name_criteria" class="form-control margin-top name-criteria" data-bind="value: c.name" placeholder="Nombre del criterio (Requerido)" required/>
+                                            <input type="text" class="form-control margin-top name-criteria" data-bind="value: c.name, attr:{name: 'name_'+$index}" placeholder="Nombre del criterio (Requerido)" required/>
                                             <textarea data-bind="value: c.description" class="form-control margin-top" placeholder="Comentarios para entender el criterio (Opcional)"></textarea>
                                         </div>
                                     </div>
@@ -255,7 +255,7 @@
         </div>
     </div>
     <div data-bind="visible: asignarGrupo.hasCurso">
-        <form data-bind="submit: submitGruposForm">
+        <form id="groups-form" data-bind="submit: submitGruposForm">
             <div class="row" data-bind="visible: asignarGrupo.hasCurso">
                 <div class="col-xs-3">Alumnos por grupo</div>
                 <div class="col-xs-3">
@@ -280,7 +280,7 @@
                         <tr>
                             <td><span data-bind="text: $data.last_name"></span></td>
                             <td><span data-bind="text: $data.first_name"></span></td>
-                            <td><input class="form-control" data-bind="value: $data.group"/></td>
+                            <td><input class="group form-control" type="number" min="0" class="form-control" data-bind="value: $data.group, attr:{name:$index}" placeholder="ingrese numero de grupo" required/></td>
                         </tr>
                         </tbody>
                     </table>
