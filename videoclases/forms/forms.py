@@ -170,7 +170,7 @@ class EditarTareaForm(forms.ModelForm):
     class Meta:
         model = Homework
         fields = ['video', 'title', 'description', 'course', 'revision',
-                  'date_upload', 'date_evaluation', 'homework_to_evaluate']
+                  'date_upload', 'date_evaluation', 'homework_to_evaluate','scala']
         dateOptions = {
             'weekStart': 1,
             'todayHighlight': True,
@@ -219,7 +219,7 @@ class EvaluacionesDeAlumnosForm(forms.ModelForm):
     class Meta:
         model = StudentEvaluations
         fields = '__all__'
-        exclude = ['author']
+        exclude = ['author','criterias']
 
 class RespuestasDeAlumnosForm(forms.ModelForm):
 

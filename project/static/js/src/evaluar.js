@@ -35,6 +35,7 @@ function ViewModel() {
     self.rythm = ko.observable();
     self.originality = ko.observable();
 
+
     self.thumbUp = ko.computed(function() { 
         if (parseInt(self.value()) === 1) {
             return self.responseValues.thumbUpGreen(); 
@@ -87,12 +88,22 @@ function ViewModel() {
                 alert("Debes seleccionar una respuesta");
                 return;
             }
-            if(self.format() === undefined || self.copyright() === undefined
-                || self.theme() === undefined || self.pedagogical() === undefined
-                || self.pedagogical() === undefined || self.rythm() === undefined
-                || self.originality() === undefined){
-                alert("Debes completar la evaluación de los criterios");
-                return;
+
+            if(self.responseValues.criterias && self.responseValues.criterias().length > 0 ){
+                for(let c of self.responseValues.criterias() ){
+                    if(! c.response() === undefined){
+                        alert("Debes evaluar todos los criterios!");
+                        return;
+                    }
+                }
+            }else{
+                if(self.format() === undefined || self.copyright() === undefined
+                    || self.theme() === undefined || self.pedagogical() === undefined
+                    || self.pedagogical() === undefined || self.rythm() === undefined
+                    || self.originality() === undefined){
+                    alert("Debes completar la evaluación de los criterios");
+                    return;
+                }
             }
             self.msg("Guardando evaluación");
             self.loading(true);
@@ -110,12 +121,23 @@ function ViewModel() {
         var fd = new FormData();
         fd.append("value", parseInt(self.value()));
 
+        if(self.responseValues.criterias && self.responseValues.criterias()){
+            let criteriasResponse = [];
+            for(let c of self.responseValues.criterias()){
+                criteriasResponse.push({ value: c.response(), criteria: c.id });
+            }
+            fd.append("criteria", JSON.stringify(criteriasResponse));
+        }else {
+        // deprecated
         fd.append("format", parseFloat(self.format()));
         fd.append("copyright", parseFloat(self.copyright()));
         fd.append("theme", parseFloat(self.theme()));
         fd.append("pedagogical", parseFloat(self.pedagogical()));
         fd.append("rythm", parseFloat(self.rythm()));
         fd.append("originality", parseFloat(self.originality()));
+        }
+
+
         fd.append("comments", self.comments());
 
         fd.append("videoclase", parseInt(self.responseValues.videoclase_id()));

@@ -27,10 +27,21 @@ $(document).ready(function() {
             return false;
         },
         'Debe ser posterior a fecha de subida.');
+    $.validator.addClassRules('name-criteria', {
+        required: true,
+        minlength:4
+    });
+    $.validator.addClassRules('group', {
+        required: true,
+        digits: true,
+    });
     $('#crear-homework-form').validate({ // initialize the plugin
         messages: {
             title: {
                 required: "Debes ingresar título a la tarea"
+            },
+            course: {
+                required: "Debes seleccionar un curso"
             },
             description: {
                 required: "Debes ingresar descripción a la tarea"
@@ -41,6 +52,13 @@ $(document).ready(function() {
             date_evaluation: {
                 required: "Debes ingresar fecha de evaluación",
                 greaterThan: "La fecha de evaluación debe ser posterior a la fecha de subida"
+            },
+            type_scalas: {
+                required: "Debes ingresar el tipo de escala a evaluar",
+            },
+            name_criteria: {
+                required: "Debes ingresar el nombre del criterio",
+                minlength: "Debe tener al menos 4 caracteres"
             }
         },
         rules: {
@@ -62,6 +80,13 @@ $(document).ready(function() {
             date_evaluation: {
                 required: true,
                 greaterThan: '#id_fecha_subida'
+            },
+            type_scalas:{
+                required:true
+            },
+            name_criteria:{
+                required:true,
+                minlength:4
             }
         },
         submitHandler: function (form) {
@@ -74,7 +99,7 @@ $(document).ready(function() {
                 vm.formErrors.push(validator.errorList[i].message);
             }
             if (!vm.asignarGrupo.siTodosTienenGrupo()) {
-                vm.formErrors.push("Debes asignar grupo a todos los estudiantes");
+                vm.formErrors.push("Grupos ingresados no válidos");
             }
             $('html,body').animate({
                 scrollTop: $("#top-form-head-line").offset().top},

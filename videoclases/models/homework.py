@@ -1,11 +1,13 @@
 # coding=utf-8
-import urlparse
-
+from urllib.parse import urlparse,parse_qs
 from django.core.validators import MaxLengthValidator
 from django.db import models
 from django.utils import timezone
 
 from videoclases.models.course import Course
+
+from videoclases.models.evaluation.criterias_by_teacher import CriteriasByTeacher
+from videoclases.models.evaluation.scala import Scala
 from videoclases.models.teacher import Teacher
 
 
@@ -25,12 +27,14 @@ class Homework(models.Model):
     date_evaluation = models.DateField()
     revision = models.IntegerField(default=3)
     homework_to_evaluate = models.ForeignKey('Homework', blank=True, null=True)
+    criterias = models.ManyToManyField(CriteriasByTeacher, blank=True)
+    scala = models.ForeignKey(Scala, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"Curso: {0}, {1}".format(self.course.name,self.title)
 
     def full_name(self):
-        return u"Curso: {0} {1} {2}".format(
+        return u"Curso: {0} {1}, {2}".format(
             self.course.name,
             self.course.year,
             self.title)
@@ -67,8 +71,8 @@ class Homework(models.Model):
         if 'youtu.be/' in link:
             video_id = link.split('youtu.be/',1)[1]
             return 'https://www.youtube.com/embed/' + str(video_id), True
-        url_data = urlparse.urlparse(link)
-        query = urlparse.parse_qs(url_data.query)
+        url_data = urlparse(link)
+        query = parse_qs(url_data.query)
         if 'youtube.com/embed/' in link:
             return link, True
         try:
@@ -81,5 +85,5 @@ class Homework(models.Model):
         if self.video:
             link, success = self.process_youtube_default_link(self.video)
             if success:
-                self.video = unicode(link)
+                self.video = str(link)
         super(Homework, self).save(*args, **kwargs)

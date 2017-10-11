@@ -5,7 +5,6 @@
 
 {% block extra-head %}
     {{ form.media }}
-    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
     <script type="text/javascript">
         function Select() {
             var self = this;
@@ -25,6 +24,16 @@
                         {name: '{{ c }}', id: {{ c.id }}}
                     {% else %}
                         {name: '{{ c }}', id: {{ c.id }}},
+                    {% endif %}
+                {% endfor %}
+            ];
+
+            self.type_scalas =  [
+                {% for c in types_scalas %}
+                    {% if forloop.last %}
+                        {name: '{{ c.name }}', id: {{ c.id }}, description: `{{ c.description}}`  }
+                    {% else %}
+                        {name: '{{ c.name }}', id: {{ c.id }}, description: `{{ c.description }}` },
                     {% endif %}
                 {% endfor %}
             ];
@@ -59,6 +68,24 @@
                 vm.homeworkDatosIniciales.homework_to_evaluate({{ homework.homework_to_evaluate.id}});
             {% endif %}
             vm.id({{ homework.id }});
+
+            /* NEW model of criterias*/
+            {% if homework.scala %}
+                vm.model_criteria.scala({{ homework.scala.id }});
+                vm.model_criteria_initials.scala({{ homework.scala.id }});
+
+                let arr = [
+                {% for g in homework.criterias.all %}
+                    {% for c in g.criterias.all %}
+                        { id:{{ c.id }}, name:'{{ c.value }}', description:'{{ c.description|default:"" }}', editable:{% if user.teacher == g.teacher %} true {% else %} false {% endif %} },
+                    {% endfor %}
+                {% endfor %}
+                ];
+                for(let e of arr){
+                vm.model_criteria_initials.criterias.push({id:ko.observable(e.id), name: ko.observable(e.name),description: ko.observable(e.description), editable: ko.observable(e.editable) });
+                vm.model_criteria.criterias.push({id:ko.observable(e.id), name: ko.observable(e.name),description: ko.observable(e.description), editable: ko.observable(e.editable) });
+            }
+            {% endif %}
 
             // initial data for groups
             $.when($.ajax("{% url 'descargar_groups_homework' homework.id %}")).done(
@@ -152,9 +179,14 @@
                                data-bind="value: homework.title"/>
                     </div>
                     <div class="panel-body" data-bind="visible: !editarTareaBoolean()">
-                        <h4>Descripción</h4>
-                        <texhomework data-bind="value: homework.description" class="form-control" rows="5"
-                                     readonly></texhomework>
+                        <div class="row">
+                            <div class="col-xs-7">Descripción</div>
+                            <div class="col-xs-5">
+                                <div class="controls input-append">
+                                    <span data-bind="text: homework.description"></span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-xs-7">Fecha límite para subir tarea</div>
                             <div class="col-xs-5">
@@ -172,18 +204,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-7"><h4>VideoClases recibidas</h4></div>
+                            <div class="col-xs-7">VideoClases recibidas</div>
                             <div class="col-xs-5">{{ videoclases_recibidas }}</div>
                         </div>
                     </div>
                     <div class="panel-body" data-bind="visible: editarTareaBoolean">
                         <h4>Descripción</h4>
-                        <texhomework name="description" class="form-control"
-                                     data-bind="value: homework.description"></texhomework>
+                        <textarea name="description" class="form-control margin-top"
+                                     data-bind="value: homework.description"></textarea>
                         <div class="row">
                             <div class="col-xs-7">Curso</div>
                             <div class="col-xs-5">
-                                <select name="course" class="form-control" id="id_course"
+                                <select name="course" class="form-control margin-top" id="id_course"
                                         data-bind="options: select.courses,
                                             optionsText: 'name',
                                             optionsValue: 'id',
@@ -194,7 +226,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-7">Revisiones mínimas</div>
-                            <div class="col-xs-5"><input class="form-control" type="number" name="revision"
+                            <div class="col-xs-5"><input class="form-control margin-top" type="number" name="revision"
                                                          min="1"
                                                          max="7" step="1" data-bind="value: homework.revision">
                             </div>
@@ -203,7 +235,7 @@
                             <div class="col-xs-7">Fecha límite para subir tarea</div>
                             <div class="col-xs-5">
                                 <div class="controls input-append date">
-                                    <input class="form-control" id="id_fecha_subida" name="date_upload"
+                                    <input class="form-control margin-top" id="id_fecha_subida" name="date_upload"
                                            readonly=""
                                            type="text" data-bind="value: homework.date_upload"/>
                                     <span class="add-on"><i class="icon-remove"></i></span>
@@ -225,7 +257,7 @@
                             <div class="col-xs-7">Fecha límite para evaluar tarea</div>
                             <div class="col-xs-5">
                                 <div class="controls input-append date">
-                                    <input class="form-control" id="id_fecha_evaluacion" name="date_evaluation"
+                                    <input class="form-control  margin-top" id="id_fecha_evaluacion" name="date_evaluation"
                                            readonly="" type="text" data-bind="value: homework.date_evaluation"/>
                                     <span class="add-on"><i class="icon-remove"></i></span>
                                     <span class="add-on"><i class="icon-th"></i></span>
@@ -245,7 +277,7 @@
                         <div class="row">
                             <div class="col-xs-7">Tarea a evaluar</div>
                             <div class="col-xs-5">
-                                <select name="homework_to_evaluate" class="form-control" id="id_homework_to_evaluate"
+                                <select name="homework_to_evaluate" class="form-control margin-top" id="id_homework_to_evaluate"
                                         data-bind="options: select.homework_to_evaluate,
                                             optionsText: 'name',
                                             optionsValue: 'id',
@@ -257,9 +289,70 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+        <div class="col-xs-12">
+            <h6 class="page-head-line">Criterios de evaluación</h6>
+        </div>
+        <div class="col-xs-12" >
+            <div class="">
+                <div class="row form-group" >
+                    <label class="col-md-6 control-label">Tipo de Escala a usar
+                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top"
+                                           title="Rango de valores usados para evaluar, si no aparece la escala que necesita escribanos a software@teachingislearning.cl para agregarla"></i></label>
+                    <div class="col-md-6">
+                        <select name="type_scalas" class="form-control" id="id_type_scalas"
+                                data-bind="options: select.type_scalas,
+                                visible: editarTareaBoolean,
+                                optionsText: 'name',
+                                optionsValue: 'id',
+                                optionsCaption: '-- escoja una escala --',
+                                value: model_criteria.scala,
+                                valueAllowUnset: false"></select>
+
+                        <span data-bind="text:chosen_scala"></span>
+                    </div>
+                </div>
+                <div class="row form-group" >
+                                <div class="col-md-4">
+                                    <label class=" control-label">Criterios a Evaluar
+                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top"
+                                           title="Listado de criterios que se mostrarán con la escala selecionada a los alumnos"></i></label><br>
+                                    <button data-bind="click: addCriteria, visible: editarTareaBoolean" class="btn btn-md btn-success"><i class="fa fa-plus-circle"></i> Agregar</button>
+                                    <br>
+                                    <span><strong>NOTA:</strong> no puedes editar los criterios creados por otros profesores</span>
+                                </div>
+                    <div  class="col-md-8" data-bind="foreach: { data: model_criteria.criterias, as: 'c' }">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <span data-bind="text: $index()+1"></span>
+                                <button data-bind="click: $parent.removeCriteria, visible: $root.editarTareaBoolean() && c.editable" class="btn  btn-md btn-danger">
+                                    <i class="fa fa-remove"></i> Borrar
+                                </button>
+                            </div>
+                            <div class="col-md-9" data-bind="visible: $root.editarTareaBoolean">
+                                <input type="text" class="form-control margin-top name-criteria" data-bind="value: c.name, enable: c.editable, attr:{name: 'name_'+$index}" placeholder="Nombre del criterio (Requerido)" required/>
+                                <textarea data-bind="value: c.description,  enable: c.editable" class="form-control margin-top" placeholder="Comentarios para entender el criterio (Opcional)"></textarea>
+                            </div>
+                            <div class="col-md-9" data-bind="style: {display: $root.editarTareaBoolean() ? 'none' : 'inline'}">
+                                <strong data-bind="text: c.name"></strong><br>
+                                <span data-bind="text: c.description"></span>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
         <input id="edit-homework-form-submit" type="submit" value="Submit" style="display: none;">
     </form>
-    <form data-bind="submit: submitGruposForm">
+    <form id="groups-form" data-bind="submit: submitGruposForm">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h6 class="page-head-line">Grupos para la tarea</h6>
+        </div>
+    </div>
         <div class="row">
             <div class="table-responsive col-xs-12">
                 <table class="table table-bordered table-hover">
@@ -273,7 +366,8 @@
                         <td><span data-bind="text: $data.last_name"></span></td>
                         <td><span data-bind="text: $data.first_name"></span></td>
                         <td>
-                            <div class="col-xs-12"><input class="form-control" data-bind="value: $data.group"/></div>
+                            <span data-bind="text: $data.group, visible:!$root.editarTareaBoolean()"></span>
+                            <input type="number" min="0" class="group form-control" data-bind="value: $data.group, visible:$root.editarTareaBoolean(), attr:{name: 'group_'+$index}" placeholder="ingrese numero de grupo" required/>
                         </td>
                         <td><span
                                 data-bind="text: $root.editarGrupo.getVideoclaseText($data.videoclase())"></span>

@@ -7,7 +7,7 @@ from videoclases.models.homework import Homework
 from videoclases.models.pedagogical_questions.question import Question
 from django.utils import timezone
 from pyexcel_xls import save_data
-import StringIO
+from io import StringIO
 
 
 class PedagogicalQuestions(models.Model):
@@ -17,7 +17,7 @@ class PedagogicalQuestions(models.Model):
     delta_time = models.DurationField()
     description = models.TextField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def export_as_xls(self):
@@ -55,12 +55,12 @@ class PedagogicalQuestions(models.Model):
                     label_questions = [u'']
                     responses = answers_state[0].response.all()
                     for r in responses:
-                        label_questions.append(unicode(r.question))
+                        label_questions.append(str(r.question))
                     list_data.append(label_questions)
                     for answer in answers_state:
-                       student_responses = [unicode(answer.student.user.get_full_name())]
+                       student_responses = [str(answer.student.user.get_full_name())]
                        for r in answer.response.all():
-                            student_responses.append(unicode(r.answer))
+                            student_responses.append(str(r.answer))
                        list_data.append(student_responses)
 
                 if len(list_data) > 0:
