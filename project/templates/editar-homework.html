@@ -104,18 +104,14 @@
     </script>
 {% endblock %}
 
-{% block body %}
-    <div class="row">
-        <div class="col-xs-2"><h4>Profesor</h4></div>
-        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2"><h4>Colegio</h4></div>
-        <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
-        <div class="col-xs-2 col-xs-offset-6">
-            <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+{% block body-header-buttons %}
+    <div class="col-xs-6 col-xs-offset-6">
+        <button onclick="location.href = '{% url 'videoclases_homework' homework.id %}';" class="btn btn-info">Volver
+        </button>
         </div>
-    </div>
+{% endblock %}
+
+{% block body %}
     <div id="top-form" class="row" data-bind="visible: formErrorsVisible">
         <div class="alert alert-danger alert-dismissible" role="alert">
             <button type="button" class="close" data-bind="click: function() {changeFormErrorsVisible(false)}"
@@ -129,7 +125,6 @@
     </div>
     <form id="edit-homework-form" name="edit-homework-form" data-bind="submit: submitEditarTarea">
         <div class="row">
-            <h6 class="page-head-line"></h6>
             <div align="center" class="col-xs-12">
                 <button class="btn btn-danger" data-bind="click: editarTarea, visible: !editarTareaBoolean()">
                     Editar tarea

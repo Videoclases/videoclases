@@ -3,26 +3,9 @@
 
 {% block teacher-active %}class="menu-top-active"{% endblock %}
 
+{% block body-header-title %}Tareas{% endblock %}
+
 {% block body %}
-    <div class="row">
-        <div class="col-xs-2"><h4>Alumno</h4></div>
-        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2"><h4>Colegio y Curso</h4></div>
-        <div class="col-xs-2"><h5>{{ user.student.course_actual.school.name }}
-            - {{ user.student.course_actual.name }}</h5></div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <h6 class="page-head-line"></h6>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <h6 class="page-head-line">Tareas</h6>
-        </div>
-    </div>
     <div class="row">
         <div class="col-xs-12">
             <table id="example" class="table table-responsive table-bordered" cellspacing="0" width="100%">

@@ -4,7 +4,6 @@
 
 {% block extra-head %}
     {{ form.media }}
-    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
     <script type="text/javascript">
         function Select() {
             var self = this;
@@ -51,20 +50,12 @@
         });
     </script>
 {% endblock %}
-
+{% block body-header-buttons %}
+{% endblock %}
+<div class="col-xs-6 col-xs-offset-6">
+    <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+</div>
 {% block body %}
-            <div class="row">
-                <div class="col-xs-2"><h4>Colegio</h4></div>
-                <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
-                <div class="col-xs-2 col-xs-offset-6">
-                    <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
-                </div>
-            </div>
-            <div class="row" id="top-form-head-line">
-                <div class="col-xs-12">
-                    <h6 class="page-head-line"></h6>
-                </div>
-            </div>
 
             <div class="col-xs-12 text-center">
                 <button onclick="location.href = '{% url 'download_pedagogical_questions' pedagogicalquestions.id %}';"

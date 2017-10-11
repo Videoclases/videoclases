@@ -24,20 +24,17 @@
         });
     </script>
 {% endblock %}
-
+{% block body-header-title %}
+    {{ user.student.course_actual.school.name }} -
+    Curso {{ user.student.course_actual.name }} - {{ user.get_full_name }}
+{% endblock %}
 {% block body %}
-    <div class="row">
-        <div class="col-xs-12">
-            <h6 class="page-head-line">{{ user.student.course_actual.school.name }} -
-                Curso {{ user.student.course_actual.name }} - {{ user.get_full_name }}</h6>
-        </div>
-    </div>
     <div class="row">
         <div class="col-xs-6">
             {% if group.videoclase.video %}
                 <div class="row">
                     <div class="col-xs-12" align="center">
-                            <span>VideoClase subida el {{ group.videoclase.upload_students|date:'d-m-Y' }}
+                        <span>VideoClase subida el {{ group.videoclase.upload_students|date:'d-m-Y' }}</span>
                     </div>
                 </div>
                 <iframe width="100%" height="315" src="{{ group.videoclase.video }}" frameborder="0"

@@ -5,7 +5,6 @@
 
 {% block extra-head %}
     {{ form.media }}
-    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
     <script type="text/javascript">
         function Select() {
             var self = this;
@@ -25,24 +24,18 @@
     <script src="{% static "js/src/createConceptualTest.js" %}"></script>
 {% endblock %}
 
+{% block body-header-buttons %}
+    <div class="col-xs-6 col-xs-offset-6">
+        <button onclick="location.href = '{% url 'new_conceptual_test' %}';" class="btn btn-info">Volver</button>
+    </div>
+{% endblock %}
+
 {% block body %}
     <div class="loader" data-bind="visible: loading">
         <div class="loader-text" align="center">
             <strong>Creando Test, espere un momento</strong>
         </div>
     </div>
-            <div class="row">
-                <div class="col-xs-2"><h4>Colegio</h4></div>
-                <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
-                <div class="col-xs-2 col-xs-offset-6">
-                    <button onclick="location.href = '{% url 'new_conceptual_test' %}';" class="btn btn-info">Volver</button>
-                </div>
-            </div>
-            <div class="row" id="top-form-head-line">
-                <div class="col-xs-12">
-                    <h6 class="page-head-line"></h6>
-                </div>
-            </div>
             <div class="row" data-bind="visible: formErrorsVisible">
                 <div class="col-xs-12">
                     <div class="alert alert-danger alert-dismissible" role="alert">
@@ -115,16 +108,17 @@
                                 <input name="question" class="form-control question required" data-bind="value: title"/>
                                 Alternativas:
                                 <div data-bind="foreach: { data: choices, as: 'c' }" class="form-group col-xs-12 ">
-                                    <div class="row">
+                                    <div class="row  margin-top">
                                         <div class="col-xs-1">
                                             <span data-bind="text: $root.indexLetter($index())"></span>
                                         </div>
                                         <div class="col-xs-9 margin-bottom">
-                                            <input name="alternative" class="form-control alternative required "
+                                            <input name="alternative" class="form-control alternative required"
                                                    data-bind="value: c.value"/>
                                         </div>
                                         <div class="col-xs-2 ">
-                                            <button data-bind="click: $parent.removeChoice" class="btn btn-danger">
+                                            <button data-bind="click: $parent.removeChoice"
+                                                    class="btn btn-danger btn-sm">
                                                 Borrar
                                                 alternativa
                                             </button>

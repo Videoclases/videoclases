@@ -30,34 +30,26 @@
     <script src="{% static "js/src/videoclasesTareaDocumentReady.js" %}"></script>
 {% endblock %}
 
-{% block body %}
+{% if student.course_actual %}
+    {% block body-header-buttons %}
+        <div class="col-xs-6 col-xs-offset-6">
+            <button onclick="location.href = '{% url 'course' student.course_actual.id %}';" class="btn btn-info">
+                Volver
+            </button>
+        </div>
+    {% endblock %}
+    {% block body-header-title %}
+        Curso {{ student.course_actual.name }} - {{ student.user.get_full_name }}
+        ({{ videoclases.count }} VideoClases)
+    {% endblock %}
     <div class="row">
-        <div class="col-xs-2"><h4>Profesor</h4></div>
-        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
+        <div class="col-xs-12">
+            <h6 class="page-head-line"></h6>
+        </div>
     </div>
-    {% if student.course_actual %}
-        <div class="row">
-            <div class="col-xs-2"><h4>Colegio</h4></div>
-            <div class="col-xs-2"><h5>{{ student.course_actual.school.name }}</h5></div>
-            <div class="col-xs-2 col-xs-offset-6">
-                <button onclick="location.href = '{% url 'course' student.course_actual.id %}';" class="btn btn-info">
-                    Volver
-                </button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h6 class="page-head-line">Curso {{ student.course_actual.name }} - {{ student.user.get_full_name }}
-                    ({{ videoclases.count }} VideoClases)</h6>
-            </div>
-        </div>
-    {% else %}
-        <div class="row">
-            <div class="col-xs-12">
-                Sin cursos actuales
-            </div>
-        </div>
-    {% endif %}
+{% endif %}
+
+{% block body %}
     {% for g in groups %}
         <div class="row">
             <div class="col-xs-6">

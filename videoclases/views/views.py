@@ -2,21 +2,17 @@
 
 import json
 import os
-import random
 from json.decoder import JSONDecodeError
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-
-from quality_control.models.quality_control import QualityControl
-from videoclases.forms.authentication_form import CustomAutheticationForm
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.validators import URLValidator
 from django.db import transaction
-from django.db.models import Count, Q
+from django.db.models import Q
 from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
@@ -26,6 +22,8 @@ from pyexcel_ods import get_data as ods_get_data
 from pyexcel_xls import get_data as xls_get_data
 from pyexcel_xlsx import get_data as xlsx_get_data
 
+from quality_control.models.quality_control import QualityControl
+from videoclases.forms.authentication_form import CustomAutheticationForm
 from videoclases.forms.forms import *
 from videoclases.models.boolean_parameters import BooleanParameters
 from videoclases.models.evaluation.criteria import Criteria
@@ -33,7 +31,6 @@ from videoclases.models.evaluation.criterias_by_teacher import CriteriasByTeache
 from videoclases.models.evaluation.scala import Scala
 from videoclases.models.final_scores import FinalScores
 from videoclases.models.groupofstudents import GroupOfStudents
-from videoclases.models.pedagogical_questions.pedagogical_questions import PedagogicalQuestions
 from videoclases.models.pedagogical_questions.pedagogical_questions_answers import PedagogicalQuestionsAnswers
 from videoclases.models.student import Student
 from videoclases.models.student_evaluations import StudentEvaluations
@@ -541,6 +538,7 @@ class EditarAlumnoView(FormView):
         context = super(EditarAlumnoView, self).get_context_data(**kwargs)
         student = Student.objects.get(id=self.kwargs['student_id'])
         context['student'] = student
+        context['course_id'] = self.kwargs['course_id']
         return context
 
     def get_initial(self):

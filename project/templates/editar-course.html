@@ -18,29 +18,21 @@
         }
     </script>
 {% endblock %}
+{% block body-header-buttons %}
+    <div class="col-xs-6">
+        <button onclick="deleteCurso()" class="btn btn-danger">Borrar curso</button>
+        <form method="post" action="{% url 'borrar_course' course.id %}">
+            {% csrf_token %}
+            <input type="number" name="course" value="{{ course.id }}" style="display:none;"/>
+            <input type="submit" id="formBorrarCursoSubmit" style="display:none;"/>
+        </form>
+    </div>
+    <div class="col-xs-6">
+        <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-xs-2"><h4>Profesor</h4></div>
-        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
-        <div class="col-xs-2 col-xs-offset-6">
-            <button onclick="deleteCurso()" class="btn btn-danger">Borrar curso</button>
-            <form method="post" action="{% url 'borrar_course' course.id %}">
-                {% csrf_token %}
-                <input type="number" name="course" value="{{ course.id }}" style="display:none;"/>
-                <input type="submit" id="formBorrarCursoSubmit" style="display:none;"/>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2"><h4>Colegio</h4></div>
-        <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <h6 class="page-head-line"></h6>
-        </div>
-    </div>
     <div class="row">
         <div class="col-xs-12">
             {% if course.students.all %}

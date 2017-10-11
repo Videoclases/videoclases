@@ -3,31 +3,17 @@
 
 {% block teacher-active %}class="menu-top-active"{% endblock %}
 
+{% block body-header-buttons %}
+    <div class="col-xs-6">
+        <button onclick="location.href = '{% url 'crear_homework' %}';" class="btn btn-info">Crear Tarea</button>
+    </div>
+    <div class="col-xs-6">
+        <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+    </div>
+{% endblock %}
+{% block body-header-title %}Crear curso{% endblock %}
+
 {% block body %}
-    <div class="row">
-        <div class="col-xs-2"><h4>Profesor</h4></div>
-        <div class="col-xs-2"><h5>{{ user.get_full_name }}</h5></div>
-        <div class="col-xs-2 col-xs-offset-6">
-            <button class="btn btn-info">Crear curso</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2"><h4>Colegio</h4></div>
-        <div class="col-xs-2"><h5>{{ user.teacher.school.name }}</h5></div>
-        <div class="col-xs-2 col-xs-offset-6">
-            <button onclick="location.href = '{% url 'crear_homework' %}';" class="btn btn-info">Crear Tarea</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <h6 class="page-head-line"></h6>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <h6 class="page-head-line">Crear curso</h6>
-        </div>
-    </div>
     <div class="row">
         <div class="col-xs-12" align="center">
             <div class="row">
@@ -62,7 +48,7 @@
             <div class="col-xs-1" align="center">{{ form.file.label }}</div>
             <div class="col-xs-3" align="center">
                 <input id="id_file" name="{{ form.file.name }}" type="file" class="form-control"/></div>
-            <div class="col-xs-12" align="center">
+            <div class="col-xs-12 margin-top" align="center">
                 <button type="submit" class="btn btn-success">Crear Curso</button>
             </div>
         </div>
