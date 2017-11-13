@@ -1,7 +1,9 @@
 # coding=utf-8
 from urllib.parse import urlparse, parse_qs
+
 from django.db import models
 from django.db.models import Q
+from django.db.models.functions.base import Coalesce
 
 from videoclases.models.groupofstudents import GroupOfStudents
 
@@ -147,13 +149,14 @@ class VideoClase(models.Model):
         from videoclases.models.student_evaluations import StudentEvaluations
         from django.db.models import Avg
         evaluations = StudentEvaluations.objects.filter(videoclase=self)
-        result = evaluations.aggregate(format=Avg('format'),
-                                     copyright=Avg('copyright'),
-                                     theme=Avg('theme'),
-                                     pedagogical=Avg('pedagogical'),
-                                     rythm=Avg('rythm'),
-                                     originality=Avg('originality')
-                                     )
+        result = evaluations.aggregate(
+            format=Coalesce(Avg('format'), 0),
+            copyright=Coalesce(Avg('copyright'), 0),
+            theme=Coalesce(Avg('theme'), 0),
+            pedagogical=Coalesce(Avg('pedagogical'), 0),
+            rythm=Coalesce(Avg('rythm'), 0),
+            originality=Coalesce(Avg('originality'), 0)
+        )
         try:
             result['total'] = sum(result.values()) + 1
         except TypeError:
@@ -163,8 +166,8 @@ class VideoClase(models.Model):
     # new version
     def get_score_criterias(self):
         from django.db.models import Avg
-        return self.evaluations.exclude(criterias__isnull=True)\
-            .values('criterias__criteria__value').annotate(value=Avg('criterias__value'))
+        return self.evaluations.exclude(criterias__isnull=True) \
+            .values('criterias__criteria__value').aggregate(value=Coalesce(Avg('criterias__value'), 0))
 
 
     @staticmethod

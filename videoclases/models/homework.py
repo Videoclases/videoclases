@@ -1,11 +1,11 @@
 # coding=utf-8
-from urllib.parse import urlparse,parse_qs
+from urllib.parse import urlparse, parse_qs
+
 from django.core.validators import MaxLengthValidator
 from django.db import models
 from django.utils import timezone
 
 from videoclases.models.course import Course
-
 from videoclases.models.evaluation.criterias_by_teacher import CriteriasByTeacher
 from videoclases.models.evaluation.scala import Scala
 from videoclases.models.teacher import Teacher

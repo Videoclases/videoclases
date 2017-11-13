@@ -19,3 +19,6 @@ class Student(models.Model):
             return 'Course: ' + self.course_actual().name + ' ' + str(self.course_actual().year) + ' ' + \
                    self.user.get_full_name()
         return 'Sin courses actualmente'
+
+    def get_full_name(self):
+        return self.user.get_full_name()

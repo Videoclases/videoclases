@@ -1,8 +1,9 @@
-from django.contrib import admin
 from django.conf.urls import url
+from django.contrib import admin
 
-import videoclases.views.views as vv
+import videoclases.views.homework as hw
 import videoclases.views.pegadogical_questions as pq
+import videoclases.views.views as vv
 
 admin.autodiscover()
 
@@ -96,7 +97,12 @@ urlpatterns = [
         pq.PedagogicalQuestionEditView.as_view(),
         name='pedagogical_questions'),
 
-
+    url(r'^teacher/homework-evaluations/(?P<pk>\d+)/$',
+        hw.HomeworkEvaluationsView.as_view(),
+        name='homework_evaluations'),
+    url(r'^teacher/homework-evaluations-teacher/(?P<pk>\d+)/$',
+        hw.HomeworkEvaluationsTeacherView.as_view(),
+        name='homework_evaluations_teacher'),
     url(r'^teacher/course/(?P<course_id>\d+)/$',
         vv.CursoView.as_view(),
         name='course'),

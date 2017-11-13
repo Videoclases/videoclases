@@ -95,60 +95,60 @@
                     </div>
                     <div class="panel-body">
                         <div class="col-xs-12">
-                            {% if g.videoclase.video %}
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <h3>Nota obtenida por criterios</h3>
-                                        {% if homework.scala %}
-                                            {% with g.videoclase.get_score_criterias as score_by_criteria  %}
-                                                <table class="table table-hover table-responsive">
-                                                    {% for c in score_by_criteria %}
-                                                        <tr>
-                                                            <th>{{ c.criterias__criteria__value }}</th>
-                                                            <td>{{ c.value|floatformat:3 }}</td>
-                                                        </tr>
-                                                        {% empty %}
-                                                        <tr><td class="text-center text-danger">Aún no posee evaluaciones</td></tr>
-                                                    {% endfor %}
-                                                </table>
-                                            {% endwith %}
-                                        {% else %}
-                                            {% with g.videoclase.get_multiple_criteria_score as score_by_criteria  %}
-                                                <table class="table table-hover table-responsive">
-                                                    <tr>
-                                                        <th>Formato</th>
-                                                        <td>{{ score_by_criteria.format|floatformat }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Respeto por licencias</th>
-                                                        <td>{{ score_by_criteria.copyright|floatformat }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Tema</th>
-                                                        <td>{{ score_by_criteria.theme|floatformat }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Pedagogía</th>
-                                                        <td>{{ score_by_criteria.pedagogical|floatformat }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Ritmo</th>
-                                                        <td>{{ score_by_criteria.rythm|floatformat }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Originalidad</th>
-                                                        <td>{{ score_by_criteria.originality|floatformat }}</td>
-                                                    </tr>
-                                                    <tr class="info">
-                                                        <th>Nota obtenida por criterios</th>
-                                                        <td>{{ score_by_criteria.total|floatformat }}</td>
-                                                    </tr>
-                                                </table>
-                                            {% endwith %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            {% endif %}
+                            {#                            {% if g.videoclase.video %}#}
+                            {#                                <div class="row">#}
+                            {#                                    <div class="col-xs-12">#}
+                            {#                                        <h3>Nota obtenida por criterios</h3>#}
+                            {#                                        {% if homework.scala %}#}
+                            {#                                            {% with g.videoclase.get_score_criterias as score_by_criteria  %}#}
+                            {#                                                <table class="table table-hover table-responsive">#}
+                            {#                                                    {% for c in score_by_criteria %}#}
+                            {#                                                        <tr>#}
+                            {#                                                            <th>{{ c.criterias__criteria__value }}</th>#}
+                            {#                                                            <td>{{ c.value|floatformat:3 }}</td>#}
+                            {#                                                        </tr>#}
+                            {#                                                        {% empty %}#}
+                            {#                                                        <tr><td class="text-center text-danger">Aún no posee evaluaciones</td></tr>#}
+                            {#                                                    {% endfor %}#}
+                            {#                                                </table>#}
+                            {#                                            {% endwith %}#}
+                            {#                                        {% else %}#}
+                            {#                                            {% with g.videoclase.get_multiple_criteria_score as score_by_criteria  %}#}
+                            {#                                                <table class="table table-hover table-responsive">#}
+                            {#                                                    <tr>#}
+                            {#                                                        <th>Formato</th>#}
+                            {#                                                        <td>{{ score_by_criteria.format|floatformat }}</td>#}
+                            {#                                                    </tr>#}
+                            {#                                                    <tr>#}
+                            {#                                                        <th>Respeto por licencias</th>#}
+                            {#                                                        <td>{{ score_by_criteria.copyright|floatformat }}</td>#}
+                            {#                                                    </tr>#}
+                            {#                                                    <tr>#}
+                            {#                                                        <th>Tema</th>#}
+                            {#                                                        <td>{{ score_by_criteria.theme|floatformat }}</td>#}
+                            {#                                                    </tr>#}
+                            {#                                                    <tr>#}
+                            {#                                                        <th>Pedagogía</th>#}
+                            {#                                                        <td>{{ score_by_criteria.pedagogical|floatformat }}</td>#}
+                            {#                                                    </tr>#}
+                            {#                                                    <tr>#}
+                            {#                                                        <th>Ritmo</th>#}
+                            {#                                                        <td>{{ score_by_criteria.rythm|floatformat }}</td>#}
+                            {#                                                    </tr>#}
+                            {#                                                    <tr>#}
+                            {#                                                        <th>Originalidad</th>#}
+                            {#                                                        <td>{{ score_by_criteria.originality|floatformat }}</td>#}
+                            {#                                                    </tr>#}
+                            {#                                                    <tr class="info">#}
+                            {#                                                        <th>Nota obtenida por criterios</th>#}
+                            {#                                                        <td>{{ score_by_criteria.total|floatformat }}</td>#}
+                            {#                                                    </tr>#}
+                            {#                                                </table>#}
+                            {#                                            {% endwith %}#}
+                            {#                                        {% endif %}#}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {#                            {% endif %}#}
 {#                        TODO: need to be optimized#}
 {#                            <div class="row">#}
 {#                                <div class="col-xs-12">#}
