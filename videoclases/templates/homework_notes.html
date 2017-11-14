@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block teacher-active %}class="menu-top-active"{% endblock %}
+{% block extra-head %}
+    <script type="application/javascript">
+    var homework_url = "{% url 'descargar_homework_evaluations' object.pk %}";
+    var i18n_url = "{% static "assets/i18n_datatable_spanish.json" %}";
+    </script>
+
+    <script src="{% static "assets/datatables/pdfmake-0.1.32/pdfmake.min.js" %}"></script>
+    <script src="{% static "assets/datatables/pdfmake-0.1.32/vfs_fonts.js" %}"></script>
+    <script src="{% static "assets/datatables/pdfmake-0.1.32/vfs_fonts.js" %}"></script>
+    <style type="text/css">
+    .btn-group{
+        display: inline;
+    }
+    </style>
+    <script src="{% static "js/src/homeworkNotes.js" %}"></script>
+
+
+{% endblock %}
+{% block body-header-buttons %}
+<div class="col-xs-6 col-xs-offset-6">
+    <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+</div>
+{% endblock %}
+{% block body %}
+<div class="loader" data-bind="visible: loading">
+    <div class="loader-text" align="center">
+        <strong>Cargando datos, espere un momento</strong>
+    </div>
+</div>
+    <div class="page-header">
+        <h3>Evaluaciones de {{object.title }} <small>Para mejorar la evaluación revisando algunos videos haga click <a  class="btn btn-default btn-sm" href="{% url 'homework_evaluations_teacher' object.pk %}">Aquí</a></small></h3>
+</div>
+<table id="table" class="table table-bordered table-responsive" cellspacing="0" width="100%">
+    <thead >
+        <tr data-bind="foreach: dataHeaders">
+            <th data-bind="text: $data"></th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: dataEvaluations">
+        <tr data-bind="foreach: $data">
+            <td data-bind="text: $data"></td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,244 @@
+﻿﻿{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block videoclases-active %}class="menu-top-active"{% endblock %}
+
+{% block extra-head %}
+    <script type="text/javascript">
+    var url_api = "{% url 'api_get_videoclase_teacher' object.pk %}";
+
+        function ResponseValues() {
+            var self = this;
+            self.question = "";
+    self.correctAnswer = ko.observable("");
+    self.ohterChoices = ko.observableArray([]);
+            self.value = ko.observable();
+            self.video = ko.observable();
+            self.videoclase_id = ko.observable();
+            self.question = ko.observable("");
+            self.msg = ko.observable("");
+            self.comments = ko.observable("");
+            self.format = ko.observable();
+            self.copyright = ko.observable();
+            self.theme = ko.observable();
+            self.pedagogical = ko.observable();
+            self.rythm = ko.observable();
+            self.originality = ko.observable();
+            self.homework = ko.observable({{ homework_id }});
+            self.videoclase = ko.observable();
+            self.evaluacion = ko.observable();
+
+            {% if homework.scala %}
+            self.score_choices = [
+                {% for a in homework.scala.values.all|dictsort:"value" %}
+                    {% if forloop.last %}
+                         {'name':'{{ a.name }}', 'value': {{ a.value }} }
+                    {% else %}
+                        {'name':'{{ a.name }}', 'value': {{ a.value }} } ,
+                    {% endif %}
+                {% endfor %}
+            ];
+                {% else %}
+            self.score_choices = [
+                {% for a in score %}
+                    {% if forloop.last %}
+                         {'name':'{{ a.0 }}', 'value': {{ a.1 }} }
+                    {% else %}
+                        {'name':'{{ a.0 }}', 'value': {{ a.1 }} } ,
+                    {% endif %}
+                {% endfor %}
+            ];
+            {% endif %}
+
+            {% if homework.criterias %}
+            self.criterias = ko.observableArray();
+            {% for g in homework.criterias.all %}
+                {% for c in g.criterias.all %}
+                    self.criterias.push(
+                        {name:"{{c.value}}", description:"{{ c.description }}", response:ko.observable(), id:{{c.id}}}
+                    );
+                {% endfor %}
+            {% endfor %}
+            {% endif %}
+            self.thumbUpGray = ko.observable('{% static "img/thumb-up-gray.png" %}');
+            self.thumbUpGreen = ko.observable('{% static "img/thumb-up-green.png" %}');
+            self.thumbDownGray = ko.observable('{% static "img/thumb-down-gray.png" %}');
+            self.thumbDownRed = ko.observable('{% static "img/thumb-down-red.png" %}');
+        }
+    </script>
+    <script src="{% static "js/src/evaluarTeacher.js" %}"></script>
+    <script src="{% static "js/libs/jquery.validate.min.js" %}"></script>
+    <script src="{% static "js/src/evaluarTeacherDocumentReady.js" %}"></script>
+{% endblock %}
+{% block body-header-buttons %}
+    <div class="col-xs-6 col-xs-offset-6">
+        <button onclick="location.href = '{% url 'student' %}';" class="btn btn-info">Volver</button>
+    </div>
+{% endblock %}
+{% block body-header-title %}
+     {{ object.title }}, {{ object.course }}
+{% endblock %}
+
+{% block body %}
+<form id="answerForm" method="post">
+    <div class="loader" data-bind="visible: loading">
+        <div class="loader-text" align="center">
+            <strong data-bind="visible: msg.length==0">Cargando evaluación, espere un momento</strong>
+            <strong data-bind="visible: msg.length>0, text: msg">Guardando evaluación, espere un momento</strong>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Evaluaciones realizadas: {{ number_evaluations }}</h3>
+        </div>
+    </div>
+
+    <div class="row" data-bind="visible: formErrorsVisible">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-bind="click: function() {changeFormErrorsVisible(false)}"
+                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div align="center">
+                Se deben completar todos los campos
+            </div>
+        </div>
+    </div>
+    <div class="row" data-bind="visible: !responseValues.loading">
+        <div class="col-xs-6">
+            <iframe width="100%" height="315" data-bind="attr: { src: responseValues.video }" frameborder="0"
+                    allowfullscreen></iframe>
+
+            <div class="panel panel-default margin-top">
+                <div class="panel-body">
+                                <h3 class="collapser" data-toggle="collapse" data-target="#pedagogicalQuestion" aria-expanded="true" aria-controls="pedagogicalQuestion">
+                Pregunta pedagógica <span class="caret"></span>
+            </h3>
+                    <div  id="pedagogicalQuestion" class="collapse in">
+                        <label class="control-label" data-bind="text:responseValues.question"></label>
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-success" data-bind="text:responseValues.correctAnswer"></li>
+                            <!-- ko foreach: responseValues.ohterChoices -->
+                            <li class="list-group-item" data-bind="text:$data"></li>
+                            <!-- /ko -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xs-6">
+            <div class="panel panel-default">
+
+                <div class="panel-body">
+                    {% csrf_token %}
+                    <input type="hidden" name="videoclase" data-bind="value: responseValues.videoclase_id"/>
+                    <h3>Evaluación Video</h3>
+                    <div class="row">
+                        {% if homework.criterias %}
+                            <div class="col-xs-12">
+                                <!-- ko foreach: responseValues.criterias -->
+                                <div class="form-group">
+                                    <label class="control-label"><span data-bind="text: $data.name"></span> <i
+                                            class="fa fa-info-circle" data-bind="attr: {title: $data.description}"></i></label>
+                                    <select class="criteria form-control"
+                                            data-bind="options: $root.responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                        optionsCaption: '-- escoja una alternativa --',
+                                        value: $data.response,
+                                        attr: { name: $data.id },
+                                        valueAllowUnset: false" required></select>
+                                </div>
+                                <!-- /ko -->
+
+                                <div class="form-group">
+                                    <label class="form-group">Comentarios para mejorar el trabajo realizado
+                                        (Opcional) </label>
+                                    <textarea name="comments" class="form-control" id="id_comments"
+                                              data-bind="value: comments"></textarea>
+                                </div>
+                            </div>
+
+                        {% else %}
+{#                                        TODO: legacy model,deprecated, need to be remove in next version#}
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-group">Formato video (Introducción, desarrollo,
+                                        conclusión)</label>
+                                    <select name="format" class="form-control" id="id_format"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                    optionsCaption: '-- escoja una alternativa --',
+                                    value: format,
+                                    valueAllowUnset: false"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-group">Uso de arreglos animados (uso del objeto de matriz de
+                                        Alice)</label>
+
+                                    <select name="copyright" class="form-control" id="id_copyright"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                    optionsCaption: '-- escoja una alternativa --',
+                                    value: copyright,
+                                    valueAllowUnset: false"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-group">Uso de programación (tienen que notarse como funciona el
+                                        algoritmo en un ejemplo)</label>
+                                    <select name="theme" class="form-control" id="id_theme"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                    optionsCaption: '-- escoja una alternativa --',
+                                    value: theme,
+                                    valueAllowUnset: false"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-group">El contenido del video está correcto (Lo enseñado está
+                                        bien)</label>
+                                    <select name="pedagogical" class="form-control" id="id_pedagogical"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                    optionsCaption: '-- escoja una alternativa --',
+                                    value: pedagogical,
+                                    valueAllowUnset: false"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-group">La pedagogia es adecuada (el como se explica el
+                                        contenido)</label>
+                                    <select name="rythm" class="form-control" id="id_rythm"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                    optionsCaption: '-- escoja una alternativa --',
+                                    value: rythm,
+                                    valueAllowUnset: false"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-group">EL video es original</label>
+                                    <select name="originality" class="form-control" id="id_originality"
+                                            data-bind="options: responseValues.score_choices, optionsText: 'name', optionsValue: 'value',
+                                    optionsCaption: '-- escoja una alternativa --',
+                                    value: originality,
+                                    valueAllowUnset: false"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-group">Comentarios para mejorar el trabajo realizado </label>
+                                    <textarea name="comments" class="form-control" id="id_comments"
+                                              data-bind="value: comments"></textarea>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <button style="display:none" id="#answerButton" type="submit"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12" align="center">
+            <button data-bind="click: clickSiguienteVideoclase" class="btn btn-lg btn-success">Siguiente VideoClase
+            </button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
