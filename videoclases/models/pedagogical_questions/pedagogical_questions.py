@@ -7,7 +7,7 @@ from videoclases.models.homework import Homework
 from videoclases.models.pedagogical_questions.question import Question
 from django.utils import timezone
 from pyexcel_xls import save_data
-from io import StringIO
+from io import BytesIO
 
 
 class PedagogicalQuestions(models.Model):
@@ -36,8 +36,8 @@ class PedagogicalQuestions(models.Model):
                 question_data.append(alternative.response)
             list_data.append(question_data)
         data['Sheet1'] = list_data
-        io = StringIO.StringIO()
-        save_data(io, data,file_type='xls')
+        io = BytesIO()
+        save_data(io, data)
         return io
 
     def export_answer_as_xls(self):
@@ -65,8 +65,8 @@ class PedagogicalQuestions(models.Model):
 
                 if len(list_data) > 0:
                     data['Sheet{0}'.format(i)] = list_data
-            io = StringIO.StringIO()
-            save_data(io, data, file_type='xls')
+            io = BytesIO()
+            save_data(io, data)
             return io
         return None
 
@@ -76,7 +76,7 @@ class PedagogicalQuestions(models.Model):
             return 1
         elif today <= self.homework.date_upload + self.delta_time and today <= self.homework.date_evaluation:
             return 2
-        elif today >= self.homework.date_evaluation and today <= self.homework.date_evaluation + self.delta_time:
+        elif self.homework.date_evaluation <= today <= self.homework.date_evaluation + self.delta_time:
             return 3
         else:
             return 4
