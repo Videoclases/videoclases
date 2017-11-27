@@ -1,5 +1,5 @@
 import random
-
+from statistics import *
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
@@ -12,13 +12,138 @@ from django.views.generic.detail import DetailView
 from quality_control.models.quality_control import QualityControl
 from videoclases.models.groupofstudents import GroupOfStudents
 from videoclases.models.homework import Homework
+from videoclases.models.student import Student
+from videoclases.models.student_evaluations import StudentEvaluations
 from videoclases.models.video_clase import VideoClase
 from videoclases.views.views import in_students_group, in_teachers_group
+
+from functools import reduce
+
+class APIHomework:
+    def __init__(self, homework_id):
+        self.homework = get_object_or_404(Homework,id=homework_id)
+        self.students = Student.objects.filter(groupofstudents__homework__pk=45)
+
+        self.studentsDict = dict()
+
+        self.videoclases = VideoClase.objects.filter(homework=self.homework, video__isnull=False)
+
+        self.videoclasesDict = dict()
+
+        self.evaluations = StudentEvaluations.objects.filter(videoclase__homework=self.homework)
+
+        try:
+            self.control = QualityControl.objects.get(homework=self.homework)
+        except QualityControl.DoesNotExist:
+            self.control = None
+        self.__build()
+
+    def get_students_evaluations(self):
+        result = list()
+        for key in self.videoclasesDict.keys():
+            v = self.videoclasesDict[key]
+            evaluations = [self.studentsDict[id]['videos'][key]['evaluation'].get_evaluation()
+                           for id in v['students']]
+            score = calculate_score(evaluations)
+            for s in v['students']:
+                result.append(
+                    {'criterias': score,
+                     'student': self.studentsDict[s]['student'].get_full_name()
+                     }
+                )
+        return result
+
+    def get_student_evaluations_filtered(self):
+        # TODO: implementar esto
+        return self.get_students_evaluations()
+
+    def get_video_for_teacher_evaluation(self, teacher):
+        items = []
+        if self.control and self.control.list_items.count() > 0:
+            items = self.control.list_items.filter(
+                teacher=teacher).prefetch_related('videoclase')
+        videoclases = [i.videoclase for i in items]
+
+        def filter_queryset(prev, curr):
+            if curr['video'] not in videoclases and len(curr['students']) > prev['count']:
+                return {
+                    'videoclase': curr['video'],
+                    'count': len(curr['students'])}
+            return prev
+        queryset = reduce(filter_queryset,self.videoclasesDict.values(), {'count': 0})
+        # FIXME: return always same value, even with evaluation, so filter is not working
+        return queryset['videoclase'] if queryset['count'] > 0 else None
+
+    def __build(self):
+        for v in self.videoclases:
+            self.videoclasesDict[v.pk] = {
+                'students': [],
+                'video': v
+            }
+        for e in self.evaluations:
+            d = self.studentsDict.get(e.author.pk, {
+                'student': e.author,
+                'videos': dict()
+            })
+            d['videos'][e.videoclase.pk] = {'evaluation': e}
+            self.studentsDict[e.author.pk] = d
+
+            f = self.videoclasesDict[e.videoclase.pk]
+            f['students'].append(e.author.pk)
+
+
+def calculate_score(evaluations):
+    if len(evaluations) > 0:
+
+        def funcion_to_reduce(res, curr):
+
+            for element in curr:
+                if element['id'] in res:
+                    res[element['id']]['scores'].append(element['value'])
+                else:
+                    res[element['id']] = {
+                        'id': element['id'],
+                        'name': element['name'],
+                        'scores': [element['value']]
+                    }
+            return res
+
+        # import ipdb; ipdb.set_trace()
+        response = reduce(funcion_to_reduce, evaluations,{})
+
+        def add_statistics(value, decimals=3):
+            element = dict(value)
+            del element['scores']
+            scores = value.get('scores', [])
+            if len(scores) > 0:
+                element['avg'] = round(mean(scores), decimals)
+                element['min_score'] = reduce(lambda x, y: x if x < y else y, scores)
+                element['max_score'] = reduce(lambda x, y: x if x > y else y, scores)
+                element['number_evaluations'] = len(scores)
+                try:
+                    element['mode'] = mode(scores)
+                except StatisticsError:
+                    # not unique common value
+                    element['mode'] = '-'
+                if len(scores) < 2:
+                    # not enough data to calculate
+                    element['standar_desv'] = '-'
+                    element['variance'] = '-'
+                else:
+                    element['standar_desv'] = round(stdev(scores), decimals)
+                    element['variance'] = round(variance(scores), decimals)
+            else:
+                element['empty'] = True
+            return element
+
+        return list(map(add_statistics, response.values()))
+    return []
 
 
 class GetVideoClaseView(DetailView):
     template_name = 'blank.html'
     model = Homework
+
     def get(self, request, *args, **kwargs):
         result = dict()
         homework_base = self.get_object()
@@ -90,27 +215,17 @@ class GetVideoClaseTeacherView(DetailView):
 
     def get(self, request, *args, **kwargs):
         result = dict()
-        homework_base = self.get_object()
-        homework = homework_base
-        groups = GroupOfStudents.objects.filter(homework=homework)
-        if homework_base.homework_to_evaluate is not None:
-            homework = homework_base.homework_to_evaluate
-            groups = GroupOfStudents.objects.filter(homework=homework)
+        homework = self.get_object()
+        api = APIHomework(homework.id)
+        videoclase = api.get_video_for_teacher_evaluation(self.request.user.teacher)
 
-        groups = groups \
-            .exclude(videoclase__video__isnull=True) \
-            .exclude(videoclase__video__exact='') \
-            .annotate(revision=Count('videoclase__answers')) \
-            .order_by('revision', '?')
-        element_response = groups[0] if groups.exists() else None
-
-        if element_response:
-            alternativas = [element_response.videoclase.alternative_2,
-                            element_response.videoclase.alternative_3]
-            result['video'] = element_response.videoclase.video
-            result['question'] = element_response.videoclase.question
-            result['videoclase_id'] = element_response.videoclase.pk
-            result['correctAnswer'] = element_response.videoclase.correct_alternative
+        if videoclase:
+            alternativas = [videoclase.alternative_2,
+                            videoclase.alternative_3]
+            result['video'] = videoclase.video
+            result['question'] = videoclase.question
+            result['videoclase_id'] = videoclase.pk
+            result['correctAnswer'] = videoclase.correct_alternative
             result['ohterChoices'] = alternativas
             result['redirect'] = False
         else:
@@ -133,7 +248,6 @@ def descargar_homework_evaluation(request, homework_id):
     data = []
     criterias_headers = []
     for v in videoclases:
-        # import ipdb; ipdb.set_trace()
         if v.group:
             e = v.get_score_criterias() if homework.criterias.count() > 0 else v.get_multiple_criteria_score()
             for student in v.group.students.all():
