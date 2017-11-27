@@ -10,4 +10,5 @@ class QualityControl(models.Model):
     list_items = models.ManyToManyField(QualityItem)
 
     def __str__(self):
-        return u" - ".join([str(hw) for hw in self.homework.all()])
+        # return u" - ".join([str(hw) for hw in self.homework.all()])
+        return str(self.id) if self.id else ''
