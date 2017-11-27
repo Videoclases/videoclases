@@ -6,6 +6,8 @@
 {% block extra-head %}
     <script type="text/javascript">
     var url_api = "{% url 'api_get_videoclase_teacher' object.pk %}";
+    var url_back = "{% url 'homework_evaluations' object.pk %}";
+    var url_next = "{% url 'homework_evaluations_teacher' object.pk %}";
 
         function ResponseValues() {
             var self = this;
@@ -72,7 +74,8 @@
 {% endblock %}
 {% block body-header-buttons %}
     <div class="col-xs-6 col-xs-offset-6">
-        <button onclick="location.href = '{% url 'student' %}';" class="btn btn-info">Volver</button>
+        <button onclick="location.href = '{% url 'homework_evaluations' object.pk %}';" class="btn btn-info">Volver
+        </button>
     </div>
 {% endblock %}
 {% block body-header-title %}
@@ -94,7 +97,7 @@
         </div>
     </div>
 
-    <div class="row" data-bind="visible: formErrorsVisible">
+    <div id="top-form-head-line" class="row" data-bind="visible: formErrorsVisible">
         <div class="alert alert-danger alert-dismissible" role="alert">
             <button type="button" class="close" data-bind="click: function() {changeFormErrorsVisible(false)}"
                     aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -158,7 +161,7 @@
                             </div>
 
                         {% else %}
-{#                                        TODO: legacy model,deprecated, need to be remove in next version#}
+                            {#                                        FIXME: legacy model,deprecated, need to be remove in next version#}
                             <div class="col-xs-12">
                                 <div class="form-group">
                                     <label class="form-group">Formato video (Introducción, desarrollo,
@@ -235,7 +238,9 @@
     </div>
     <div class="row">
         <div class="col-xs-12" align="center">
-            <button data-bind="click: clickSiguienteVideoclase" class="btn btn-lg btn-success">Siguiente VideoClase
+            <button data-bind="click: clickBack" class="btn btn-success">Guardar evaluación y volver al listado
+            </button>
+            <button data-bind="click: clickNext" class="btn btn-success">Guardar evaluación y revisar otra
             </button>
         </div>
     </div>

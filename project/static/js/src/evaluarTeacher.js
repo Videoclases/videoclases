@@ -2,6 +2,7 @@
  *  ViewModel for the evaluar template, using Knockout.js
  */
 
+var url_post = url_next;
 function ViewModel() {
     var self = this;
 
@@ -14,6 +15,7 @@ function ViewModel() {
     self.msg= ko.observable("");
     self.comments = ko.observable("");
     self.videoclase_id= ko.observable();
+    self.url = url_next;
 
     self.formErrorsVisible = ko.observable(false);
 
@@ -22,7 +24,6 @@ function ViewModel() {
     };
 
     self.url = ko.observable(window.location.pathname);
-    self.value = ko.computed(function() { return self.responseValues.value(); });
     self.answer = ko.observable();
 
     self.format = ko.observable();
@@ -50,7 +51,7 @@ function ViewModel() {
                 console.log(response);
                 if(response.redirect){
                     alert("Completaste todas las evaluaciones de esta tarea");
-                    location.href="/";
+                    location.href = url_back;
                 }else{
                     self.responseValues.ohterChoices(response.ohterChoices);
                     self.responseValues.correctAnswer(response.correctAnswer);
@@ -63,20 +64,22 @@ function ViewModel() {
         });
     };
 
-    self.clickSiguienteVideoclase = function() {
+    self.clickNext = function () {
+        self.url = url_next;
+        self.checkValidForm();
+    };
+    self.clickBack = function () {
+        self.url = url_back;
+        self.checkValidForm();
+    };
 
+    self.checkValidForm = function () {
         if($("#answerForm").valid()){
-
-            if (self.answer() === undefined) {
-                alert("Debes seleccionar una respuesta");
-                return;
-            }
-
             if(self.responseValues.criterias && self.responseValues.criterias().length > 0 ){
                 for(let c of self.responseValues.criterias() ){
                     if(! c.response() === undefined){
                         alert("Debes evaluar todos los criterios!");
-                        return;
+                        return false;
                     }
                 }
             }else{
@@ -85,23 +88,22 @@ function ViewModel() {
                     || self.pedagogical() === undefined || self.rythm() === undefined
                     || self.originality() === undefined){
                     alert("Debes completar la evaluación de los criterios");
-                    return;
+                    return false;
                 }
             }
+
             self.msg("Guardando evaluación");
             self.loading(true);
-            self.submitEvaluacionDeAlumno();
+
+            self.submitResponse();
+            return true;
         }
-
+        return false;
     };
 
-    self.evaluar = function(value) {
-        self.responseValues.value(value);
-    };
 
-    self.submitEvaluacionDeAlumno = function(data, event) {
+    self.submitResponse = function (data, event) {
         var fd = new FormData();
-        fd.append("value", parseInt(self.value()));
 
         if(self.responseValues.criterias && self.responseValues.criterias()){
             let criteriasResponse = [];
@@ -130,12 +132,23 @@ function ViewModel() {
                 }
             }
         });
-        return $.ajax('/student/evaluar-video/', {
+
+
+        return $.ajax(url_post, {
             data: fd,
             type: "post",
             processData: false,
             contentType: false,
             success: function(response){
+                self.loading(false);
+                console.log(response);
+                self.msg('Evaluación guardada, redirigiendo ...');
+                location.href = self.url
+            },
+            error: function (response) {
+                self.loading(false);
+                console.log(response);
+                alert('no se pudo guardar la evaluación');
             }
         });
     };

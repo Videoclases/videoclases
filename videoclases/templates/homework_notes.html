@@ -31,8 +31,8 @@
     </div>
 </div>
     <div class="page-header">
-        <h3>Evaluaciones de {{object.title }} <small>Para mejorar la evaluación revisando algunos videos haga click <a  class="btn btn-default btn-sm" href="{% url 'homework_evaluations_teacher' object.pk %}">Aquí</a></small></h3>
-</div>
+        <h3>Evaluaciones de {{ object.title }} realizadas por alumnos</h3>
+    </div>
 <table id="table" class="table table-bordered table-responsive" cellspacing="0" width="100%">
     <thead >
         <tr data-bind="foreach: dataHeaders">
@@ -44,5 +44,24 @@
             <td data-bind="text: $data"></td>
         </tr>
     </tbody>
+</table>
+    <div class="page-header">
+        <h3>Evaluaciones de {{ object.title }} realizadas por docentes
+            <small>Para mejorar la evaluación revisando algunos videos haga click
+                <a class="btn btn-default btn-sm" href="{% url 'homework_evaluations_teacher' object.pk %}">Aquí</a>
+            </small>
+        </h3>
+    </div>
+    <table id="table2" class="table table-bordered table-responsive" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td></td>
+        </tr>
+        </tbody>
 </table>
 {% endblock %}
