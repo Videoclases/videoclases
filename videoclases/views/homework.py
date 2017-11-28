@@ -72,7 +72,7 @@ class HomeworkEvaluationsTeacherView(DetailView):
             control = None
             try:
                 control, created = QualityControl.objects.get_or_create(homework=self.get_object())
-            except ValueError:
+            except Exception:
                 control = QualityControl()
                 control.save()
                 control.homework.add(self.get_object())
@@ -83,6 +83,7 @@ class HomeworkEvaluationsTeacherView(DetailView):
             if created:
                 item.save()
                 control.list_items.add(item)
+                control.save()
             item.comments = request.POST.get('comments', None)
             item.save()
             for c in criterias:
@@ -95,6 +96,7 @@ class HomeworkEvaluationsTeacherView(DetailView):
                     score.save()
                     item.score_check.add(score)
                 score.save()
+            item.save()
             return JsonResponse({})
         else:
             # not should be necessary, only for deprecated model

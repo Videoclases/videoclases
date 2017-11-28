@@ -1,5 +1,7 @@
 import random
+from functools import reduce
 from statistics import *
+
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
@@ -17,7 +19,6 @@ from videoclases.models.student_evaluations import StudentEvaluations
 from videoclases.models.video_clase import VideoClase
 from videoclases.views.views import in_students_group, in_teachers_group
 
-from functools import reduce
 
 class APIHomework:
     def __init__(self, homework_id):
@@ -71,7 +72,6 @@ class APIHomework:
                     'count': len(curr['students'])}
             return prev
         queryset = reduce(filter_queryset,self.videoclasesDict.values(), {'count': 0})
-        # FIXME: return always same value, even with evaluation, so filter is not working
         return queryset['videoclase'] if queryset['count'] > 0 else None
 
     def __build(self):

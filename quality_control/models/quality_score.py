@@ -8,7 +8,7 @@ from videoclases.models.teacher import Teacher
 class QualityScore(models.Model):
     field = models.CharField(max_length=200, null=True,blank=True)
     criteria = models.ForeignKey(Criteria, null=True, blank=True)
-    score = models.DecimalField(max_digits=10, decimal_places=3)
+    score = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
     teacher = models.ForeignKey(Teacher, null=True, blank=True)
 
     def __str__(self):
