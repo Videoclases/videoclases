@@ -258,10 +258,18 @@ def descargar_homework_evaluation(request, homework_id):
 
     headers = ['Estudiante']
     headers.extend(criterias_headers)
+    teacher_evaluations = 0
+
+    try:
+        control = QualityControl.objects.get(homework=homework)
+        teacher_evaluations = control.list_items.filter(teacher=request.user.teacher).count()
+    except QualityControl.DoesNotExist:
+        pass
+
     results = {
         'headers': headers,
         'evaluations': data,
-        'teacherEvaluations': 0
+        'teacherEvaluations': teacher_evaluations
     }
 
     return JsonResponse(results, safe=False)

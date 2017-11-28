@@ -31,6 +31,7 @@ class HomeworkEvaluationsView(DetailView):
     def dispatch(self, *args, **kwargs):
         return super(HomeworkEvaluationsView, self).dispatch(*args, **kwargs)
 
+
 class HomeworkEvaluationsTeacherView(DetailView):
     template_name = 'homework_teacher_evaluation.html'
     model = Homework
@@ -43,14 +44,16 @@ class HomeworkEvaluationsTeacherView(DetailView):
         context = super(HomeworkEvaluationsTeacherView, self).get_context_data(**kwargs)
         context['homework_id'] = self.object.pk
         context['homework'] = self.object
-        homework_base = context['homework']
-        homework = homework_base
-        control = QualityControl.objects.filter(homework=homework)
-        control = control[0] if control.exists() else None
-        # Fixme: update to real numbers
-        number_evaluations = 0
+        homework = context['homework']
+        teacher_evaluations = 0
 
-        context['number_evaluations'] = number_evaluations
+        try:
+            control = QualityControl.objects.get(homework=homework)
+            teacher_evaluations = control.list_items.filter(teacher=self.request.user.teacher).count()
+        except QualityControl.DoesNotExist:
+            pass
+
+        context['number_evaluations'] = teacher_evaluations
         context['score'] = StudentEvaluations.scores
         return context
 
@@ -87,14 +90,18 @@ class HomeworkEvaluationsTeacherView(DetailView):
             item.comments = request.POST.get('comments', None)
             item.save()
             for c in criterias:
-                score, created = QualityScore.objects.get_or_create(
-                    criteria=Criteria.objects.get(id=c['criteria']),
-                    teacher=request.user.teacher
-                )
-                score.score = c['value']
-                if created:
+                score = item.score_check.filter(criteria__id=c['criteria'])
+                if score.count() > 0:
+                    score = score[0]
+                else:
+                    score = QualityScore.objects.create(
+                        criteria=Criteria.objects.get(id=c['criteria']),
+                        teacher=request.user.teacher
+                    )
                     score.save()
                     item.score_check.add(score)
+
+                score.score = c['value']
                 score.save()
             item.save()
             return JsonResponse({})
@@ -106,4 +113,3 @@ class HomeworkEvaluationsTeacherView(DetailView):
 
     def get_success_url(self, *args, **kwargs):
         return reverse('homework_evaluations_teacher', kwargs={'pk': self.kwargs['pk']})
-
