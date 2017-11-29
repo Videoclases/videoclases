@@ -53,11 +53,19 @@ class APIHomework:
             if v:
                 evaluations = [self.studentsDict[id]['videos'][group.videoclase.id]['evaluation'].get_evaluation()
                                for id in v['students']]
-                score = calculate_score(evaluations)
+                if len(evaluations) > 0:
+                    score = calculate_score(evaluations)
             for s in group.students.all():
                 result.append(
                     {'criterias': score,
-                     'student': {'first_name': s.user.first_name, 'last_name': s.user.last_name}
+                     'student': {'first_name': s.user.first_name, 'last_name': s.user.last_name},
+                     'videoclase': {
+                         'url': group.videoclase.video,
+                         'question': group.videoclase.question,
+                         'response': group.videoclase.correct_alternative,
+                         'date': group.videoclase.upload_students.strftime(
+                             "%d-%m-%Y %H:%M") if group.videoclase.upload_students else None
+                     }
                      }
                 )
         return {"headers_criterias": criterias, "results": result}
@@ -252,20 +260,8 @@ class GetVideoClaseTeacherView(DetailView):
 @user_passes_test(in_teachers_group, login_url='/')
 def descargar_homework_evaluation(request, homework_id):
     homework = get_object_or_404(Homework, pk=homework_id)
-    videoclases = VideoClase.objects.filter(homework=homework)
-    data = []
-    criterias_headers = []
-    for v in videoclases:
-        if v.group:
-            e = v.get_score_criterias() if homework.criterias.count() > 0 else v.get_multiple_criteria_score()
-            for student in v.group.students.all():
-                element = ["{0}, {1}".format(student.user.last_name, student.user.first_name)]
-                element.extend([round(val, 3) for val in e.values()])
-                criterias_headers = e.keys()
-                data.append(element)
-
-    headers = ['Estudiante']
-    headers.extend(criterias_headers)
+    api = APIHomework(homework_id)
+    data = api.get_student_evaluations_filtered()
     teacher_evaluations = 0
 
     try:
@@ -275,8 +271,8 @@ def descargar_homework_evaluation(request, homework_id):
         pass
 
     results = {
-        'headers': headers,
-        'evaluations': data,
+        'headers': data.get('headers_criterias', []),
+        'evaluations': data.get('results', []),
         'teacherEvaluations': teacher_evaluations
     }
 
