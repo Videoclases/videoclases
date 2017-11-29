@@ -66,6 +66,40 @@ class Homework(models.Model):
                 count += 1
         return count
 
+    def get_criterias_list(self):
+        if self.criterias:
+            list = []
+            for ct in self.criterias.all():
+                for c in ct.criterias.all():
+                    list.append({'id': c.id, 'name': c.value})
+            return list
+        return [
+            {
+                'id': 'originality',
+                'name': 'Originalidad'
+            },
+            {
+                'id': 'format',
+                'name': 'Formato'
+            },
+            {
+                'id': 'copyright',
+                'name': 'Licencias'
+            },
+            {
+                'id': 'theme',
+                'name': 'Tema'
+            },
+            {
+                'id': 'pedagogical',
+                'name': 'Pedagogía'
+            },
+            {
+                'id': 'rythm',
+                'name': 'Ritmo'
+            },
+        ]
+
     @staticmethod
     def process_youtube_default_link(link):
         if 'youtu.be/' in link:
