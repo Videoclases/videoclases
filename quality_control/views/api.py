@@ -22,7 +22,7 @@ from videoclases.views.views import in_students_group, in_teachers_group
 
 class APIHomework:
     def __init__(self, homework_id):
-        self.homework = get_object_or_404(Homework,id=homework_id)
+        self.homework = get_object_or_404(Homework, id=homework_id)
         self.students = Student.objects.filter(groupofstudents__homework__pk=45)
 
         self.studentsDict = dict()
@@ -41,18 +41,26 @@ class APIHomework:
 
     def get_students_evaluations(self):
         result = list()
-        for key in self.videoclasesDict.keys():
-            v = self.videoclasesDict[key]
-            evaluations = [self.studentsDict[id]['videos'][key]['evaluation'].get_evaluation()
-                           for id in v['students']]
-            score = calculate_score(evaluations)
-            for s in v['students']:
+        groups = GroupOfStudents.objects.filter(homework=self.homework).prefetch_related('students').select_related(
+            'videoclase')
+        criterias = self.homework.get_criterias_list()
+        score_base = criterias.copy()
+        for s in score_base:
+            s['empty'] = True
+        for group in groups:
+            v = self.videoclasesDict.get(group.videoclase.id, None)
+            score = score_base.copy()
+            if v:
+                evaluations = [self.studentsDict[id]['videos'][group.videoclase.id]['evaluation'].get_evaluation()
+                               for id in v['students']]
+                score = calculate_score(evaluations)
+            for s in group.students.all():
                 result.append(
                     {'criterias': score,
-                     'student': self.studentsDict[s]['student'].get_full_name()
+                     'student': {'first_name': s.user.first_name, 'last_name': s.user.last_name}
                      }
                 )
-        return result
+        return {"headers_criterias": criterias, "results": result}
 
     def get_student_evaluations_filtered(self):
         # TODO: implementar esto

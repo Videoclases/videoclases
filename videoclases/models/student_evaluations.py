@@ -48,7 +48,7 @@ class StudentEvaluations(models.Model):
             result = list()
             for c in self.criterias.select_related('criteria'):
                 result.append(
-                    {'id': c.id, 'name': c.criteria.value, 'value': c.value}
+                    {'id': c.criteria.id, 'name': c.criteria.value, 'value': c.value}
                 )
             return result
         return [
