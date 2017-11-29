@@ -2,6 +2,11 @@
 {% load staticfiles %}
 {% block teacher-active %}class="menu-top-active"{% endblock %}
 {% block extra-head %}
+    <style>
+        .new-row {
+            background-color: transparent !important;
+        }
+    </style>
     <script type="application/javascript">
     var homework_url = "{% url 'descargar_homework_evaluations' object.pk %}";
     var i18n_url = "{% static "assets/i18n_datatable_spanish.json" %}";
@@ -33,15 +38,37 @@
     <div class="page-header">
         <h3>Evaluaciones de {{ object.title }} realizadas por alumnos</h3>
     </div>
-<table id="table" class="table table-bordered table-responsive" cellspacing="0" width="100%">
-    <thead >
-        <tr data-bind="foreach: dataHeaders">
-            <th data-bind="text: $data"></th>
+    <table id="table" class="table table-bordered table-striped table-responsive" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th class="details-control" rowspan="2"></th>
+            <th colspan="2">Alumno</th>
+            <th data-bind="attr: { colspan:  dataHeaders.length }">Criterios</th>
+        </tr>
+        <tr>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <!-- ko foreach: dataHeaders -->
+            <th data-bind="text: $data.name"></th>
+            <!-- /ko -->
+
         </tr>
     </thead>
     <tbody data-bind="foreach: dataEvaluations">
-        <tr data-bind="foreach: $data">
-            <td data-bind="text: $data"></td>
+    <tr data-bind="attr:{ id: $index}">
+        <td class=" details-control text-center">
+            <i class="fa fa-plus-circle text-success" aria-hidden="true"></i>
+        </td>
+        <td data-bind="text: $data.student.first_name"></td>
+        <td data-bind="text: $data.student.last_name"></td>
+        <!-- ko foreach: $data.criterias -->
+        <!-- ko if: $data.avg -->
+        <td data-bind="text: $data.avg"></td>
+        <!-- /ko -->
+        <!-- ko if: $data.empty -->
+        <td>-</td>
+        <!-- /ko -->
+        <!-- /ko -->
         </tr>
     </tbody>
 </table>
