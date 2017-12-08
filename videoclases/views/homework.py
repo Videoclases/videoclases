@@ -55,6 +55,9 @@ class HomeworkEvaluationsTeacherView(DetailView):
 
         context['number_evaluations'] = teacher_evaluations
         context['score'] = StudentEvaluations.scores
+        videoclase_id = self.request.GET.get('id', None)
+        if videoclase_id:
+            context['videoclase_id'] = videoclase_id
         return context
 
     def get(self, request, *args, **kwargs):

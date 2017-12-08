@@ -42,7 +42,11 @@ function ViewModel() {
                 }
             }
         });
-        return $.ajax(url_api, {
+        let url = url_api;
+        if (self.responseValues.videoclase_id()) {
+            url += '?videoclase_id=' + self.responseValues.videoclase_id();
+        }
+        return $.ajax(url, {
             type: "get",
             processData: false,
             contentType: false,
@@ -58,6 +62,15 @@ function ViewModel() {
                     self.responseValues.video(response.video);
                     self.responseValues.question(response.question);
                     self.responseValues.videoclase_id(response.videoclase_id);
+
+                    if (response.responses) {
+                        response.responses.forEach(r => {
+                            self.responseValues.criterias().find(d => d.id === r.id).response(r.value);
+                        });
+                    }
+                    if (response.comments) {
+                        self.comments(response.comments);
+                    }
                     self.loading(false);
                 }
             }

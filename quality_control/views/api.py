@@ -265,8 +265,18 @@ class GetVideoClaseTeacherView(DetailView):
     def get(self, request, *args, **kwargs):
         result = dict()
         homework = self.get_object()
-        api = APIHomework(homework.id)
-        videoclase = api.get_video_for_teacher_evaluation(self.request.user.teacher)
+        videoclase_id = request.GET.get('videoclase_id', None)
+        videoclase = []
+        if videoclase_id:
+            videoclase = VideoClase.objects \
+                .filter(homework=homework, id=videoclase_id) \
+                .exclude(video__isnull=True) \
+                .exclude(video="")
+        if len(videoclase) > 0:
+            videoclase = videoclase[0]
+        else:
+            api = APIHomework(homework.id)
+            videoclase = api.get_video_for_teacher_evaluation(self.request.user.teacher)
 
         if videoclase:
             alternativas = [videoclase.alternative_2,
@@ -277,6 +287,11 @@ class GetVideoClaseTeacherView(DetailView):
             result['correctAnswer'] = videoclase.correct_alternative
             result['ohterChoices'] = alternativas
             result['redirect'] = False
+            evaluations = videoclase.qualityItemList.filter(teacher=self.request.user.teacher)
+            if evaluations.count() > 0:
+                evaluation = evaluations[0]
+                result['responses'] = evaluation.get_evaluation()
+                result['comments'] = evaluation.comments
         else:
             result['redirect'] = True
         return JsonResponse(result)
