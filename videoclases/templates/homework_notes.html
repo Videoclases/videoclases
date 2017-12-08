@@ -9,11 +9,13 @@
     </style>
     <script type="application/javascript">
     var homework_url = "{% url 'descargar_homework_evaluations' object.pk %}";
+    var teacher_evaluations_url = "{% url 'descargar_teacher_evaluations' object.pk %}";
+    var teacher_evaluate_url = "{% url 'homework_evaluations_teacher' object.pk %}";
     var i18n_url = "{% static "assets/i18n_datatable_spanish.json" %}";
     </script>
 
+    <script src="{% static "assets/datatables/Buttons-1.4.2/js/buttons.colVis.min.js" %}"></script>
     <script src="{% static "assets/datatables/pdfmake-0.1.32/pdfmake.min.js" %}"></script>
-    <script src="{% static "assets/datatables/pdfmake-0.1.32/vfs_fonts.js" %}"></script>
     <script src="{% static "assets/datatables/pdfmake-0.1.32/vfs_fonts.js" %}"></script>
     <style type="text/css">
     .btn-group{
@@ -44,12 +46,13 @@
             <th class="details-control" rowspan="2"></th>
             <th colspan="2">Alumno</th>
             <th data-bind="attr: { colspan:  dataHeaders.length }">Criterios</th>
+            <th class="button-col" rowspan="2"></th>
         </tr>
         <tr>
-            <th>Nombres</th>
-            <th>Apellidos</th>
+            <th class="exportable">Nombres</th>
+            <th class="exportable">Apellidos</th>
             <!-- ko foreach: dataHeaders -->
-            <th data-bind="text: $data.name"></th>
+            <th class="exportable" data-bind="text: $data.name"></th>
             <!-- /ko -->
 
         </tr>
@@ -69,25 +72,65 @@
         <td>-</td>
         <!-- /ko -->
         <!-- /ko -->
+        <td>
+            <button type="button" class="btn btn-sm btn-default" data-bind="click: $root.evaluateVideoclase">Evaluar o
+                Editar
+            </button>
+        </td>
         </tr>
     </tbody>
 </table>
+    <h6 class="clearfix page-head-line"></h6>
     <div class="page-header">
-        <h3>Evaluaciones de {{ object.title }} realizadas por docentes
+        <h3>Evaluaciones de {{ object.title }} realizadas por docentes<br>
             <small>Para mejorar la evaluación revisando algunos videos haga click
                 <a class="btn btn-default btn-sm" href="{% url 'homework_evaluations_teacher' object.pk %}">Aquí</a>
             </small>
         </h3>
     </div>
-    <table id="table2" class="table table-bordered table-responsive" cellspacing="0" width="100%">
+    <table id="table2" class="table table-bordered table-striped table-responsive" cellspacing="0" width="100%">
         <thead>
         <tr>
-            <th></th>
+            <th class="details-control" rowspan="2"></th>
+            <th colspan="2">Datos del grupo</th>
+            <th data-bind="attr: { colspan:  dataHeaders.length }">Criterios</th>
+            <th class="button-col" rowspan="2"></th>
+        </tr>
+        <tr>
+            <th class="exportable">Url video</th>
+            <th class="exportable">Alumnos</th>
+            <!-- ko foreach: dataHeaders -->
+            <th class="exportable" data-bind="text: $data.name"></th>
+            <!-- /ko -->
+
         </tr>
         </thead>
-        <tbody>
-        <tr>
-            <td></td>
+        <tbody data-bind="foreach: dataEvaluationsTeacher">
+        <tr data-bind="attr:{ id: $index}">
+            <td class=" details-control text-center">
+                <i class="fa fa-plus-circle text-success" aria-hidden="true"></i>
+            </td>
+            <td data-bind="text: $data.videoclase.url"></td>
+            <td>
+                <ul class="list-unstyled" data-bind="foreach: $data.students">
+                    <li><span data-bind="text: $data.first_name"></span> <span data-bind="text: $data.last_name"></span>
+                    </li>
+                </ul>
+
+            </td>
+            <!-- ko foreach: $data.criterias -->
+            <!-- ko if: $data.avg -->
+            <td data-bind="text: $data.avg"></td>
+            <!-- /ko -->
+            <!-- ko if: !$data.avg -->
+            <td>-</td>
+            <!-- /ko -->
+            <!-- /ko -->
+            <td>
+                <button type="button" class="btn btn-sm btn-default" data-bind="click: $root.evaluateVideoclase">Evaluar
+                    o Editar
+                </button>
+            </td>
         </tr>
         </tbody>
 </table>

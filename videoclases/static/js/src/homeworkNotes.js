@@ -3,14 +3,18 @@ function ViewModel() {
     let self = this;
     self.loading = ko.observable(true);
     self.dataEvaluations = ko.observableArray([]);
+    self.dataEvaluationsTeacher = ko.observableArray([]);
     self.dataHeaders = ko.observableArray([]);
     self.teacherEvaluations = ko.observable();
+
+    self.evaluateVideoclase = function (data) {
+        location.href = teacher_evaluate_url + '?id=' + data.videoclase_id;
+    }
 }
 
 let vm = new ViewModel();
 
-let format = function (d) {
-    // `d` is the original data object for the row
+const formatBaseBody = function (d) {
     let body = '';
     body += '<tr>' +
         '<th colspan="2"><h4>Datos del video</h4> </th>' +
@@ -42,9 +46,9 @@ let format = function (d) {
     body += '<tr>' +
         '<th colspan="2"><h4>Evaluaciones</h4> </th>' +
         '</tr>';
-    if (d.empty || d.criterias[0].empty) {
+    if (d.empty || !d.criterias[0].avg) {
         body += '<tr>' +
-            '<td colspan="2">No registra evaluaciones de sus compañeros</td>' +
+            '<td colspan="2">No registra evaluaciones</td>' +
             '</tr>'
     } else {
         d.criterias.forEach(c => {
@@ -71,6 +75,11 @@ let format = function (d) {
                 '</tr>'
         });
     }
+    return body
+};
+
+const formatStudent = function (d) {
+    // `d` is the original data object for the row
 
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-responsive">' +
         '<tr>' +
@@ -79,66 +88,106 @@ let format = function (d) {
         '<tr>' +
         '<th>Nombre Completo: </th>' +
         `<td>${d.student.first_name} ${d.student.last_name}</td>` +
-        '</tr>' + body +
+        '</tr>' + formatBaseBody(d) +
+        '</table>';
+
+};
+const formatTeacher = function (d) {
+    // `d` is the original data object for the row
+    let studentsBody = "<ul class=\"list-unstyled\">";
+    d.students.forEach(s => studentsBody += `<li>${s.first_name} ${s.last_name}</li>`);
+    studentsBody += "</ul>";
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-responsive">' +
+        '<tr>' +
+        '<th colspan="2"><h4>Datos del grupo</h4> </th>' +
+        '</tr>' +
+        '<tr>' +
+        '<th>Nombre estudiantes: </th>' +
+        `<td>${studentsBody}</td>` +
+        '</tr>' + formatBaseBody(d) +
         '</table>';
 
 };
 
-$(document).ready(function() {
-    ko.applyBindings(vm);
+const sendAjax = function (url, onSucess, onError = (error) => {
+    console.log(error)
+}) {
     $.ajax( {
         "dataType": 'json',
         "type": "POST",
-        "url": homework_url,
+        "url": url,
         "beforeSend": function (xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         },
-        "success":function (result) {
+        "success": onSucess,
+        "error": onError
+    });
+
+};
+const dataTableConfig = {
+    "language": {
+        url: i18n_url
+    },
+    dom: 'Bfrt<"col-sm-5"l><"col-sm-7"p><"clearfix">',
+    pageLength: 10,
+    "scrollX": true,
+    buttons: [
+        {
+            extend: 'colvis',
+            text: 'Columnas a mostrar',
+        },
+        {
+            extend: 'copy',
+            text: 'Copiar',
+            exportOptions: {
+                columns: '.exportable'
+            }
+        },
+        {
+            extend: 'excel',
+            exportOptions: {
+                columns: '.exportable'
+            }
+        },
+        {
+            extend: 'pdf',
+            exportOptions: {
+                columns: '.exportable'
+            }
+        },
+        {
+            extend: 'print',
+            text: 'Imprimir',
+            exportOptions: {
+                columns: '.exportable'
+            }
+        },
+    ],
+    columnDefs: [
+        {
+            targets: 'details-control', orderable: false,
+            "defaultContent": ""
+        },
+        {
+            targets: 'button-col', orderable: false,
+            "width": "110px",
+            "defaultContent": ""
+        }
+    ],
+    "order": [[2, 'asc']]
+
+};
+
+$(document).ready(function () {
+    ko.applyBindings(vm);
+    sendAjax(homework_url, function (result) {
             $(".loader").fadeOut();
-            console.log(JSON.stringify(result));
             vm.dataHeaders(result.headers);
             vm.dataEvaluations(result.evaluations);
             vm.teacherEvaluations(result.teacherEvaluations);
-            let dt = $('#table').DataTable({
-                "language" : {
-                    url: i18n_url
-                },
-                dom: 'Bfrtip',
-                pageLength: 50,
-                buttons: [
-                    {
-                        extend:'copy',
-                        text:'Copiar',
-                    },
-                    {
-                        extend:'excel',
-                    },
-                    {
-                        extend:'pdf',
-                    },
-                    {
-                        extend:'print',
-                        text:'Imprimir',
-                    },
-                ],
-                //          "columns": [
-                //     {
-                //         "class":          "details-control",
-                //         "orderable":      false,
-                //         "defaultContent": ""
-                //     },
-                // ],
-                columnDefs: [
-                    {
-                        targets: 'details-control', orderable: false,
-                        "defaultContent": ""
-                    }
-                ],
-                "order": [[2, 'asc']]
-
-            } );
+        let dt = $('#table').DataTable(dataTableConfig);
 
 
             $('#table tbody').on('click', 'tr td.details-control', function () {
@@ -154,11 +203,36 @@ $(document).ready(function() {
                 else {
                     tr.find('i').removeClass('fa-plus-circle text-success');
                     tr.find('i').addClass('fa-minus-circle text-danger');
-                    row.child(format(vm.dataEvaluations()[idx]), 'new-row').show();
+                    row.child(formatStudent(vm.dataEvaluations()[idx]), 'new-row').show();
                 }
             });
 
-        }
-    } );
+    });
+    sendAjax(teacher_evaluations_url, function (result) {
+        $(".loader").fadeOut();
+        vm.dataHeaders(result.headers);
+        vm.dataEvaluationsTeacher(result.evaluations);
+        let dt = $('#table2').DataTable(dataTableConfig);
+
+
+        $('#table2 tbody').on('click', 'tr td.details-control', function () {
+            let tr = $(this).closest('tr');
+            let row = dt.row(tr);
+            let idx = tr.attr('id');
+
+            if (row.child.isShown()) {
+                tr.find('i').removeClass('fa-minus-circle text-danger');
+                tr.find('i').addClass('fa-plus-circle text-success');
+                row.child.hide();
+            }
+            else {
+                tr.find('i').removeClass('fa-plus-circle text-success');
+                tr.find('i').addClass('fa-minus-circle text-danger');
+                row.child(formatTeacher(vm.dataEvaluationsTeacher()[idx]), 'new-row').show();
+            }
+        });
+
+    });
 
 });
+
