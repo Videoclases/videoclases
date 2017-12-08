@@ -15,4 +15,7 @@ urlpatterns = [
     url(r'^homework/(?P<homework_id>\d+)/evaluations/$',
         api.descargar_homework_evaluation,
         name='descargar_homework_evaluations'),
+    url(r'^homework/(?P<homework_id>\d+)/evaluations-teacher/$',
+        api.descargar_teacher_evaluations,
+        name='descargar_teacher_evaluations'),
 ]

@@ -70,6 +70,38 @@ class APIHomework:
                 )
         return {"headers_criterias": criterias, "results": result}
 
+    def get_teacher_evaluations(self):
+        videoclases = VideoClase.objects.filter(homework=self.homework).prefetch_related('qualityItemList',
+                                                                                         'group__students')
+        criterias = self.homework.get_criterias_list()
+        score_base = criterias.copy()
+        data = list()
+        for v in videoclases:
+            score = score_base.copy()
+            videoclase_info = {
+                "videoclase_id": v.id,
+                'criterias': score,
+                'students': [{'first_name': s.user.first_name, 'last_name': s.user.last_name}
+                             for s in v.group.students.all()],
+                'videoclase': {
+                    'id': v.id,
+                    'url': v.video,
+                    'question': v.question,
+                    'response': v.correct_alternative,
+                    'date': v.upload_students.strftime(
+                        "%d-%m-%Y %H:%M") if v.upload_students else None
+                }
+
+            }
+            if v.qualityItemList.count() > 0:
+                videoclase_info['criterias'] = calculate_score([e.get_evaluation() for e in v.qualityItemList.all()])
+            data.append(videoclase_info)
+
+        return {
+            'headers': criterias,
+            'evaluations': data
+        }
+
     def get_student_evaluations_filtered(self):
         # TODO: implementar esto
         return self.get_students_evaluations()
@@ -87,7 +119,8 @@ class APIHomework:
                     'videoclase': curr['video'],
                     'count': len(curr['students'])}
             return prev
-        queryset = reduce(filter_queryset,self.videoclasesDict.values(), {'count': 0})
+
+        queryset = reduce(filter_queryset, self.videoclasesDict.values(), {'count': 0})
         return queryset['videoclase'] if queryset['count'] > 0 else None
 
     def __build(self):
@@ -125,7 +158,7 @@ def calculate_score(evaluations):
             return res
 
         # import ipdb; ipdb.set_trace()
-        response = reduce(funcion_to_reduce, evaluations,{})
+        response = reduce(funcion_to_reduce, evaluations, {})
 
         def add_statistics(value, decimals=3):
             element = dict(value)
@@ -189,7 +222,7 @@ class GetVideoClaseView(DetailView):
             if evaluated_items.count() < 3:
                 items = control.list_items.all() \
                     .exclude(videoclase__answers__student=student)
-                item_to_evaluate = items[random.randint(0, items.count()-1)] if items.exists() else None
+                item_to_evaluate = items[random.randint(0, items.count() - 1)] if items.exists() else None
                 if item_to_evaluate and element_response:
                     value_random = random.random()
                     # TODO: need to be a more smart filter
@@ -218,7 +251,7 @@ class GetVideoClaseView(DetailView):
     @method_decorator(user_passes_test(in_students_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
         obj = self.get_object()
-        hw = Homework.objects.filter(id=obj.id,course__students=self.request.user.student)
+        hw = Homework.objects.filter(id=obj.id, course__students=self.request.user.student)
         if hw.count() == 0:
             messages.info(self.request, 'No tienes permisos para evaluar esta tarea.')
             return HttpResponseRedirect(reverse('student'))
@@ -277,3 +310,9 @@ def descargar_homework_evaluation(request, homework_id):
     }
 
     return JsonResponse(results, safe=False)
+
+
+@user_passes_test(in_teachers_group, login_url='/')
+def descargar_teacher_evaluations(request, homework_id):
+    api = APIHomework(homework_id)
+    return JsonResponse(api.get_teacher_evaluations(), safe=False)
