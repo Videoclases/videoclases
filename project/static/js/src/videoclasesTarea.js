@@ -25,6 +25,6 @@ function ViewModel() {
             }
         });
     }
-}
+};
 
 var vm = new ViewModel();

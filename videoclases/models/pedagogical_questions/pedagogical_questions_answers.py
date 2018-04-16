@@ -30,5 +30,5 @@ class PedagogicalQuestionsAnswers(models.Model):
     def get_states_dict(cls):
         return dict(cls.state_choices)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{0} - {1} - {2}".format(self.test,self.student, self.get_info_state())

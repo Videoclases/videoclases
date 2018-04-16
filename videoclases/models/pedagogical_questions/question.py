@@ -8,5 +8,5 @@ class Question(models.Model):
     alternatives = models.ManyToManyField(Alternative, related_name='question_alternatives')
     correct = models.ForeignKey(Alternative, related_name='question_correct', blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.question

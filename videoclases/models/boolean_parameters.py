@@ -6,7 +6,7 @@ class BooleanParameters(models.Model):
     description = models.CharField(max_length=256)
     value = models.BooleanField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.description + ': ' + str(self.value)
 
     class Meta:

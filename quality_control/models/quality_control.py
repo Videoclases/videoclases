@@ -9,5 +9,5 @@ class QualityControl(models.Model):
     homework = models.ManyToManyField(Homework)
     list_items = models.ManyToManyField(QualityItem)
 
-    def __unicode__(self):
+    def __str__(self):
         return u" - ".join([str(hw) for hw in self.homework.all()])

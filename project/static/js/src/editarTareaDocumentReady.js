@@ -4,8 +4,8 @@ $(document).ready(function() {
         "greaterThan",
         function(value, element, params) {
             var target = $(params).val();
-            var isValue = value != undefined && value != false
-            var isTarget = target != undefined && target != false
+            var isValue = value !== undefined && value !== false;
+            var isTarget = target !== undefined && target !== false;
             if (isValue && isTarget) {
                 var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
                 var valueArray = reggie.exec(value); 
@@ -25,10 +25,20 @@ $(document).ready(function() {
             return false;
         },
         'Debe ser posterior a fecha de subida.');
-    $('#editar-homework-form').validate({ // initialize the plugin
+    $.validator.addClassRules('name-criteria', {
+        required: true,
+        minlength:4
+    });
+        $.validator.addClassRules('group', {
+        required: true
+    });
+    $('#edit-homework-form').validate({ // initialize the plugin
         messages: {
             title: {
                 required: "Debes ingresar título a la tarea"
+            },
+            course: {
+                required: "Debes seleccionar un curso"
             },
             description: {
                 required: "Debes ingresar descripción a la tarea"
@@ -39,6 +49,13 @@ $(document).ready(function() {
             date_evaluation: {
                 required: "Debes ingresar fecha de evaluación",
                 greaterThan: "La fecha de evaluación debe ser posterior a la fecha de subida"
+            },
+            type_scalas: {
+                required: "Debes ingresar el tipo de escala a evaluar",
+            },
+            name_criteria: {
+                required: "Debes ingresar el nombre del criterio",
+                minlength: "Debe tener al menos 4 caracteres"
             }
         },
         rules: {
@@ -60,6 +77,13 @@ $(document).ready(function() {
             date_evaluation: {
                 required: true,
                 greaterThan: '#id_fecha_subida'
+            },
+            type_scalas:{
+                required:true
+            },
+            name_criteria:{
+                required:true,
+                minlength:4
             }
         },
         submitHandler: function (form) {
@@ -71,7 +95,7 @@ $(document).ready(function() {
             for (var i = 0; i < validator.errorList.length; i++){
                 vm.formErrors.push(validator.errorList[i].message);
             }
-            if (!vm.asignarGrupo.siTodosTienenGrupo()) {
+            if (!vm.editarGrupo.siTodosTienenGrupo()) {
                 vm.formErrors.push("Debes asignar grupo a todos los estudiantes");
             }
             $('html,body').animate({

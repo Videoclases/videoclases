@@ -3,6 +3,7 @@
 import json
 import os
 import random
+from json.decoder import JSONDecodeError
 
 from django.conf import settings
 from django.contrib import messages
@@ -27,6 +28,9 @@ from pyexcel_xlsx import get_data as xlsx_get_data
 
 from videoclases.forms.forms import *
 from videoclases.models.boolean_parameters import BooleanParameters
+from videoclases.models.evaluation.criteria import Criteria
+from videoclases.models.evaluation.criterias_by_teacher import CriteriasByTeacher
+from videoclases.models.evaluation.scala import Scala
 from videoclases.models.final_scores import FinalScores
 from videoclases.models.groupofstudents import GroupOfStudents
 from videoclases.models.pedagogical_questions.pedagogical_questions import PedagogicalQuestions
@@ -207,7 +211,9 @@ class ChangePasswordView(FormView):
             user.student.save()
             return reverse('student')
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
         return form_class(self.request.user, **self.get_form_kwargs())
 
     def get_initial(self):
@@ -239,7 +245,9 @@ class ChangeStudentPasswordView(FormView):
     def form_invalid(self, form, *args, **kwargs):
         return super(ChangeStudentPasswordView, self).form_invalid(form, *args, **kwargs)
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
         form = form_class(**self.get_form_kwargs())
         course = Course.objects.get(id=self.kwargs['course_id'])
         form.fields['student'].queryset = course.students.all()
@@ -265,7 +273,9 @@ class ChangeStudentPasswordSelectCursoView(FormView):
     def form_invalid(self, form, *args, **kwargs):
         return super(ChangeStudentPasswordSelectCursoView, self).form_invalid(form, *args, **kwargs)
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
         form = form_class(**self.get_form_kwargs())
         form.fields['course'].queryset = self.request.user.teacher.courses.all()
         form.fields['course'].label = 'Curso'
@@ -323,7 +333,10 @@ class CrearCursoFormView(FormView):
                 complete &= student_array[2] not in [None, '']
                 complete &= student_array[3] not in [None, '']
             if not complete:
-                os.remove(path)
+                try:
+                    os.remove(path)
+                except Exception:
+                    print("Not possible delete path")
                 messages.info(self.request, 'El archivo no tiene toda la información de un alumno.')
                 return HttpResponseRedirect(reverse('crear_course'))
         # Create Course
@@ -337,10 +350,10 @@ class CrearCursoFormView(FormView):
                 student_array = sheet[i]
                 if len(student_array) == 0:
                     continue
-                apellidos = unicode(student_array[0])
-                name = unicode(student_array[1])
-                username = unicode(student_array[2])
-                password = unicode(student_array[3])
+                apellidos = str(student_array[0])
+                name = str(student_array[1])
+                username = str(student_array[2])
+                password = str(student_array[3])
                 if apellidos and name and username and password:
                     try:
                         user = User.objects.get(username=username)
@@ -369,7 +382,9 @@ class CrearTareaView(TemplateView):
         context = super(CrearTareaView, self).get_context_data(**kwargs)
         form = CrearTareaForm()
         context['crear_homework_form'] = form
-        context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
+        teacher = self.request.user.teacher
+        context['courses'] = teacher.courses.filter(year=timezone.now().year)
+        context['types_scalas'] = Scala.objects.all()
         context['homeworks'] = Homework.objects.filter(course__in=context['courses'])
         return context
 
@@ -393,7 +408,7 @@ class CrearTareaFormView(FormView):
         result_dict['id'] = -1
         form_errors = []
         for field, errors in form.errors.items():
-            print errors
+            print(errors)
             for error in errors:
                 form_errors.append(error)
         result_dict['errors'] = form_errors
@@ -401,9 +416,25 @@ class CrearTareaFormView(FormView):
 
     def form_valid(self, form):
         result_dict = {}
+        scala = self.request.POST.get("scala", None)
+        teacher = self.request.user.teacher
         homework = form.save(commit=False)
-        homework.teacher = self.request.user.teacher
+        homework.teacher = teacher
         homework.save()
+        if scala:
+            try:
+                scala = json.loads(scala)
+                model = CriteriasByTeacher.objects.create(teacher=teacher, name=homework.full_name())
+                model.save()
+                for c in scala.get('criterias'):
+                    print(c)
+                    model.criterias.create(value=c.get("name"), description=c.get('description', ""))
+                homework.scala = Scala.objects.get(id=scala.get("scala"))
+                homework.criterias.add(model)
+                homework.save()
+            except JSONDecodeError as e:
+                pass
+
         result_dict['success'] = True
         result_dict['id'] = homework.id
         result_dict['errors'] = []
@@ -578,7 +609,7 @@ class EditarGrupoFormView(FormView):
             return True, None
 
     def groups_numbers_correct(self, groups_json):
-        numbers = range(1, len(groups_json) + 1)
+        numbers = list(range(1, len(groups_json) + 1))
         for number in groups_json:
             number_int = int(number)
             try:
@@ -625,7 +656,10 @@ class EditarGrupoFormView(FormView):
                         group.students.clear()
                         for a in list_submitted_students:
                             group.students.add(a)
-                            nf = FinalScores.objects.get(group__homework=homework, student=a)
+                            try:
+                                nf = FinalScores.objects.get(group__homework=homework, student=a)
+                            except Exception:
+                                nf = FinalScores(student=a)
                             nf.group = group
                             nf.save()
                 # if group does not exist, create group and add students
@@ -664,11 +698,11 @@ class EditarGrupoFormView(FormView):
         except ValueError:
             result_dict = {}
             result_dict['success'] = False
-            result_dict['message'] = unicode(message)
+            result_dict['message'] = str(message)
             return JsonResponse(result_dict)
 
     def form_invalid(self, form):
-        print form.errors
+        print(form.errors)
         return super(EditarGrupoFormView, self).form_invalid(form)
 
 
@@ -687,6 +721,7 @@ class EditarTareaView(UpdateView):
         homework = Homework.objects.get(id=self.kwargs['homework_id'])
         context['courses'] = self.request.user.teacher.courses.filter(year=timezone.now().year)
         context['homework'] = homework
+        context['types_scalas'] = Scala.objects.all()
         context['homeworks'] = Homework.objects.filter(course__in=context['courses']).exclude(id=homework.id)
         context['videoclases_recibidas'] = GroupOfStudents.objects.filter(homework=homework) \
             .exclude(videoclase__video__isnull=True) \
@@ -696,6 +731,39 @@ class EditarTareaView(UpdateView):
     def form_valid(self, form):
         self.object = self.get_object()
         self.object = form.save()
+
+        criterias = self.request.POST.get('criterias', None)
+        teacher = self.request.user.teacher
+        if criterias:
+            try:
+                criterias = json.loads(criterias)
+                groups_criteria = self.object.criterias.filter(teacher=teacher)
+                if len(criterias) >0:
+                    if groups_criteria.count() == 0:
+                        model = CriteriasByTeacher.objects.create(teacher=teacher, name=self.object.full_name())
+                        model.save()
+                        filtered_criterias = [item for item in criterias if item.get('editable',None) and not item.get('id', None)]
+                        for c in filtered_criterias:
+                            model.criterias.create(value=c.get("name"), description=c.get('description', ""))
+                        self.object.criterias.add(model)
+                    else:
+                        group = groups_criteria[0]
+                        for c in criterias:
+                            id = c.get('id', None)
+                            editable = c.get('editable', False)
+                            if id and editable:
+                                original = group.criterias.filter(id=id)[0]
+                                if c.get('deleted', False):
+                                    original.delete()
+                                else:
+                                    original.value = c.get('name')
+                                    original.description = c.get('description',"")
+                                    original.save()
+                            elif not id and editable:
+                                group.criterias.create(value=c.get("name"), description=c.get('description', ""))
+
+            except JSONDecodeError:
+                pass
         result_dict = dict()
         result_dict['id'] = self.object.id
         return JsonResponse(result_dict)
@@ -771,13 +839,24 @@ class EvaluacionesDeAlumnosFormView(CreateView):
 
     def form_valid(self, form):
         student = self.request.user.student
+
         evaluation, created = StudentEvaluations.objects.get_or_create(
-            author=student,videoclase=form.cleaned_data['videoclase']
+            author=student, videoclase=form.cleaned_data['videoclase']
         )
-        self.object = EvaluacionesDeAlumnosForm(self.request.POST,instance=evaluation)
+        self.object = EvaluacionesDeAlumnosForm(self.request.POST, instance=evaluation)
         # self.object.author = self.request.user.student
         self.object.save()
-        result_dict = {}
+
+        criterias = self.request.POST.get('criteria', None)
+        if criterias:
+            try:
+                criterias = json.loads(criterias)
+                for c in criterias:
+                    evaluation.criterias.create(value=c['value'], criteria=Criteria.objects.get(id=c['criteria']))
+
+            except JSONDecodeError:
+                pass
+        result_dict = dict()
         result_dict['value'] = form.cleaned_data['value']
         return JsonResponse(result_dict)
 
@@ -864,7 +943,7 @@ class EvaluarVideoclaseFormView(FormView):
         return JsonResponse(result_dict)
 
     def form_invalid(self, form):
-        print form.errors
+        print(form.errors)
         result_dict = {}
         return JsonResponse(result_dict)
 

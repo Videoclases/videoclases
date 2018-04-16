@@ -9,5 +9,5 @@ class QualityItem(models.Model):
     videoclase = models.ForeignKey(VideoClase)
     score_check = models.ManyToManyField(QualityScore)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{0}".format(self.videoclase.question[:50])

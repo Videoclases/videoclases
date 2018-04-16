@@ -48,7 +48,7 @@ function EditarGrupo() {
         grupos = self.crearArrayGrupos();
         for (i = 0; i < self.students().length; i++) {
             var group;
-            if (parseInt(self.cantidadPorGrupo()) == 1) {
+            if (parseInt(self.cantidadPorGrupo()) === 1) {
                 group = grupos[i];
             } else {
                 var ri = Math.floor(Math.random() * grupos.length);
@@ -69,7 +69,7 @@ function EditarGrupo() {
     self.siTodosTienenGrupo = function() {
         for (var i = 0; i < self.students().length; i++){
             var student = self.students()[i];
-            if (student.group() == undefined || !student.group()) {
+            if (student.group() === undefined || !student.group()) {
                 return false;
             }
         }
@@ -80,22 +80,22 @@ function EditarGrupo() {
         switch(sortKey){
             case 'first_name':
                 self.students.sort(function(a,b){
-                    return a.first_name() < b.first_name() ? -1 : a.first_name() > b.first_name() ? 1 : a.first_name() == b.first_name() ? 0 : 0;
+                    return a.first_name() < b.first_name() ? -1 : a.first_name() > b.first_name() ? 1 : a.first_name() === b.first_name() ? 0 : 0;
                 });
                 break;
             case 'last_name':
                 self.students.sort(function(a,b){
-                    return a.last_name() < b.last_name() ? -1 : a.last_name() > b.last_name() ? 1 : a.last_name() == b.last_name() ? 0 : 0;
+                    return a.last_name() < b.last_name() ? -1 : a.last_name() > b.last_name() ? 1 : a.last_name() === b.last_name() ? 0 : 0;
                 });
                 break;
             case 'group':
                 self.students.sort(function(a,b){
-                    return a.group() < b.group() ? -1 : a.group() > b.group() ? 1 : a.group() == b.group() ? 0 : 0;
+                    return a.group() < b.group() ? -1 : a.group() > b.group() ? 1 : a.group() === b.group() ? 0 : 0;
                 });
                 break;
             case 'videoclase':
                 self.students.sort(function(a,b){
-                    return a.videoclase() < b.videoclase() ? -1 : a.videoclase() > b.videoclase() ? 1 : a.videoclase() == b.videoclase() ? 0 : 0;
+                    return a.videoclase() < b.videoclase() ? -1 : a.videoclase() > b.videoclase() ? 1 : a.videoclase() === b.videoclase() ? 0 : 0;
                 });
                 break;
         }
@@ -130,7 +130,7 @@ function EditarGrupo() {
         var i;
         for (i = 0; i < self.students().length; i++) {
             var group = parseInt(self.students()[i].group());
-            if ($.inArray(group, grupoNumbers) == -1) {
+            if ($.inArray(group, grupoNumbers) === -1) {
                 grupoNumbers.push(group)
             }
         }
@@ -138,7 +138,7 @@ function EditarGrupo() {
             return a - b;
         });
         for (i = 0; i < grupoNumbers.length; i++) {
-            if (grupoNumbers[i] != i + 1)
+            if (grupoNumbers[i] !== i + 1)
                 valid = false;
         }
         return valid;

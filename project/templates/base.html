@@ -14,18 +14,20 @@
     <title>{% block title %}Teaching is Learning{% endblock %}</title>
     <link rel="shortcut icon" type="image/png" href="{% static "img/logoTIL_burned.png" %}"/>
     <!-- BOOTSTRAP CORE STYLE  -->
-    <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "assets/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
     <!-- FONT AWESOME ICONS  -->
     <link href="{% static "assets/css/font-awesome.css" %}" rel="stylesheet">
     <!-- CUSTOM STYLE  -->
     <link href="{% static "assets/css/style.css" %}" rel="stylesheet">
-    <link href="{% static "css/src/my-style.css" %}" rel="stylesheet">
-    <link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="{% static "css/my-style.css" %}" rel="stylesheet">
+{#    <link href="{% static "css/datatables.min.css" %}" rel="stylesheet">#}
+{#    <link href="{% static "css/jquery.datatables.min.css" %}" rel="stylesheet">#}
+    <link href="{% static "assets/datatables/datatables.min.css" %}" rel="stylesheet">
     <!-- CORE SCRIPTS -->
-    <script src="{% static "assets/js/jquery-1.11.1.js" %}"></script>
-    <script src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-    <script src="{% static "bootstrap/js/bootstrap.js" %}"></script>
-    <script src="{% static "js/libs/knockout-3.3.0.js" %}"></script>
+    <script src="{% static "assets/jquery-3.2.1.min.js" %}"></script>
+    <script src="{% static "assets//bootstrap/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "assets/datatables/datatables.min.js" %}"></script>
+    <script src="{% static "assets/knockout.js" %}"></script>
     <!-- SOURCE JS LIBRARIES -->
     <script src="{% static "js/src/csrf-django.js" %}"></script>
     <!-- HTML5 Shiv and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -56,7 +58,7 @@
                     <div class="user-settings-right">
                         {% if user.is_authenticated %}
                             <div align="right">
-                                Bienvenido {{user.get_full_name}}
+                                Bienvenido/a {{user.get_full_name}}
                                 <br /><a href="{% url 'logout' %}">Cerrar sesión</a>
                             </div>
                         {% else %}
@@ -70,7 +72,7 @@
                                         <h4 class="modal-title" id="gridSystemModalLabel">Recuperar contraseña</h4>
                                       </div>
                                       <div class="modal-body" >
-                                    <span>Pidele a tu profesor que cambie tu contraseña, en caso de ser un profesor contacta a
+                                    <span>Pidele a tu profesor(a) que cambie tu contraseña, en caso de ser un profesor contacta a
                                         <a href="mailto:software@teachingislearning.cl">software@teachingislearning.cl</a>
                                         </span>
                                   </div>

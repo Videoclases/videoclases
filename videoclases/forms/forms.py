@@ -170,7 +170,7 @@ class EditarTareaForm(forms.ModelForm):
     class Meta:
         model = Homework
         fields = ['video', 'title', 'description', 'course', 'revision',
-                  'date_upload', 'date_evaluation', 'homework_to_evaluate']
+                  'date_upload', 'date_evaluation', 'homework_to_evaluate','scala']
         dateOptions = {
             'weekStart': 1,
             'todayHighlight': True,
@@ -207,16 +207,6 @@ class EditarTareaForm(forms.ModelForm):
             instance.save()
         return instance
 
-    def __init__(self, *args, **kwargs):
-        super(EditarTareaForm, self).__init__(*args, **kwargs)
-        self.fields['video'].required = False
-        self.fields['title'].required = False
-        self.fields['description'].required = False
-        self.fields['course'].required = False
-        self.fields['revision'].required = False
-        self.fields['date_upload'].required = False
-        self.fields['date_evaluation'].required = False
-
 class EnviarVideoclaseForm(forms.ModelForm):
 
     class Meta:
@@ -229,7 +219,7 @@ class EvaluacionesDeAlumnosForm(forms.ModelForm):
     class Meta:
         model = StudentEvaluations
         fields = '__all__'
-        exclude = ['author']
+        exclude = ['author','criterias']
 
 class RespuestasDeAlumnosForm(forms.ModelForm):
 

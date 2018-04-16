@@ -11,5 +11,5 @@ class Teacher(models.Model):
     courses = models.ManyToManyField(Course, blank=True)
     changed_password = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
