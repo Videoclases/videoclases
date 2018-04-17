@@ -59,6 +59,8 @@
             <div class="col-xs-2" align="center">{{ form.year.label }}</div>
             <div class="col-xs-2" align="center">
                 <input class="form-control" type="number" name="{{ form.year.name }}" min="2015" step="1"/></div>
+                <input class="form-control" type="number" name="{{ form.year.name }}" min="{% now "Y" %}"
+                       value="{% now "Y" %}" step="1"/></div>
             <div class="col-xs-1" align="center">{{ form.file.label }}</div>
             <div class="col-xs-3" align="center">
                 <input id="id_file" name="{{ form.file.name }}" type="file" class="form-control"/></div>
