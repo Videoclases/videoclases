@@ -68,7 +68,7 @@ function ViewModel() {
                 console.log(response);
                 if(response.redirect){
                     alert("Completaste todas las evaluaciones de esta tarea");
-                    location.href="/";
+                    location.href="/student";
                 }else{
                     self.responseValues.alternativas(response.alternativas);
                     self.responseValues.video(response.video);
