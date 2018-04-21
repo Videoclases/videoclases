@@ -95,7 +95,7 @@
                         vm.course.id(result.course.id);
                         for (i = 0; i < result.students.length; i++) {
                             var a = result.students[i];
-                            vm.editarGrupo.students.push(new Alumno(parseInt(a.id), a.first_name, a.last_name, parseInt(a.group), a.videoclase));
+                            vm.editarGrupo.students.push(new Alumno(parseInt(a.id), a.last_name, a.first_name, parseInt(a.group), a.videoclase));
                         }
                         vm.editarGrupo.sortTable('group');
                     }
